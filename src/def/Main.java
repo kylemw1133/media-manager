@@ -127,7 +127,7 @@ public class Main {
 		boolean promptUser = true;
 
 		Scanner s = new Scanner(System.in);
-
+		/*
 		try {
 			int id = Album.insert(conn, s);
 			System.out.println(id);
@@ -135,7 +135,7 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		*/
 		while (promptUser) {
 			System.out.print("Enter db command (add, edit, search, order, report, print, exit): ");
 			String command = s.nextLine();
