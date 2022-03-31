@@ -15,15 +15,12 @@ public class Album {
 
 	public static int insert(Connection conn, Scanner s) throws SQLException {
 		int id = InventoryItem.insert(conn, s);
-
-		System.out.println(id);
-
 		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "ALBUM");
 		PreparedStatement insertAlbumStmt = conn.prepareStatement(insertAlbumSQL);
 
 		for (TypedAttribute a : colSet) {
-			if (a.name == "Inventory_ID") {
+			if (a.name.equals("Inventory_ID")) {
 				a.value = id;
 			} else {
 				a.promptForValue(s);
@@ -32,6 +29,8 @@ public class Album {
 			a.fillInStmt(insertAlbumStmt, i);
 			i++;
 		}
+		
+		insertAlbumStmt.executeUpdate();
 
 		return id;
 	}

@@ -29,6 +29,8 @@ public class InventoryItem {
 
 			i++;
 		}
+		
+		insertInventoryItemStmt.executeUpdate();
 
 		return id;
 	}

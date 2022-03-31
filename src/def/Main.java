@@ -16,6 +16,7 @@ import commands.OrderCommand;
 import commands.ReportCommand;
 import commands.SearchCommand;
 import entities.Album;
+import entities.InventoryItem;
 
 public class Main {
 
@@ -128,7 +129,8 @@ public class Main {
 		Scanner s = new Scanner(System.in);
 
 		try {
-			Album.insert(conn, s);
+			int id = Album.insert(conn, s);
+			System.out.println(id);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
