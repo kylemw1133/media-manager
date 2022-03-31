@@ -3,6 +3,8 @@ package commands;
 import java.sql.Connection;
 import java.util.Scanner;
 
+import entities.Movie;
+
 public class SearchCommand {
 
 	public static void exec(Connection conn, Scanner s) {
@@ -14,7 +16,9 @@ public class SearchCommand {
 		case "album":
 			sql = "SELECT * FROM ALBUM;";
 			break;
-		default:
+		case "movie":
+			Movie.retrieve(conn, s);
+			break;
 		}
 	}
 }
