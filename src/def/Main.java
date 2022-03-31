@@ -15,11 +15,11 @@ import commands.EditCommand;
 import commands.OrderCommand;
 import commands.ReportCommand;
 import commands.SearchCommand;
-import util.Utils;
+import entities.Album;
 
 public class Main {
 
-	private static String DATABASE = "checkpoint4-filled.sqlite";
+	private static String DATABASE = "populated_project_database.db";
 
 	public static Connection initializeDB(String databaseFileName) {
 		/**
@@ -126,8 +126,13 @@ public class Main {
 		boolean promptUser = true;
 
 		Scanner s = new Scanner(System.in);
-		
-		System.out.println(Utils.getInventoryItemAttributes(conn, "ALBUM"));
+
+		try {
+			Album.insert(conn, s);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		while (promptUser) {
 			System.out.print("Enter db command (add, edit, search, order, report, print, exit): ");
@@ -157,18 +162,6 @@ public class Main {
 			}
 		}
 		s.close();
-
-		/*
-		 * finally best approach finally{
-		 *
-		 * /* From JSE7 onwards the try-with-resources statement is introduced. The
-		 * resources in the try block will be closed automatically after the use, at the
-		 * end of the try block close JDBC objects If not, use the following block: try
-		 * { if(rs!=null) rs.close(); } catch (SQLException se) { se.printStackTrace();
-		 * } try { if(stmt !=null) st.close(); } catch (SQLException se) {
-		 * se.printStackTrace(); } try { if(conn !=null) con.close(); } catch
-		 * (SQLException se) { se.printStackTrace(); } }
-		 */
 	}
 
 }

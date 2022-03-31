@@ -3,28 +3,28 @@ package commands;
 import java.sql.Connection;
 import java.util.Scanner;
 
+import entities.Album;
+import entities.InventoryItem;
+
 public class AddCommand {
 
 	public static void exec(Connection conn, Scanner s) {
 		System.out.print("Enter type of item to add (album, movie, tvshow, audiobook): ");
 		String type = s.nextLine();
+		InventoryItem i;
 
 		switch (type) {
 		case "album":
-			System.out.print("name: ");
-			System.out.print("length: ");
-			System.out.print("year: ");
-
-			// sql = "INSERT INTO album ";
+			Album.insert(conn, s);
 			break;
 		case "movie":
-
+			Movie.insert(conn, s);
 			break;
 		case "tvshow":
-
+			TVShow.insert(conn, s);
 			break;
 		case "audiobook":
-
+			Audiobook.insert(conn, s);
 			break;
 		default:
 			System.out.println("Invalid item type");
