@@ -4,11 +4,12 @@ import data.*;
 import entities.*;
 import entities.audiobook.Audiobook;
 
+import java.sql.Connection;
 import java.util.Scanner;
 
 public class AddCommand {
 
-	public static void exec(Scanner s) {
+	public static void exec(Scanner s, Connection con) {
 		System.out.print("Enter type of item to add (album, movie, tvshow, audiobook): ");
 		String type = s.nextLine();
 

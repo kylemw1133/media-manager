@@ -50,13 +50,13 @@ public class Main {
 			String command = s.nextLine();
 			switch (command) {
 			case "add":
-				AddCommand.exec(s);
+				AddCommand.exec(s, conn);
 				break;
 			case "edit":
 				EditCommand.exec(s);
 				break;
 			case "search":
-				SearchCommand.exec(s);
+				SearchCommand.exec(s, conn);
 				break;
 			case "order":
 				OrderCommand.exec(s);
