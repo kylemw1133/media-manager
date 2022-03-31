@@ -1,40 +1,42 @@
 package commands;
 
-import data.*;
-import entities.*;
-import entities.audiobook.Audiobook;
 
-import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AddCommand {
 
-	public static void exec(Scanner s, Connection con) {
+	public static ArrayList<Object> exec(Scanner s) {
 		System.out.print("Enter type of item to add (album, movie, tvshow, audiobook): ");
 		String type = s.nextLine();
-
-		InventoryItem newItem = null;
-
+		ArrayList<Object> data = new ArrayList<>();
+		
 		switch (type) {
 		case "album":
-			newItem = new Album(s);
+			System.out.print("name: ");
+			data.add(s.next());
+			System.out.print("length: ");
+			data.add(s.nextInt());
+			System.out.print("year: ");
+			data.add(s.nextInt());
+			
+			//sql = "INSERT INTO album ";
 			break;
 		case "movie":
-			newItem = new Movie(s);
+			
 			break;
 		case "tvshow":
-			newItem = new TVShow(s);
+			
 			break;
 		case "audiobook":
-			newItem = new Audiobook(s);
+			
 			break;
 		default:
 			System.out.println("Invalid item type");
-			return;
+			return null;
 		}
+		return data;
 
-		FakeDatabase.getInstance().addItem(newItem);
-		System.out.println("New " + type + " added.");
 	}
 
 }

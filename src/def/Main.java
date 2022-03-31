@@ -2,15 +2,19 @@ package def;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import commands.*;
-import data.*;
 
 public class Main {
 	
-	private static String DATABASE = "database_binary.db";
+	private static String DATABASE = "checkpoint4-filled.sqlite";
 	
 	public static Connection initializeDB(String databaseFileName) {
     	/**
@@ -38,6 +42,73 @@ public class Main {
         }
         return conn;
     }
+	/**
+     * Queries the database and prints the results.
+     * 
+     * @param conn a connection object
+     * @param sql a SQL statement that returns rows
+     * This query is written with the Statement class, tipically 
+     * used for static SQL SELECT statements
+     */
+    public static void sqlQuery(Connection conn, String sql){
+        try {
+        	Statement stmt = conn.createStatement();
+        	ResultSet rs = stmt.executeQuery(sql);
+        	ResultSetMetaData rsmd = rs.getMetaData();
+        	int columnCount = rsmd.getColumnCount();
+        	for (int i = 1; i <= columnCount; i++) {
+        		String value = rsmd.getColumnName(i);
+        		System.out.print(value);
+        		if (i < columnCount) System.out.print(",  ");
+        	}
+			System.out.print("\n");
+        	while (rs.next()) {
+        		for (int i = 1; i <= columnCount; i++) {
+        			String columnValue = rs.getString(i);
+            		System.out.print(columnValue);
+            		if (i < columnCount) System.out.print(",  ");
+        		}
+    			System.out.print("\n");
+        	}
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    /**
+     * Queries the database and prints the results.
+     * 
+     * @param conn a connection object
+     * @param sql a SQL statement that returns rows
+     * This query is written with the Statement class, tipically 
+     * used for static SQL SELECT statements
+     */
+    public static void sqlInsert(Connection conn, String sql){
+    	try {
+        	String sql = "INSERT INTO ";
+    		PreparedStatement stmt = conn.prepareStatement(sql);
+        	//stmt.setInt(1, year);
+        	ResultSet rs = stmt.executeQuery();
+        	ResultSetMetaData rsmd = rs.getMetaData();
+        	int columnCount = rsmd.getColumnCount();
+        	for (int i = 1; i <= columnCount; i++) {
+        		String value = rsmd.getColumnName(i);
+        		System.out.print(value);
+        		if (i < columnCount) System.out.print(",  ");
+        	}
+			System.out.print("\n");
+        	while (rs.next()) {
+        		for (int i = 1; i <= columnCount; i++) {
+        			String columnValue = rs.getString(i);
+            		System.out.print(columnValue);
+            		if (i < columnCount) System.out.print(",  ");
+        		}
+    			System.out.print("\n");
+        	}
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
     
 	public static void main(String[] args) {
 		System.out.println("This is a new run");
@@ -50,13 +121,13 @@ public class Main {
 			String command = s.nextLine();
 			switch (command) {
 			case "add":
-				AddCommand.exec(s, conn);
+				sqlInsert(conn, AddCommand.exec(s));
 				break;
 			case "edit":
 				EditCommand.exec(s);
 				break;
 			case "search":
-				SearchCommand.exec(s, conn);
+				sqlQuery(conn, SearchCommand.exec(s));
 				break;
 			case "order":
 				OrderCommand.exec(s);
@@ -76,6 +147,31 @@ public class Main {
 			}
 		}
 		s.close();
+
+    	/* finally best approach
+		finally{
+		   
+			/* From JSE7 onwards the try-with-resources statement is introduced. 
+			 * The resources in the try block will be closed automatically after the use,
+			 * at the end of the try block
+			 *  close JDBC objects
+			 * If not, use the following block:
+		   try {
+		      if(rs!=null) rs.close();
+		   } catch (SQLException se) {
+		      se.printStackTrace();
+		   }
+		   try {
+		      if(stmt !=null) st.close();
+		   } catch (SQLException se) {
+		      se.printStackTrace();
+		   }
+		   try {
+		      if(conn !=null) con.close();
+		   } catch (SQLException se) {
+		      se.printStackTrace();
+		   }
+		}*/
 	}
 
 }

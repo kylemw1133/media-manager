@@ -1,18 +1,25 @@
 package commands;
 
-import java.sql.Connection;
 import java.util.Scanner;
 
-import data.FakeDatabase;
 
 public class SearchCommand {
 
-	public static void exec(Scanner s, Connection con) {
-		System.out.println("Enter the keyword: ");
-		String key = s.nextLine();
+	public static String exec(Scanner s) {
+		System.out.println("Enter the type: ");
+		String type = s.nextLine();
+		String sql;
+		switch(type) {
+		case "album":
+			sql =  "SELECT * FROM ALBUM;";
+			break;
+		default:
+			return null;
+		}
+		return sql;
 		
 		
 		
-		FakeDatabase.getInstance().findItems(key);
+		
 	}
 }
