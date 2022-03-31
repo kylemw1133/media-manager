@@ -22,8 +22,8 @@ public class InventoryItem {
 		for (TypedAttribute a : colSet) {
 			a.promptForValue(s);
 			a.fillInStmt(insertInventoryItemStmt, i);
-
-			if (a.name == "Inventory_ID") {
+			
+			if (a.name.equals("Inventory_ID")) {
 				id = (int) a.value;
 			}
 
