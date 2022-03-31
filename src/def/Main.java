@@ -15,6 +15,7 @@ import commands.EditCommand;
 import commands.OrderCommand;
 import commands.ReportCommand;
 import commands.SearchCommand;
+import util.Utils;
 
 public class Main {
 
@@ -125,6 +126,8 @@ public class Main {
 		boolean promptUser = true;
 
 		Scanner s = new Scanner(System.in);
+		
+		System.out.println(Utils.getInventoryItemAttributes(conn, "ALBUM"));
 
 		while (promptUser) {
 			System.out.print("Enter db command (add, edit, search, order, report, print, exit): ");
