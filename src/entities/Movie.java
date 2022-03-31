@@ -18,7 +18,7 @@ public class Movie {
 
 		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "MOVIE");
-		PreparedStatement insertAlbumStmt = conn.prepareStatement(insertMovieSQL);
+		PreparedStatement insertMovieStmt = conn.prepareStatement(insertMovieSQL);
 
 		for (TypedAttribute a : colSet) {
 			if (a.name == "Inventory_ID") {
@@ -27,7 +27,7 @@ public class Movie {
 				a.promptForValue(s);
 			}
 
-			a.fillInStmt(insertAlbumStmt, i);
+			a.fillInStmt(insertMovieStmt, i);
 			i++;
 		}
 
