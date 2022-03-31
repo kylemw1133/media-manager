@@ -1,25 +1,20 @@
 package commands;
 
+import java.sql.Connection;
 import java.util.Scanner;
-
 
 public class SearchCommand {
 
-	public static String exec(Scanner s) {
+	public static void exec(Connection conn, Scanner s) {
 		System.out.println("Enter the type: ");
 		String type = s.nextLine();
 		String sql;
-		switch(type) {
+
+		switch (type) {
 		case "album":
-			sql =  "SELECT * FROM ALBUM;";
+			sql = "SELECT * FROM ALBUM;";
 			break;
 		default:
-			return null;
 		}
-		return sql;
-		
-		
-		
-		
 	}
 }
