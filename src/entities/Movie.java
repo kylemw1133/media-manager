@@ -20,9 +20,16 @@ public class Movie {
 	
 	public static int insert(Connection conn, Scanner s) throws SQLException {
 		int id = InventoryItem.insert(conn, s);
+<<<<<<< HEAD
+		int i = 1;
+=======
+>>>>>>> branch 'master' of https://github.com/kylemw1133/media-manager.git
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "MOVIE");
 		PreparedStatement insertMovieStmt = conn.prepareStatement(insertMovieSQL);
+<<<<<<< HEAD
+=======
 		int i = 1;
+>>>>>>> branch 'master' of https://github.com/kylemw1133/media-manager.git
 
 		for (TypedAttribute a : colSet) {
 			if (a.name.equals("Inventory_ID")) {
@@ -34,6 +41,8 @@ public class Movie {
 			a.fillInStmt(insertMovieStmt, i);
 			i++;
 		}
+		
+		insertMovieStmt.executeUpdate();
 
 		insertMovieStmt.executeUpdate();
 
