@@ -52,13 +52,14 @@ public class Utils {
 	 * 
 	 * @param rs the result set containing records to print to console
 	 */
-	public static void printRecords(ResultSet rs) {
+	public static void printRecords(ResultSet rs) throws SQLException {
 		ResultSetMetaData rsmd = rs.getMetaData();
 		int columnCnt = rsmd.getColumnCount();
-		for ()int i = 1; i <= columnCnt; i++) {
-			String value = rsmd.getcolumnName(i);
+		for (int i = 1; i <= columnCnt; i++) {
+			String value = rsmd.getColumnName(i);
 			System.out.print(value);
-			if (i < columnCnt) System.out.print(", ");
+			if (i < columnCnt)
+				System.out.print(", ");
 		}
 		System.out.print("\n");
 
@@ -66,7 +67,8 @@ public class Utils {
 			for (int i = 1; i <= columnCnt; i++) {
 				String columnVal = rs.getString(i);
 				System.out.print(columnVal);
-				if (i < columnCnt) System.out.print(", ");
+				if (i < columnCnt)
+					System.out.print(", ");
 			}
 			System.out.print("\n");
 		}
