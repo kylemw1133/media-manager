@@ -2,7 +2,9 @@ package entities;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -25,6 +27,7 @@ public class Order {
 		}
 
 		insertOrderStmt.executeUpdate();
+		insertOrderStmt.close();
 	}
 
 	public static void activate(Connection conn, Scanner s) throws SQLException {
@@ -36,11 +39,39 @@ public class Order {
 
 		System.out.println("Enter the order ID to fulfill:");
 
-		String id = "";
+		String order_id = "";
 		// repeat promp for inventory id until user inputs a valid integer
-		while (id.equals("") || !id.matches("\\-?\\d+")) {
-			id = s.nextLine();
+		while (order_id.equals("") || !order_id.matches("\\-?\\d+")) {
+			order_id = s.nextLine();
 		}
 
+		ResultSet rs = selectOrderStatement.executeQuery();
+		System.out.println(
+				"Do you wish to activate this order? Quantity will be increased and order status will change from PENDING to FULFILLED.");
+		Utils.printRecords(rs);
+		System.out.println("Y/N");
+
+		String input = s.nextLine();
+		if (input.equals("Y")) {
+			System.out.println("Activating order...");
+			Statement stmt = conn.createStatement();
+			rs = stmt.executeQuery(
+					"SELECT INVENTORY_ITEM.Quantity FROM INVENTORY_ITEM, ORDER WHERE INVENTORY_ITEM.Inventory_ID = ORDER.Inventory_ID AND Order_ID="
+							+ order_id);
+
+			rs.next();
+			int prevQuantity = rs.getInt("Quantity");
+			int newQuantity = prevQuantity + rs.getInt("Copies");
+			int inventory_id = rs.getInt("Inventory_ID");
+
+			stmt.executeUpdate("UPDATE INVENTORY_ITEM SET Quantity=" + Integer.toString(newQuantity)
+					+ " WHERE  INVENTORY_ITEM.Inventory_ID = ORDER.Inventory_ID AND Inventory_ID =" + inventory_id);
+			stmt.executeUpdate("UPDATE ORDER SET Status='FULFILLED' WHERE Order_ID =" + order_id);
+
+			stmt.close();
+		} else {
+			System.out.println("Activation cancelled.");
+		}
+		selectOrderStatement.close();
 	}
 }
