@@ -15,7 +15,7 @@ import util.Utils;
 public class Album {
 
 	private final static String insertAlbumSQL = "INSERT INTO ALBUM VALUES (?, ?, ?, ?);";
-	private final static String editAlbumSQL = " UPDATE MOVIE SET Name=?, Length=?, Year=? WHERE Inventory_ID=?;";
+	private final static String editAlbumSQL = " UPDATE ALBUM SET Name=?, Length=?, Year=? WHERE Inventory_ID=?";
 
 	public static int insert(Connection conn, Scanner s) throws SQLException {
 		int id = InventoryItem.insert(conn, s);
@@ -125,6 +125,7 @@ public class Album {
 			System.out.println(e.getMessage());
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	}=======
 
 	}
@@ -132,4 +133,5 @@ public class Album {
 	>>>>>>>branch'master'
 
 	of https:// github.com/kylemw1133/media-manager.git
-}
+	=======
+}>>>>>>>6f 67310ea 469255790 b1b5318eb0ef91f753eebe}

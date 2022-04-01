@@ -4,10 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import entities.Album;
-import entities.Audiobook;
-import entities.InventoryItem;
-import entities.Movie;
+import entities.*;
 
 public class SearchCommand {
 
@@ -22,15 +19,14 @@ public class SearchCommand {
 			case "movie":
 				Movie.search(conn, s);
 				break;
-			case "tvshow":
-				// TVShow.search(conn, s);
-				break;
 			case "audiobook":
 				Audiobook.search(conn, s);
 				break;
 			case "inventory_item":
 				// InventoryItem.search(conn, s);
 				break;
+			case "tvshow":
+				TVShow.retrieve(conn, s);
 			default:
 				System.out.println("Invalid item type");
 		}
