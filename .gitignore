@@ -1,3 +1,5 @@
 .classpath
 .project
 bin
+*.db
+/populated_project_database.sql

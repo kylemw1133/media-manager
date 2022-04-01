@@ -15,7 +15,11 @@ import util.Utils;
 public class Album {
 
 	private final static String insertAlbumSQL = "INSERT INTO ALBUM VALUES (?, ?, ?, ?);";
+<<<<<<< HEAD
 	private final static String editAlbumSQL = " UPDATE ALBUM SET Name=?, Length=?, Year=? WHERE Inventory_ID=?";
+=======
+	private final static String editAlbumSQL = " UPDATE MOVIE SET Name=?, Length=?, Year=? WHERE Inventory_ID=?;";
+>>>>>>> branch 'master' of https://github.com/kylemw1133/media-manager.git
 
 	public static int insert(Connection conn, Scanner s) throws SQLException {
 		int id = InventoryItem.insert(conn, s);
@@ -33,12 +37,12 @@ public class Album {
 			a.fillInStmt(insertAlbumStmt, i);
 			i++;
 		}
-		
+
 		insertAlbumStmt.executeUpdate();
 
 		return id;
 	}
-	
+
 	public static void edit(Connection conn, Scanner s) throws SQLException {
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "ALBUM");
 		PreparedStatement editAlbumStmt = conn.prepareStatement(editAlbumSQL);
@@ -124,5 +128,12 @@ public class Album {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
+<<<<<<< HEAD
 	}
+=======
+		
+	}
+	
+	
+>>>>>>> branch 'master' of https://github.com/kylemw1133/media-manager.git
 }
