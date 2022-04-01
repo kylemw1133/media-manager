@@ -19,7 +19,6 @@ public class Movie {
 	private final static String selectMovieSQL = "SELECT * FROM MOVIE WHERE Inventory_ID = ?";
 	private final static String editMovieSQL = "UPDATE MOVIE SET ? WHERE Inventory_ID = ?";
 
-
 	public static int insert(Connection conn, Scanner s) throws SQLException {
 		int id = InventoryItem.insert(conn, s);
 		int i = 1;
@@ -150,7 +149,7 @@ public class Movie {
 	}
 
 	public static void search(Connection conn, Scanner s) {
-		
+
 		try {
 			Statement stmt = conn.createStatement();
 			System.out.println("Which field do you want to search by?");
@@ -165,27 +164,27 @@ public class Movie {
 					System.out.println("Enter search name");
 					searchCol = "name";
 					searchInputString = s.nextLine();
-					searchMovieSQL = "SELECT * FROM MOVIE WHERE "+searchCol+"="+"\"" + searchInputString + "\";";
+					searchMovieSQL = "SELECT * FROM MOVIE WHERE " + searchCol + "=" + "\"" + searchInputString + "\";";
 					break;
 				case "2":
 					System.out.println("Enter search Length");
 					searchCol = "length";
 					searchInputInt = s.nextInt();
-					searchMovieSQL = "SELECT * FROM MOVIE WHERE "+searchCol+"="+ searchInputInt+";";
+					searchMovieSQL = "SELECT * FROM MOVIE WHERE " + searchCol + "=" + searchInputInt + ";";
 
 					break;
 				case "3":
 					System.out.println("Enter search Year");
 					searchCol = "year";
 					searchInputInt = s.nextInt();
-					searchMovieSQL = "SELECT * FROM MOVIE WHERE "+searchCol+"="+searchInputInt+";";
+					searchMovieSQL = "SELECT * FROM MOVIE WHERE " + searchCol + "=" + searchInputInt + ";";
 
 					break;
 				case "4":
 					System.out.println("Enter search Content_Rating");
 					searchCol = "content_rating";
 					searchInputString = s.nextLine();
-					searchMovieSQL = "SELECT * FROM MOVIE WHERE "+searchCol+"="+"\"" + searchInputString + "\"; ";
+					searchMovieSQL = "SELECT * FROM MOVIE WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
 					break;
 				case "5":
 					System.out.println("Exit");
@@ -194,8 +193,8 @@ public class Movie {
 					System.out.println("Invalid input");
 					break;
 			}
-			if(searchCol!="") {
-				
+			if (searchCol != "") {
+
 				ResultSet rs = stmt.executeQuery(searchMovieSQL);
 				ResultSetMetaData rsmd = rs.getMetaData();
 				int columnCount = rsmd.getColumnCount();
@@ -215,8 +214,7 @@ public class Movie {
 					}
 					System.out.print("\n");
 				}
-			}
-			else {
+			} else {
 				System.out.println("...");
 			}
 		} catch (SQLException e) {

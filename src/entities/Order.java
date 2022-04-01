@@ -14,7 +14,7 @@ import util.Utils;
 public class Order {
 
 	private final static String insertOrderSQL = "INSERT INTO [ORDER] VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-	private final static String selectOrderSQL = "SELECT * FROM ORDER WHERE Order_ID = ?;";
+	private final static String selectOrderSQL = "SELECT * FROM [ORDER] WHERE Order_ID=?;";
 
 	public static void insert(Connection conn, Scanner s) throws SQLException {
 		int i = 1;
@@ -56,7 +56,7 @@ public class Order {
 			System.out.println("Activating order...");
 			Statement stmt = conn.createStatement();
 			rs = stmt.executeQuery(
-					"SELECT INVENTORY_ITEM.Quantity FROM INVENTORY_ITEM, ORDER WHERE INVENTORY_ITEM.Inventory_ID = ORDER.Inventory_ID AND Order_ID="
+					"SELECT INVENTORY_ITEM.Quantity, [ORDER].Copies, INVENTORY_ITEM.Inventory_ID FROM INVENTORY_ITEM, [ORDER] WHERE INVENTORY_ITEM.Inventory_ID = [ORDER].Inventory_ID AND Order_ID="
 							+ order_id);
 
 			rs.next();
@@ -65,8 +65,8 @@ public class Order {
 			int inventory_id = rs.getInt("Inventory_ID");
 
 			stmt.executeUpdate("UPDATE INVENTORY_ITEM SET Quantity=" + Integer.toString(newQuantity)
-					+ " WHERE  INVENTORY_ITEM.Inventory_ID = ORDER.Inventory_ID AND Inventory_ID =" + inventory_id);
-			stmt.executeUpdate("UPDATE ORDER SET Status='FULFILLED' WHERE Order_ID =" + order_id);
+					+ " WHERE  INVENTORY_ITEM.Inventory_ID = [ORDER].Inventory_ID AND Inventory_ID =" + inventory_id);
+			stmt.executeUpdate("UPDATE [ORDER] SET Status='FULFILLED' WHERE Order_ID =" + order_id);
 
 			stmt.close();
 		} else {
