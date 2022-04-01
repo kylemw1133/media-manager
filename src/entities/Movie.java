@@ -16,7 +16,8 @@ public class Movie {
 
 	private final static String insertMovieSQL = "INSERT INTO MOVIE VALUES (?, ?, ?, ?, ?);";
 	private final static String retrieveMovieSQL = "SELECT * FROM MOVIE;";
-	private final static String editMovieSQL = " UPDATE MOVIE SET Name=?, Length=?, Year=?, Content_Rating=? WHERE Inventory_ID=?;";
+	private final static String selectMovieSQL = "SELECT * FROM MOVIE WHERE Inventory_ID = ?";
+	private final static String editMovieSQL = "UPDATE MOVIE SET ? WHERE Inventory_ID = ?";
 
 	public static int insert(Connection conn, Scanner s) throws SQLException {
 		int id = InventoryItem.insert(conn, s);
@@ -43,24 +44,81 @@ public class Movie {
 	}
 
 	public static void edit(Connection conn, Scanner s) throws SQLException {
-		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "MOVIE");
+		PreparedStatement selectMovieStmt = conn.prepareStatement(selectMovieSQL);
 		PreparedStatement editMovieStmt = conn.prepareStatement(editMovieSQL);
-		int i = 1;
-		int id = 0;
 
-		for (TypedAttribute a : colSet) {
-			if (a.name.equals("Inventory_ID")) {
-				System.out.print("Provide the ID of the item you want to edit: ");
-				id = Integer.parseInt(s.nextLine());
-			} else {
-				a.promptForValue(s);
-				a.fillInStmt(editMovieStmt, i++);
-			}
+		System.out.println("Enter the inventory ID of the movie ");
+
+		String id = "";
+		// repeat promp for inventory id until user inputs a valid integer
+		while (id.equals("") || !id.matches("\\-?\\d+")) {
+			id = s.nextLine();
 		}
 
-		editMovieStmt.setInt(i, id);
+		selectMovieStmt.setString(1, id);
+		editMovieStmt.setString(2, id);
 
-		editMovieStmt.executeUpdate();
+		ResultSet selectedRecord = selectMovieStmt.executeQuery();
+
+		if (selectedRecord.next()) {
+			Utils.printRecords(selectedRecord);
+			System.out.println("Which field do you want to edit?");
+			System.out.println("1: Name | 2: Length | 3: Year | 4: Content_Rating | 5: EXIT");
+			String input = s.nextLine();
+			String newInput = "";
+
+			switch (input) {
+				case "1":
+					System.out.println("Enter new Name");
+					newInput = "Name=" + s.nextLine();
+				case "2":
+					System.out.println("Enter new Length");
+					newInput = "Length=" + s.nextLine();
+				case "3":
+					System.out.println("Enter new Year");
+					newInput = "Year=" + s.nextLine();
+				case "4":
+					System.out.println("Enter new Content_Rating");
+					newInput = "Content_Rating=" + s.nextLine();
+
+				case "5":
+					System.out.println("Exit");
+					break;
+				default:
+					System.out.println("Invalid input");
+					break;
+			}
+
+			if (newInput != "") {
+				editMovieStmt.setString(1, newInput);
+				editMovieStmt.executeUpdate();
+			}
+
+		} else {
+			System.out.println("Record not found...");
+		}
+		editMovieStmt.close();
+		selectMovieStmt.close();
+		/*
+		 * LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "MOVIE");
+		 * PreparedStatement editMovieStmt = conn.prepareStatement(editMovieSQL);
+		 * int i = 1;
+		 * int id = 0;
+		 * 
+		 * for (TypedAttribute a : colSet) {
+		 * if (a.name.equals("Inventory_ID")) {
+		 * System.out.print("Provide the ID of the item you want to edit: ");
+		 * id = Integer.parseInt(s.nextLine());
+		 * } else {
+		 * a.promptForValue(s);
+		 * a.fillInStmt(editMovieStmt, i++);
+		 * }
+		 * }
+		 * 
+		 * editMovieStmt.setInt(i, id);
+		 * 
+		 * editMovieStmt.executeUpdate();
+		 */
 	}
 
 	public static void retrieve(Connection conn, Scanner s) {
