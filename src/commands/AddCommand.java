@@ -21,10 +21,10 @@ public class AddCommand {
 				Movie.insert(conn, s);
 				break;
 			case "tvshow":
-				TVShow.insert(conn, s);
+				//TVShow.insert(conn, s);
 				break;
 			case "audiobook":
-				Audiobook.insert(conn, s);
+				//Audiobook.insert(conn, s);
 				break;
 			default:
 				System.out.println("Invalid item type");
