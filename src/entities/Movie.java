@@ -16,8 +16,8 @@ public class Movie {
 
 	private final static String insertMovieSQL = "INSERT INTO MOVIE VALUES (?, ?, ?, ?, ?);";
 	private final static String retrieveMovieSQL = "SELECT * FROM MOVIE;";
-	private final static String editMovieSQL = " UPDATE MOVIE SET Name=?, Length=?, Year=?, Content_Rating=? WHERE Inventory_ID=?";
-	
+	private final static String editMovieSQL = " UPDATE MOVIE SET Name=?, Length=?, Year=?, Content_Rating=? WHERE Inventory_ID=?;";
+
 	public static int insert(Connection conn, Scanner s) throws SQLException {
 		int id = InventoryItem.insert(conn, s);
 		int i = 1;
@@ -34,7 +34,7 @@ public class Movie {
 			a.fillInStmt(insertMovieStmt, i);
 			i++;
 		}
-		
+
 		insertMovieStmt.executeUpdate();
 
 		insertMovieStmt.executeUpdate();
@@ -57,12 +57,12 @@ public class Movie {
 				a.fillInStmt(editMovieStmt, i++);
 			}
 		}
-		
+
 		editMovieStmt.setInt(i, id);
-		
+
 		editMovieStmt.executeUpdate();
 	}
-	
+
 	public static void retrieve(Connection conn, Scanner s) {
 		try {
 			Statement stmt = conn.createStatement();

@@ -12,7 +12,7 @@ import util.Utils;
 public class Album {
 
 	private final static String insertAlbumSQL = "INSERT INTO ALBUM VALUES (?, ?, ?, ?);";
-	private final static String editAlbumSQL = " UPDATE MOVIE SET Name=?, Length=?, Year=? WHERE Inventory_ID=?";
+	private final static String editAlbumSQL = " UPDATE MOVIE SET Name=?, Length=?, Year=? WHERE Inventory_ID=?;";
 
 	public static int insert(Connection conn, Scanner s) throws SQLException {
 		int id = InventoryItem.insert(conn, s);
@@ -30,12 +30,12 @@ public class Album {
 			a.fillInStmt(insertAlbumStmt, i);
 			i++;
 		}
-		
+
 		insertAlbumStmt.executeUpdate();
 
 		return id;
 	}
-	
+
 	public static void edit(Connection conn, Scanner s) throws SQLException {
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "MOVIE");
 		PreparedStatement editAlbumStmt = conn.prepareStatement(editAlbumSQL);
@@ -51,9 +51,9 @@ public class Album {
 				a.fillInStmt(editAlbumStmt, i++);
 			}
 		}
-		
+
 		editAlbumStmt.setInt(i, id);
-		
+
 		editAlbumStmt.executeUpdate();
 	}
 }

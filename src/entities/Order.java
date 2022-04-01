@@ -12,6 +12,7 @@ import util.Utils;
 public class Order {
 
 	private final static String insertOrderSQL = "INSERT INTO [ORDER] VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+	private final static String selectOrderSQL = "SELECT * FROM ORDER WHERE Order_ID = ?;";
 
 	public static void insert(Connection conn, Scanner s) throws SQLException {
 		int i = 1;
@@ -25,11 +26,21 @@ public class Order {
 
 		insertOrderStmt.executeUpdate();
 	}
-	
+
 	public static void activate(Connection conn, Scanner s) throws SQLException {
 		// Get an order
 		// Get the associated inventory item
 		// increase the items quantity by the order's quantity
 		// change the order status
+		PreparedStatement selectOrderStatement = conn.prepareStatement(selectOrderSQL);
+
+		System.out.println("Enter the order ID to fulfill:");
+
+		String id = "";
+		// repeat promp for inventory id until user inputs a valid integer
+		while (id.equals("") || !id.matches("\\-?\\d+")) {
+			id = s.nextLine();
+		}
+
 	}
 }
