@@ -75,21 +75,21 @@ public class Album {
 					System.out.println("Enter search Name");
 					searchCol = "name";
 					searchInputString = s.nextLine();
-					searchAlbumSQL = "SELECT * FROM ALBUM WHERE "+searchCol+"="+"\"" + searchInputString + "\"; ";
+					searchAlbumSQL = "SELECT * FROM ALBUM WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
 					break;
 				case "2":
 					System.out.println("Enter search Length");
 					searchCol = "length";
 					searchInputInt = s.nextInt();
-					searchAlbumSQL = "SELECT * FROM ALBUM WHERE "+searchCol+"="+ searchInputInt+";";
+					searchAlbumSQL = "SELECT * FROM ALBUM WHERE " + searchCol + "=" + searchInputInt + ";";
 					break;
 				case "3":
 					System.out.println("Enter search Year");
 					searchCol = "year";
 					searchInputInt = s.nextInt();
-					searchAlbumSQL = "SELECT * FROM ALBUM WHERE "+searchCol+"="+searchInputInt+";";
+					searchAlbumSQL = "SELECT * FROM ALBUM WHERE " + searchCol + "=" + searchInputInt + ";";
 					break;
-				
+
 				case "4":
 					System.out.println("Exit");
 					break;
@@ -97,7 +97,7 @@ public class Album {
 					System.out.println("Invalid input");
 					break;
 			}
-			if(searchCol!="") {
+			if (searchCol != "") {
 				ResultSet rs = stmt.executeQuery(searchAlbumSQL);
 				ResultSetMetaData rsmd = rs.getMetaData();
 				int columnCount = rsmd.getColumnCount();
@@ -117,21 +117,11 @@ public class Album {
 					}
 					System.out.print("\n");
 				}
-			}
-			else {
+			} else {
 				System.out.println("No search performed");
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-<<<<<<< HEAD
-<<<<<<< HEAD
-	}=======
-
 	}
-
-	>>>>>>>branch'master'
-
-	of https:// github.com/kylemw1133/media-manager.git
-	=======
-}>>>>>>>6f 67310ea 469255790 b1b5318eb0ef91f753eebe}
+}
