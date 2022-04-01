@@ -4,10 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import entities.Album;
-import entities.Audiobook;
-import entities.InventoryItem;
-import entities.Movie;
+import entities.*;
 
 public class EditCommand {
 

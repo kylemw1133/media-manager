@@ -21,9 +21,9 @@ public class Movie {
 	
     public static int insert(Connection conn, Scanner s) throws SQLException {
 		int id = InventoryItem.insert(conn, s);
+		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "MOVIE");
 		PreparedStatement insertMovieStmt = conn.prepareStatement(insertMovieSQL);
-		int i = 1;
 
 		for (TypedAttribute a : colSet) {
 			if (a.name.equals("Inventory_ID")) {
@@ -35,6 +35,8 @@ public class Movie {
 			a.fillInStmt(insertMovieStmt, i);
 			i++;
 		}
+		
+		insertMovieStmt.executeUpdate();
 
 		insertMovieStmt.executeUpdate();
 

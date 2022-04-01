@@ -4,16 +4,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import entities.Album;
-import entities.InventoryItem;
-import entities.Movie;
+import entities.*;
 
 public class AddCommand {
 
-	public static void exec(Connection conn, Scanner s) {
+	public static void exec(Connection conn, Scanner s) throws SQLException {
 		System.out.print("Enter type of item to add (album, movie, tvshow, audiobook): ");
 		String type = s.nextLine();
-
+		
 		try {
 			switch (type) {
 			case "album":
