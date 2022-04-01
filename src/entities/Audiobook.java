@@ -3,6 +3,7 @@ package entities;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.sql.ResultSet;
@@ -13,8 +14,9 @@ import util.Utils;
 public class Audiobook {
 
     private final static String insertAudiobookSQL = "INSERT INTO AUDIOBOOK VALUES (? ? ? ? ? ?);";
-    private final static String selectAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE Inventory_ID = ?;";
-    private final static String editAudiobookSQL = "UPDATE AUDIOBOOK SET ? WHERE Inventory_ID = ?;";
+    private final static String selectAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE Inventory_ID=?;";
+    // private final static String editAudiobookSQL = "UPDATE AUDIOBOOK SET ? WHERE
+    // Inventory_ID = ?;";
 
     public static int insert(Connection conn, Scanner s) throws SQLException {
         int id = InventoryItem.insert(conn, s);
@@ -39,7 +41,8 @@ public class Audiobook {
 
     public static void edit(Connection conn, Scanner s) throws SQLException {
         PreparedStatement selectAudiobookStmt = conn.prepareStatement(selectAudiobookSQL);
-        PreparedStatement editAudiobookStmt = conn.prepareStatement(editAudiobookSQL);
+        // PreparedStatement editAudiobookStmt =
+        // conn.prepareStatement(editAudiobookSQL);
 
         System.out.println("Enter the inventory ID of the audiobook ");
 
@@ -50,7 +53,7 @@ public class Audiobook {
         }
 
         selectAudiobookStmt.setString(1, id);
-        editAudiobookStmt.setString(2, id);
+        // editAudiobookStmt.setString(2, id);
 
         ResultSet selectedRecord = selectAudiobookStmt.executeQuery();
 
@@ -86,14 +89,17 @@ public class Audiobook {
             }
 
             if (newInput != "") {
-                editAudiobookStmt.setString(1, newInput);
-                editAudiobookStmt.executeUpdate();
+                // editAudiobookStmt.setString(1, newInput);
+                // editAudiobookStmt.executeUpdate();
+                Statement stmt = conn.createStatement();
+                stmt.executeUpdate("UPDATE AUDIOBOOK SET " + newInput + " WHERE Inventory_ID=" + id);
+                System.out.println("Record Updated");
             }
 
         } else {
             System.out.println("Record not found...");
         }
-        editAudiobookStmt.close();
+        // editAudiobookStmt.close();
         selectAudiobookStmt.close();
     }
 }
