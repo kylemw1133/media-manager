@@ -14,7 +14,7 @@ public class SearchCommand {
 
 		switch (type) {
 		case "album":
-			sql = "SELECT * FROM ALBUM;";
+			Movie.search(conn,s);
 			break;
 		case "movie":
 			Movie.retrieve(conn, s);

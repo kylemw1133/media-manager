@@ -13,8 +13,8 @@ import util.Utils;
 public class Audiobook {
 
     private final static String insertAudiobookSQL = "INSERT INTO AUDIOBOOK VALUES (? ? ? ? ? ?);";
-    private final static String selectAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE Inventory_ID = ?";
-    private final static String editAudiobookSQL = "UPDATE AUDIOBOOK SET ? WHERE Inventory_ID = ?";
+    private final static String selectAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE Inventory_ID = ?;";
+    private final static String editAudiobookSQL = "UPDATE AUDIOBOOK SET ? WHERE Inventory_ID = ?;";
 
     public static int insert(Connection conn, Scanner s) throws SQLException {
         int id = InventoryItem.insert(conn, s);

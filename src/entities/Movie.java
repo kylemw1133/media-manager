@@ -147,4 +147,9 @@ public class Movie {
 			System.out.println(e.getMessage());
 		}
 	}
+
+	public static void search(Connection conn, Scanner s) {
+		// TODO Auto-generated method stub
+		
+	}
 }
