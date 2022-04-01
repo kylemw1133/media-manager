@@ -16,12 +16,13 @@ public class Movie {
 
 	private final static String insertMovieSQL = "INSERT INTO MOVIE VALUES (?, ?, ?, ?, ?);";
 	private final static String retrieveMovieSQL = "SELECT * FROM MOVIE;";
-	private final static String editMovieSQL = "UPDATE MOVIE SET ";
+	private final static String editMovieSQL = " UPDATE MOVIE SET Name=?, Length=?, Year=?, Content_Rating=? WHERE Inventory_ID=?";
+	
 	public static int insert(Connection conn, Scanner s) throws SQLException {
 		int id = InventoryItem.insert(conn, s);
-		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "MOVIE");
 		PreparedStatement insertMovieStmt = conn.prepareStatement(insertMovieSQL);
+		int i = 1;
 
 		for (TypedAttribute a : colSet) {
 			if (a.name.equals("Inventory_ID")) {
@@ -34,13 +35,32 @@ public class Movie {
 			i++;
 		}
 		
-		insertAlbumStmt.executeUpdate();
+		insertMovieStmt.executeUpdate();
 
 		return id;
 	}
-	public static void edit(Connection conn, Scanner s) {
+	
+	public static void edit(Connection conn, Scanner s) throws SQLException {
+		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "MOVIE");
+		PreparedStatement editMovieStmt = conn.prepareStatement(editMovieSQL);
+		int i = 1;
+		int id = 0;
+
+		for (TypedAttribute a : colSet) {
+			if (a.name.equals("Inventory_ID")) {
+				System.out.print("Provide the ID of the item you want to edit: ");
+				id = Integer.parseInt(s.nextLine());
+			} else {
+				a.promptForValue(s);
+				a.fillInStmt(editMovieStmt, i++);
+			}
+		}
 		
+		editMovieStmt.setInt(i, id);
+		
+		editMovieStmt.executeUpdate();
 	}
+	
 	public static void retrieve(Connection conn, Scanner s) {
 		try {
 			Statement stmt = conn.createStatement();

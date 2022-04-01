@@ -15,26 +15,25 @@ public class AddCommand {
 		String type = s.nextLine();
 		InventoryItem i;
 
-		switch (type) {
-		case "album":
-			Album.insert(conn, s);
-			break;
-		case "movie":
-			try {
-				int id = Movie.insert(conn, s);
-				System.out.println(id);
-			} catch (SQLException e) {
-				e.printStackTrace();
+		try {
+			switch (type) {
+			case "album":
+				Album.insert(conn, s);
+				break;
+			case "movie":
+				Movie.insert(conn, s);
+				break;
+			case "tvshow":
+				TVShow.insert(conn, s);
+				break;
+			case "audiobook":
+				Audiobook.insert(conn, s);
+				break;
+			default:
+				System.out.println("Invalid item type");
 			}
-			break;
-		case "tvshow":
-			TVShow.insert(conn, s);
-			break;
-		case "audiobook":
-			Audiobook.insert(conn, s);
-			break;
-		default:
-			System.out.println("Invalid item type");
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
