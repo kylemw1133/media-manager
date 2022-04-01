@@ -127,7 +127,10 @@ public class Main {
 		boolean promptUser = true;
 
 		Scanner s = new Scanner(System.in);
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'master' of https://github.com/kylemw1133/media-manager.git
 		/*
 		try {
 			int id = Album.insert(conn, s);
@@ -137,7 +140,10 @@ public class Main {
 			e.printStackTrace();
 		}
 		*/
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'master' of https://github.com/kylemw1133/media-manager.git
 		while (promptUser) {
 			System.out.print("Enter db command (add, edit, search, order, report, print, exit): ");
 			String command = s.nextLine();
