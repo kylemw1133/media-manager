@@ -21,7 +21,7 @@ public class EditCommand {
 				Movie.edit(conn, s);
 				break;
 			case "tvshow":
-				//TVShow.edit(conn, s);
+				TVShow.edit(conn, s);
 				break;
 			case "audiobook":
 				Audiobook.edit(conn, s);

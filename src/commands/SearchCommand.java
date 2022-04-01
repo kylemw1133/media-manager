@@ -3,22 +3,32 @@ package commands;
 import java.sql.Connection;
 import java.util.Scanner;
 
-import entities.Movie;
+import entities.*;
 
 public class SearchCommand {
 
 	public static void exec(Connection conn, Scanner s) {
-		System.out.println("Enter the type: ");
+		System.out.print("Enter the type (album, movie, tvshow, audiobook): ");
 		String type = s.nextLine();
-		String sql;
-
+		
 		switch (type) {
 		case "album":
-			sql = "SELECT * FROM ALBUM;";
+			Album.search(conn, s);
 			break;
 		case "movie":
-			Movie.retrieve(conn, s);
+			Movie.search(conn, s);
 			break;
+		case "audiobook":
+			Audiobook.search(conn, s);
+			break;
+		case "inventory_item":
+			//InventoryItem.search(conn, s);
+			break;
+		case "tvshow":
+			TVShow.retrieve(conn, s);
+			break;
+		default:
+			System.out.println("Invalid item type");
 		}
 	}
 }
