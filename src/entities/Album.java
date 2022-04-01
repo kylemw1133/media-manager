@@ -80,13 +80,13 @@ public class Album {
 				case "2":
 					System.out.println("Enter search Length");
 					searchCol = "length";
-					searchInputInt = s.nextInt();
+					searchInputInt = Integer.parseInt(s.nextLine());
 					searchAlbumSQL = "SELECT * FROM ALBUM WHERE " + searchCol + "=" + searchInputInt + ";";
 					break;
 				case "3":
 					System.out.println("Enter search Year");
 					searchCol = "year";
-					searchInputInt = s.nextInt();
+					searchInputInt = Integer.parseInt(s.nextLine());
 					searchAlbumSQL = "SELECT * FROM ALBUM WHERE " + searchCol + "=" + searchInputInt + ";";
 					break;
 
