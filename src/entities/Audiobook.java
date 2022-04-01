@@ -3,9 +3,11 @@ package entities;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 
 import util.TypedAttribute;
 import util.Utils;
@@ -96,4 +98,82 @@ public class Audiobook {
         editAudiobookStmt.close();
         selectAudiobookStmt.close();
     }
+
+	public static void search(Connection conn, Scanner s) {
+		try {
+			Statement stmt = conn.createStatement();
+			System.out.println("Which field do you want to search by?");
+			System.out.println("1: Author_ID | 2: Length | 3: Year | 4: Name | 5: Reader | 6: EXIT: ");
+			String input = s.nextLine();
+			String searchInputString = "";
+			int searchInputInt;
+			String searchCol = "";
+			String searchAudiobookSQL = "";
+			switch (input) {
+				case "1":
+					System.out.println("Enter search authorID");
+					searchCol = "author_id";
+					searchInputInt = s.nextInt();
+					searchAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE "+searchCol+"="+ searchInputInt +";";
+					break;
+				case "2":
+					System.out.println("Enter search Length");
+					searchCol = "length";
+					searchInputInt = s.nextInt();
+					searchAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE "+searchCol+"="+ searchInputInt+";";
+					break;
+				case "3":
+					System.out.println("Enter search Year");
+					searchCol = "year";
+					searchInputInt = s.nextInt();
+					searchAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE "+searchCol+"="+searchInputInt+";";
+					break;
+				case "4":
+					System.out.println("Enter search Name");
+					searchCol = "name";
+					searchInputString = s.nextLine();
+					searchAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE "+searchCol+"="+"\"" + searchInputString + "\"; ";
+					break;
+				case "5":
+					System.out.println("Enter search Reader");
+					searchCol = "reader";
+					searchInputString = s.nextLine();
+					searchAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE "+searchCol+"="+"\"" + searchInputString + "\"; ";
+					break;
+				case "6":
+					System.out.println("Exit");
+					break;
+				default:
+					System.out.println("Invalid input");
+					break;
+			}
+			if(searchCol!="") {
+				ResultSet rs = stmt.executeQuery(searchAudiobookSQL);
+				ResultSetMetaData rsmd = rs.getMetaData();
+				int columnCount = rsmd.getColumnCount();
+				for (int i = 1; i <= columnCount; i++) {
+					String value = rsmd.getColumnName(i);
+					System.out.print(value);
+					if (i < columnCount)
+						System.out.print(",  ");
+				}
+				System.out.print("\n");
+				while (rs.next()) {
+					for (int i = 1; i <= columnCount; i++) {
+						String columnValue = rs.getString(i);
+						System.out.print(columnValue);
+						if (i < columnCount)
+							System.out.print(",  ");
+					}
+					System.out.print("\n");
+				}
+			}
+			else {
+				System.out.println("...");
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+	}
 }
