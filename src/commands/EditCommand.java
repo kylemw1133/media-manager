@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import entities.Album;
+import entities.Audiobook;
 import entities.InventoryItem;
 import entities.Movie;
 
@@ -23,7 +24,7 @@ public class EditCommand {
 				Movie.edit(conn, s);
 				break;
 			case "tvshow":
-				TVShow.edit(conn, s);
+				//TVShow.edit(conn, s);
 				break;
 			case "audiobook":
 				Audiobook.edit(conn, s);

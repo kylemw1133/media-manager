@@ -11,6 +11,7 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 import commands.AddCommand;
+import commands.DeleteCommand;
 import commands.EditCommand;
 import commands.OrderCommand;
 import commands.ReportCommand;
@@ -137,7 +138,7 @@ public class Main {
 		}
 		*/
 		while (promptUser) {
-			System.out.print("Enter db command (add, edit, search, order, report, print, exit): ");
+			System.out.print("Enter db command (add, edit, delete, search, order, report, print, exit): ");
 			String command = s.nextLine();
 			switch (command) {
 			case "add":
@@ -146,6 +147,8 @@ public class Main {
 			case "edit":
 				EditCommand.exec(conn, s);
 				break;
+			case "delete":
+				DeleteCommand.exec(conn, s);
 			case "search":
 				SearchCommand.exec(conn, s);
 				break;
