@@ -34,12 +34,12 @@ public class Movie {
 			a.fillInStmt(insertMovieStmt, i);
 			i++;
 		}
-		
+
 		insertMovieStmt.executeUpdate();
 
 		return id;
 	}
-	
+
 	public static void edit(Connection conn, Scanner s) throws SQLException {
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "MOVIE");
 		PreparedStatement editMovieStmt = conn.prepareStatement(editMovieSQL);
