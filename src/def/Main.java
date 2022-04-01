@@ -128,6 +128,7 @@ public class Main {
 
 		Scanner s = new Scanner(System.in);
 
+		/*
 		try {
 			int id = Album.insert(conn, s);
 			System.out.println(id);
@@ -135,13 +136,19 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 
 		while (promptUser) {
 			System.out.print("Enter db command (add, edit, search, order, report, print, exit): ");
 			String command = s.nextLine();
 			switch (command) {
 			case "add":
-				AddCommand.exec(conn, s);
+				try {
+					AddCommand.exec(conn, s);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				break;
 			case "edit":
 				EditCommand.exec(conn, s);
@@ -165,5 +172,4 @@ public class Main {
 		}
 		s.close();
 	}
-
 }

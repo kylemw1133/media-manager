@@ -9,15 +9,15 @@ import java.util.Scanner;
 import util.TypedAttribute;
 import util.Utils;
 
-public class Movie {
+public class TVShow {
 
-	private final static String insertMovieSQL = "INSERT INTO MOVIE VALUES (?, ?, ?, ?, ?);";
+	private final static String insertTVShowSQL = "INSERT INTO TV_SHOW VALUES (?, ?, ?, ?);";
 
 	public static int insert(Connection conn, Scanner s) throws SQLException {
 		int id = InventoryItem.insert(conn, s);
 		int i = 1;
-		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "MOVIE");
-		PreparedStatement insertMovieStmt = conn.prepareStatement(insertMovieSQL);
+		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "TV_SHOW");
+		PreparedStatement insertTVShowStmt = conn.prepareStatement(insertTVShowSQL);
 
 		for (TypedAttribute a : colSet) {
 			if (a.name == "Inventory_ID") {
@@ -26,12 +26,12 @@ public class Movie {
 				a.promptForValue(s);
 			}
 
-			a.fillInStmt(insertMovieStmt, i);
+			a.fillInStmt(insertTVShowStmt, i);
 			i++;
 		}
 		
-		insertMovieStmt.executeUpdate();
-
+		insertTVShowStmt.executeUpdate();
+		
 		return id;
 	}
 }
