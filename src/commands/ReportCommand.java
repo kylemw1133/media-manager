@@ -1,7 +1,11 @@
 package commands;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Scanner;
+
+import util.Utils;
 
 public class ReportCommand {
 
@@ -52,12 +56,41 @@ public class ReportCommand {
 		System.out.println("The available reports are as follows:");
 		
 		for (int i = 0; i < reportDescs.length; i++) {
-			System.out.println("Report " + i + 1 + ": " + reportDescs[i]);
+			System.out.println("Report " + (i + 1) + ": " + reportDescs[i]);
 		}
 		
 		System.out.print("Select one (1 - 6): ");
-		int selection = Integer.parseInt(s.nextLine());
+		int selection = Integer.parseInt(s.nextLine()) - 1;
+
+		try {
+			PreparedStatement stmt = conn.prepareStatement(reportSQLs[selection]);
+			
+			switch (selection) {
+			case 0:
+				System.out.print("Provide the patron's email: ");
+				String email = s.nextLine();
+				stmt.setString(1, email);
+				break;
+			case 5:
+				System.out.print("Provide the artist's ID: ");
+				int id = Integer.parseInt(s.nextLine());
+				System.out.print("Provide the year: ");
+				int year = Integer.parseInt(s.nextLine());
+
+				stmt.setInt(1, id);
+				stmt.setInt(2, year);
+				break;
+			}
+			
+			Utils.printRecords(stmt.executeQuery());
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		
+                
 		
 	}
 
