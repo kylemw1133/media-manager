@@ -27,6 +27,7 @@ public class Order {
 		}
 
 		insertOrderStmt.executeUpdate();
+		insertOrderStmt.close();
 	}
 
 	public static void activate(Connection conn, Scanner s) throws SQLException {
@@ -71,5 +72,6 @@ public class Order {
 		} else {
 			System.out.println("Activation cancelled.");
 		}
+		selectOrderStatement.close();
 	}
 }
