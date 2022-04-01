@@ -41,8 +41,8 @@ public class Audiobook {
         PreparedStatement selectAudiobookStmt = conn.prepareStatement(selectAudiobookSQL);
         PreparedStatement editAudiobookStmt = conn.prepareStatement(editAudiobookSQL);
 
-        System.out.println("Enter the inventory ID of the audiobook ")
-        
+        System.out.println("Enter the inventory ID of the audiobook ");
+
         String id = "";
         // repeat promp for inventory id until user inputs a valid integer
         while (id.equals("") || !id.matches("\\-?\\d+")) {
@@ -56,12 +56,12 @@ public class Audiobook {
 
         if (selectedRecord.next()) {
             Utils.printRecords(selectedRecord);
-            System.out.println("Which field do you want to edit?")
-            System.out.println("1: Author_ID | 2: Length | 3: Year | 4: Name | 5: Reader | 6: EXIT")
+            System.out.println("Which field do you want to edit?");
+            System.out.println("1: Author_ID | 2: Length | 3: Year | 4: Name | 5: Reader | 6: EXIT");
             String input = s.nextLine();
             String newInput = "";
 
-            switch(input) {
+            switch (input) {
                 case "1":
                     System.out.println("Enter new Author_ID");
                     newInput = "Author_ID=" + s.nextLine();
@@ -89,7 +89,6 @@ public class Audiobook {
                 editAudiobookStmt.setString(1, newInput);
                 editAudiobookStmt.executeUpdate();
             }
-
 
         } else {
             System.out.println("Record not found...");
