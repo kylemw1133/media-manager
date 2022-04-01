@@ -93,6 +93,7 @@ public class Audiobook {
                 // editAudiobookStmt.executeUpdate();
                 Statement stmt = conn.createStatement();
                 stmt.executeUpdate("UPDATE AUDIOBOOK SET " + newInput + " WHERE Inventory_ID=" + id);
+                stmt.close();
                 System.out.println("Record Updated");
             }
 
