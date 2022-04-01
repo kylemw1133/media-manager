@@ -124,19 +124,19 @@ public class Audiobook {
                 case "1":
                     System.out.println("Enter search authorID");
                     searchCol = "author_id";
-                    searchInputInt = s.nextInt();
+                    searchInputInt = Integer.parseInt(s.nextLine());
                     searchAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE " + searchCol + "=" + searchInputInt + ";";
                     break;
                 case "2":
                     System.out.println("Enter search Length");
                     searchCol = "length";
-                    searchInputInt = s.nextInt();
+                    searchInputInt = Integer.parseInt(s.nextLine());
                     searchAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE " + searchCol + "=" + searchInputInt + ";";
                     break;
                 case "3":
                     System.out.println("Enter search Year");
                     searchCol = "year";
-                    searchInputInt = s.nextInt();
+                    searchInputInt = Integer.parseInt(s.nextLine());
                     searchAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE " + searchCol + "=" + searchInputInt + ";";
                     break;
                 case "4":

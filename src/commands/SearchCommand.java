@@ -22,11 +22,9 @@ public class SearchCommand {
 			case "audiobook":
 				Audiobook.search(conn, s);
 				break;
-			case "inventory_item":
-				// InventoryItem.search(conn, s);
-				break;
 			case "tvshow":
-				TVShow.retrieve(conn, s);
+				TVShow.search(conn, s);
+				break;
 			default:
 				System.out.println("Invalid item type");
 		}

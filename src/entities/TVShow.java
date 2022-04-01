@@ -63,26 +63,56 @@ public class TVShow {
 		editTVShowStmt.executeUpdate();
 	}
 	
-	public static void retrieve(Connection conn, Scanner s) {
+	public static void search(Connection conn, Scanner s) {
 		try {
-			System.out.print("Enter the column to search (Name, Year, Rating): ");
-			String columnname = s.nextLine();
-			System.out.print("Enter the search term: ");
-			String keyword = s.nextLine();
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(retrieveTVShowSQL);
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int columnCount = rsmd.getColumnCount();
-			int column = -1;
-			for (int i = 1; column < 0 || i <= columnCount; i++) {
-				if(rsmd.getColumnName(i).equals(columnname)) {
-					column = i;
-				}
+			System.out.println("Which field do you want to search by?");
+			System.out.println("1: Name | 2: Year | 3: Rating | 4: EXIT: ");
+			String input = s.nextLine();
+			String searchInputString = "";
+			int searchInputInt;
+			String searchCol = "";
+			String searchTVShowSQL = "";
+			switch (input) {
+				case "1":
+					System.out.println("Enter search Name");
+					searchCol = "name";
+					searchInputString = s.nextLine();
+					searchTVShowSQL = "SELECT * FROM TV_SHOW WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
+					break;
+		
+				case "2":
+					System.out.println("Enter search Year");
+					searchCol = "year";
+					searchInputInt = Integer.parseInt(s.nextLine());
+					searchTVShowSQL = "SELECT * FROM TV_SHOW WHERE " + searchCol + "=" + searchInputInt + ";";
+					break;
+
+				case "3":
+					System.out.println("Enter search rating");
+					searchCol = "name";
+					searchInputString = s.nextLine();
+					searchTVShowSQL = "SELECT * FROM TV_SHOW WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
+					break;
+				case "4":
+					System.out.println("Exit");
+					break;
+				default:
+					System.out.println("Invalid input");
+					break;
 			}
-			
-			int foundcount = 0;
-			while(rs.next()) {
-				if(rs.getString(column).toLowerCase().contains(keyword.toLowerCase())) {
+			if (searchCol != "") {
+				ResultSet rs = stmt.executeQuery(searchTVShowSQL);
+				ResultSetMetaData rsmd = rs.getMetaData();
+				int columnCount = rsmd.getColumnCount();
+				for (int i = 1; i <= columnCount; i++) {
+					String value = rsmd.getColumnName(i);
+					System.out.print(value);
+					if (i < columnCount)
+						System.out.print(",  ");
+				}
+				System.out.print("\n");
+				while (rs.next()) {
 					for (int i = 1; i <= columnCount; i++) {
 						String columnValue = rs.getString(i);
 						System.out.print(columnValue);
@@ -90,15 +120,12 @@ public class TVShow {
 							System.out.print(",  ");
 					}
 					System.out.print("\n");
-					foundcount++;
 				}
+			} else {
+				System.out.println("No search performed");
 			}
-			if(foundcount == 0)
-				System.out.println("No results found for \'" + keyword + "\' under \'" + columnname + "\'");
-			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-		
 	}
 }
