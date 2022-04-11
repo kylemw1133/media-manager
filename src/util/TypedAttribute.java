@@ -23,6 +23,9 @@ public class TypedAttribute {
 		case Types.INTEGER:
 			value = Integer.parseInt(s.nextLine());
 			break;
+		case Types.REAL:
+			value = Double.parseDouble(s.nextLine());
+			break;
 		case Types.VARCHAR:
 			value = s.nextLine();
 			break;
@@ -33,6 +36,9 @@ public class TypedAttribute {
 		switch (this.dataType) {
 		case Types.INTEGER:
 			s.setInt(valuePos, (int) this.value);
+			break;
+		case Types.REAL:
+			s.setDouble(valuePos, (double) this.value);
 			break;
 		case Types.VARCHAR:
 			s.setString(valuePos, (String) this.value);

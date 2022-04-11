@@ -52,92 +52,12 @@ public class Main {
 		return conn;
 	}
 
-	/**
-	 * Queries the database and prints the results.
-	 *
-	 * @param conn a connection object
-	 * @param sql  a SQL statement that returns rows This query is written with the
-	 *             Statement class, tipically used for static SQL SELECT statements
-	 */
-	public static void sqlQuery(Connection conn, String sql) {
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int columnCount = rsmd.getColumnCount();
-			for (int i = 1; i <= columnCount; i++) {
-				String value = rsmd.getColumnName(i);
-				System.out.print(value);
-				if (i < columnCount)
-					System.out.print(",  ");
-			}
-			System.out.print("\n");
-			while (rs.next()) {
-				for (int i = 1; i <= columnCount; i++) {
-					String columnValue = rs.getString(i);
-					System.out.print(columnValue);
-					if (i < columnCount)
-						System.out.print(",  ");
-				}
-				System.out.print("\n");
-			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
-	/**
-	 * Queries the database and prints the results.
-	 *
-	 * @param conn a connection object
-	 * @param sql  a SQL statement that returns rows This query is written with the
-	 *             Statement class, tipically used for static SQL SELECT statements
-	 */
-	public static void sqlInsert(Connection conn, String sql) {
-		try {
-			String s = "INSERT INTO ";
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			// stmt.setInt(1, year);
-			ResultSet rs = stmt.executeQuery();
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int columnCount = rsmd.getColumnCount();
-			for (int i = 1; i <= columnCount; i++) {
-				String value = rsmd.getColumnName(i);
-				System.out.print(value);
-				if (i < columnCount)
-					System.out.print(",  ");
-			}
-			System.out.print("\n");
-			while (rs.next()) {
-				for (int i = 1; i <= columnCount; i++) {
-					String columnValue = rs.getString(i);
-					System.out.print(columnValue);
-					if (i < columnCount)
-						System.out.print(",  ");
-				}
-				System.out.print("\n");
-			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
 	public static void main(String[] args) {
 		System.out.println("This is a new run");
 		Connection conn = initializeDB(DATABASE);
 		boolean promptUser = true;
 
 		Scanner s = new Scanner(System.in);
-		
-		/*
-		try {
-			int id = Album.insert(conn, s);
-			System.out.println(id);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
 		
 		while (promptUser) {
 			System.out.print("Enter db command (add, edit, delete, search, order, report, print, exit): ");

@@ -15,6 +15,11 @@ public class Order {
 
 	private final static String insertOrderSQL = "INSERT INTO [ORDER] VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	private final static String selectOrderSQL = "SELECT * FROM [ORDER] WHERE Order_ID=?;";
+	private final static String updateInventorySQL = "UPDATE INVENTORY_ITEM SET Quantity=? "
+	+ "WHERE INVENTORY_ITEM.Inventory_ID=?";
+	
+	private final static String updateOrderSQL = "UPDATE [ORDER] SET Status='FULFILLED'"
+			+ "WHERE Order_ID=?";
 
 	public static void insert(Connection conn, Scanner s) throws SQLException {
 		int i = 1;
@@ -62,13 +67,15 @@ public class Order {
 			rs.next();
 			int prevQuantity = rs.getInt("Quantity");
 			int newQuantity = prevQuantity + rs.getInt("Copies");
-			int inventory_id = rs.getInt("Inventory_ID");
+			int inventoryID = rs.getInt("Inventory_ID");
 
-			stmt.executeUpdate("UPDATE INVENTORY_ITEM SET Quantity=" + Integer.toString(newQuantity)
-					+ " WHERE  INVENTORY_ITEM.Inventory_ID = [ORDER].Inventory_ID AND Inventory_ID =" + inventory_id);
-			stmt.executeUpdate("UPDATE [ORDER] SET Status='FULFILLED' WHERE Order_ID =" + order_id);
-
+			stmt.executeUpdate(updateOrderSQL);
 			stmt.close();
+			
+			PreparedStatement updateStmt = conn.prepareStatement(updateInventorySQL);
+			updateStmt.setInt(1, newQuantity);
+			updateStmt.setInt(2, inventoryID);
+			updateStmt.execute();
 		} else {
 			System.out.println("Activation cancelled.");
 		}
