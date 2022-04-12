@@ -1,6 +1,7 @@
 package commands;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -11,29 +12,34 @@ public class EditCommand {
 	public static void exec(Connection conn, Scanner s) {
 		System.out.print("Enter type of item to edit (album, movie, tvshow, audiobook, inventory_item): ");
 		String type = s.nextLine();
+		ResultSet rs;
+		Entity e;
 
 		try {
 			switch (type) {
 			case "album":
-				Album.edit(conn, s);
+				e = Album.searchForOne(conn, s);
 				break;
 			case "movie":
-				Movie.edit(conn, s);
+				e = Movie.searchForOne(conn, s);
 				break;
 			case "tvshow":
-				TVShow.edit(conn, s);
+				e = TVShow.searchForOne(conn, s);
 				break;
 			case "audiobook":
-				Audiobook.edit(conn, s);
+				e = Audiobook.searchForOne(conn, s);
 				break;
 			case "inventory_item":
-				InventoryItem.edit(conn, s);
+				e = InventoryItem.searchForOne(conn, s);
 				break;
 			default:
 				System.out.println("Invalid item type");
+				return;
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+
+			e.edit(conn, s);
+		} catch (SQLException ex) {
+			ex.printStackTrace();
 		}
 	}
 

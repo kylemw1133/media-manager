@@ -12,15 +12,26 @@ import java.util.Scanner;
 import util.TypedAttribute;
 import util.Utils;
 
-public class Movie {
+public class Movie implements Entity {
 
 	private final static String insertMovieSQL = "INSERT INTO MOVIE VALUES (?, ?, ?, ?, ?);";
 	private final static String retrieveMovieSQL = "SELECT * FROM MOVIE;";
 	private final static String selectMovieSQL = "SELECT * FROM MOVIE WHERE Inventory_ID = ?";
 	private final static String editMovieSQL = "UPDATE MOVIE SET ? WHERE Inventory_ID = ?";
 
-	public static int insert(Connection conn, Scanner s) throws SQLException {
-		int id = InventoryItem.insert(conn, s);
+	private LinkedList<TypedAttribute> data;
+	
+	public Movie() {
+		this.data = null;
+	}
+	
+	public Movie(LinkedList<TypedAttribute> data) {
+		this.data = data;
+	}
+	
+	public int insert(Connection conn, Scanner s) throws SQLException {
+		InventoryItem parentItem = new InventoryItem();
+		int id = parentItem.insert(conn, s);
 		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "MOVIE");
 		PreparedStatement insertMovieStmt = conn.prepareStatement(insertMovieSQL);
@@ -43,7 +54,7 @@ public class Movie {
 		return id;
 	}
 
-	public static void edit(Connection conn, Scanner s) throws SQLException {
+	public void edit(Connection conn, Scanner s) throws SQLException {
 		PreparedStatement selectMovieStmt = conn.prepareStatement(selectMovieSQL);
 		PreparedStatement editMovieStmt = conn.prepareStatement(editMovieSQL);
 
@@ -115,34 +126,18 @@ public class Movie {
 		 */
 	}
 
-	public static void retrieve(Connection conn, Scanner s) {
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(retrieveMovieSQL);
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int columnCount = rsmd.getColumnCount();
-			for (int i = 1; i <= columnCount; i++) {
-				String value = rsmd.getColumnName(i);
-				System.out.print(value);
-				if (i < columnCount)
-					System.out.print(",  ");
-			}
-			System.out.print("\n");
-			while (rs.next()) {
-				for (int i = 1; i <= columnCount; i++) {
-					String columnValue = rs.getString(i);
-					System.out.print(columnValue);
-					if (i < columnCount)
-						System.out.print(",  ");
-				}
-				System.out.print("\n");
-			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+	public static Movie searchForOne(Connection conn, Scanner s) throws SQLException {
+		ResultSet rs = Album.search(conn, s);
+		if (rs.first()) {
+			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "MOVIE");
+			Utils.fillRowData(rs, rowData);
+			return new Movie(rowData);
+		} else {
+			return null;
 		}
 	}
-
-	public static void search(Connection conn, Scanner s) throws SQLException {
+	
+	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		System.out.println("Which field do you want to search by?");
 		System.out.println("1: Name | 2: Length | 3: Year | 4: Content_Rating | 5: EXIT");
 		String input = s.nextLine();
@@ -181,29 +176,13 @@ public class Movie {
 			System.out.println("Invalid input");
 			break;
 		}
-		if (searchMovieSQLstmt != null) {
 
+		if (searchMovieSQLstmt != null) {
 			ResultSet rs = searchMovieSQLstmt.executeQuery();
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int columnCount = rsmd.getColumnCount();
-			for (int i = 1; i <= columnCount; i++) {
-				String value = rsmd.getColumnName(i);
-				System.out.print(value);
-				if (i < columnCount)
-					System.out.print(",  ");
-			}
-			System.out.print("\n");
-			while (rs.next()) {
-				for (int i = 1; i <= columnCount; i++) {
-					String columnValue = rs.getString(i);
-					System.out.print(columnValue);
-					if (i < columnCount)
-						System.out.print(",  ");
-				}
-				System.out.print("\n");
-			}
+			return rs;
 		} else {
-			System.out.println("...");
+			System.out.println("No search performed");
+			return null;
 		}
 	}
 }

@@ -11,20 +11,23 @@ public class OrderCommand {
 	public static void exec(Connection conn, Scanner s) {
 		System.out.print("Enter type of action (place, activate): ");
 		String type = s.nextLine();
+		Order e;
 
 		try {
 			switch (type) {
 			case "place":
-				Order.insert(conn, s);
+				e = new Order();
+				e.insert(conn, s);
 				break;
 			case "activate":
-				Order.activate(conn, s);
+				e = Order.searchForOne(conn, s);
+				e.activate(conn, s);
 				break;
 			default:
 				System.out.println("Invalid action type");
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
 		}
 	}
 

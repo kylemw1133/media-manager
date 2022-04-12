@@ -11,26 +11,30 @@ public class AddCommand {
 	public static void exec(Connection conn, Scanner s) {
 		System.out.print("Enter type of item to add (album, movie, tvshow, audiobook): ");
 		String type = s.nextLine();
-		
+		Entity e;
+
 		try {
 			switch (type) {
 			case "album":
-				Album.insert(conn, s);
+				e = new Album();
 				break;
 			case "movie":
-				Movie.insert(conn, s);
+				e = new Movie();
 				break;
 			case "tvshow":
-				TVShow.insert(conn, s);
+				e = new TVShow();
 				break;
 			case "audiobook":
-				Audiobook.insert(conn, s);
+				e = new Audiobook();
 				break;
 			default:
+				e = new InventoryItem();
 				System.out.println("Invalid item type");
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+			
+			e.insert(conn, s);
+		} catch (SQLException ex) {
+			ex.printStackTrace();
 		}
 	}
 

@@ -12,7 +12,7 @@ public class TypedAttribute {
 	public String name;
 	public int dataType;
 	public Object value;
-	
+
 	private static final DateFormat dateFormat = DateFormat.getInstance();
 
 	public TypedAttribute(String n, int t) {

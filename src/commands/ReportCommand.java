@@ -48,23 +48,25 @@ public class ReportCommand {
 	public static final String report6SQL = "SELECT Track.Name\n" + "FROM TRACK, ARTIST\n"
 			+ "WHERE TRACK.Artist_ID = ARTIST.Artist_ID\n" + "AND ARTIST.Name = ?\n" + "AND TRACK.Year < ?;";
 
-	public static final String[] reportDescs = { report1Desc, report2Desc, report3Desc, report4Desc, report5Desc, report6Desc };
-	public static final String[] reportSQLs = { report1SQL, report2SQL, report3SQL, report4SQL, report5SQL, report6SQL };
+	public static final String[] reportDescs = { report1Desc, report2Desc, report3Desc, report4Desc, report5Desc,
+			report6Desc };
+	public static final String[] reportSQLs = { report1SQL, report2SQL, report3SQL, report4SQL, report5SQL,
+			report6SQL };
 
 	public static void exec(Connection conn, Scanner s) {
-		
+
 		System.out.println("The available reports are as follows:");
-		
+
 		for (int i = 0; i < reportDescs.length; i++) {
 			System.out.println("Report " + (i + 1) + ": " + reportDescs[i]);
 		}
-		
+
 		System.out.print("Select one (1 - 6): ");
 		int selection = Integer.parseInt(s.nextLine()) - 1;
 
 		try {
 			PreparedStatement stmt = conn.prepareStatement(reportSQLs[selection]);
-			
+
 			switch (selection) {
 			case 0:
 				System.out.print("Provide the patron's email: ");
@@ -81,17 +83,14 @@ public class ReportCommand {
 				stmt.setInt(2, year);
 				break;
 			}
-			
+
 			Utils.printRecords(stmt.executeQuery());
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-                
-		
+
 	}
 
 }

@@ -12,7 +12,7 @@ import java.util.Scanner;
 import util.TypedAttribute;
 import util.Utils;
 
-public class Artist {
+public class Artist implements Entity {
 
 	private final static String insertArtistSQL = "INSERT INTO ARTIST VALUES (?, ?);";
 	private static final String maxArtistIDSQL = "SELECT MAX(Artist_ID) AS Max_ID FROM ARTIST;";
@@ -20,8 +20,9 @@ public class Artist {
 	public static int getNextArtistID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxArtistIDSQL, "Max_ID");
 	}
-	
-	public static int insert(Connection conn, Scanner s) throws SQLException {
+
+	@Override
+	public int insert(Connection conn, Scanner s) throws SQLException {
 		int id = 0;
 		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "ARTIST");
@@ -42,5 +43,11 @@ public class Artist {
 		insertArtistStmt.execute();
 
 		return id;
+	}
+
+	@Override
+	public void edit(Connection conn, Scanner s) throws SQLException {
+		// TODO Auto-generated method stub
+
 	}
 }

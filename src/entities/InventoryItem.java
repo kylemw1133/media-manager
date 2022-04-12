@@ -3,6 +3,7 @@ package entities;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
@@ -11,18 +12,28 @@ import java.util.Scanner;
 import util.TypedAttribute;
 import util.Utils;
 
-public class InventoryItem {
+public class InventoryItem implements Entity {
 
 	private final static String insertInventoryItemSQL = "INSERT INTO INVENTORY_ITEM VALUES (?, ?, ?, ?);";
 	private final static String editInventoryItemSQL = " UPDATE INVENTORY_ITEM SET Quantity=?, Format=?, Location=? WHERE Inventory_ID=?;";
 	private final static String deleteInventoryItemSQL = "DELETE FROM INVENTORY_ITEM WHERE Inventory_ID = ?;";
 	private static final String maxInventoryIDSQL = "SELECT MAX(Inventory_ID) AS Max_ID FROM INVENTORY_ITEM;";
 
+	private LinkedList<TypedAttribute> data;
+	
+	public InventoryItem() {
+		this.data = null;
+	}
+	
+	public InventoryItem(LinkedList<TypedAttribute> data) {
+		this.data = data;
+	}
+	
 	public static int getNextInventoryID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxInventoryIDSQL, "Max_ID");
 	}
-	
-	public static int insert(Connection conn, Scanner s) throws SQLException {
+
+	public int insert(Connection conn, Scanner s) throws SQLException {
 		int id = 0;
 		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "INVENTORY_ITEM");
@@ -35,18 +46,18 @@ public class InventoryItem {
 			} else {
 				a.promptForValue(s);
 			}
-			
+
 			a.fillInStmt(insertInventoryItemStmt, i);
 			i++;
 		}
 
 		insertInventoryItemStmt.execute();
 		insertInventoryItemStmt.close();
-		
+
 		return id;
 	}
 
-	public static void edit(Connection conn, Scanner s) throws SQLException {
+	public void edit(Connection conn, Scanner s) throws SQLException {
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "MOVIE");
 		PreparedStatement editInventoryItemStmt = conn.prepareStatement(editInventoryItemSQL);
 		int i = 1;
@@ -76,10 +87,80 @@ public class InventoryItem {
 		while (id.equals("") || !id.matches("\\-?\\d+")) {
 			id = s.nextLine();
 		}
-		
+
 		deleteInventoryItemStmt.setString(1, id);
 		deleteInventoryItemStmt.executeQuery();
-
 		deleteInventoryItemStmt.close();
+	}
+	
+	public static InventoryItem searchForOne(Connection conn, Scanner s) throws SQLException {
+		ResultSet rs = InventoryItem.search(conn, s);
+		if (rs.first()) {
+			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "INVENTORY_ITEM");
+			Utils.fillRowData(rs, rowData);
+			return new InventoryItem(rowData);
+		} else {
+			return null;
+		}
+	}
+	
+	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
+		System.out.println("Which field do you want to search by?");
+		System.out.println("1: Name | 2: Length | 3: Year | 4: EXIT: ");
+		String input = s.nextLine();
+		String searchInputString = "";
+		int searchInputInt;
+		PreparedStatement searchAlbumSQLstmt = null;
+		switch (input) {
+		case "1":
+			System.out.println("Enter search name");
+			searchInputString = s.nextLine();
+			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE name = ?;");
+			searchAlbumSQLstmt.setString(1, searchInputString);
+			break;
+		case "2":
+			System.out.println("Enter search Length");
+			searchInputInt = Integer.parseInt(s.nextLine());
+			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE length = ?;");
+			searchAlbumSQLstmt.setInt(1, searchInputInt);
+			break;
+		case "3":
+			System.out.println("Enter search year");
+			searchInputString = s.nextLine();
+			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE year = ?;");
+			searchAlbumSQLstmt.setString(1, searchInputString);
+			break;
+
+		case "4":
+			System.out.println("Exit");
+			break;
+		default:
+			System.out.println("Invalid input");
+			break;
+		}
+		if (searchAlbumSQLstmt != null) {
+			ResultSet rs = searchAlbumSQLstmt.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int columnCount = rsmd.getColumnCount();
+			for (int i = 1; i <= columnCount; i++) {
+				String value = rsmd.getColumnName(i);
+				System.out.print(value);
+				if (i < columnCount)
+					System.out.print(",  ");
+			}
+			System.out.print("\n");
+			while (rs.next()) {
+				for (int i = 1; i <= columnCount; i++) {
+					String columnValue = rs.getString(i);
+					System.out.print(columnValue);
+					if (i < columnCount)
+						System.out.print(",  ");
+				}
+				System.out.print("\n");
+			}
+		} else {
+			System.out.println("No search performed");
+		}
+		return null;
 	}
 }

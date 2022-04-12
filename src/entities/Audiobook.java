@@ -12,16 +12,26 @@ import java.sql.ResultSetMetaData;
 import util.TypedAttribute;
 import util.Utils;
 
-public class Audiobook {
+public class Audiobook implements Entity {
 
 	private final static String insertAudiobookSQL = "INSERT INTO AUDIOBOOK VALUES (? ? ? ? ? ?);";
 	private final static String selectAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE Inventory_ID=?;";
 	// private final static String editAudiobookSQL = "UPDATE AUDIOBOOK SET ? WHERE
 	// Inventory_ID = ?;";
 
-	public static int insert(Connection conn, Scanner s) throws SQLException {
-		int id = InventoryItem.insert(conn, s);
-
+	private LinkedList<TypedAttribute> data;
+	
+	public Audiobook() {
+		this.data = null;
+	}
+	
+	public Audiobook(LinkedList<TypedAttribute> data) {
+		this.data = data;
+	}
+	
+	public int insert(Connection conn, Scanner s) throws SQLException {
+		InventoryItem parentItem = new InventoryItem();
+		int id = parentItem.insert(conn, s);
 		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "AUDIOBOOK");
 		PreparedStatement insertAudiobookStmt = conn.prepareStatement(insertAudiobookSQL);
@@ -40,7 +50,7 @@ public class Audiobook {
 		return id;
 	}
 
-	public static void edit(Connection conn, Scanner s) throws SQLException {
+	public void edit(Connection conn, Scanner s) throws SQLException {
 		PreparedStatement selectAudiobookStmt = conn.prepareStatement(selectAudiobookSQL);
 		// PreparedStatement editAudiobookStmt =
 		// conn.prepareStatement(editAudiobookSQL);
@@ -110,7 +120,18 @@ public class Audiobook {
 		selectAudiobookStmt.close();
 	}
 
-	public static void search(Connection conn, Scanner s) throws SQLException {
+	public static Audiobook searchForOne(Connection conn, Scanner s) throws SQLException {
+		ResultSet rs = Album.search(conn, s);
+		if (rs.first()) {
+			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "AUDIOBOOK");
+			Utils.fillRowData(rs, rowData);
+			return new Audiobook(rowData);
+		} else {
+			return null;
+		}
+	}
+	
+	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		System.out.println("Which field do you want to search by?");
 		System.out.println("1: Author_ID | 2: Length | 3: Year | 4: Name | 5: Reader | 6: EXIT: ");
 		String input = s.nextLine();
@@ -119,7 +140,7 @@ public class Audiobook {
 		PreparedStatement searchAudiobookSQLstmt = null;
 		switch (input) {
 		case "1":
-			
+
 			System.out.println("Enter search author id");
 			searchInputInt = Integer.parseInt(s.nextLine());
 			searchAudiobookSQLstmt = conn.prepareStatement("SELECT * FROM AUDIOBOOK WHERE Author_ID = ?;");
@@ -156,28 +177,13 @@ public class Audiobook {
 			System.out.println("Invalid input");
 			break;
 		}
+		
 		if (searchAudiobookSQLstmt != null) {
 			ResultSet rs = searchAudiobookSQLstmt.executeQuery();
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int columnCount = rsmd.getColumnCount();
-			for (int i = 1; i <= columnCount; i++) {
-				String value = rsmd.getColumnName(i);
-				System.out.print(value);
-				if (i < columnCount)
-					System.out.print(",  ");
-			}
-			System.out.print("\n");
-			while (rs.next()) {
-				for (int i = 1; i <= columnCount; i++) {
-					String columnValue = rs.getString(i);
-					System.out.print(columnValue);
-					if (i < columnCount)
-						System.out.print(",  ");
-				}
-				System.out.print("\n");
-			}
+			return rs;
 		} else {
-			System.out.println("...");
+			System.out.println("No search performed");
+			return null;
 		}
 	}
 }

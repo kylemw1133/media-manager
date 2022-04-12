@@ -12,13 +12,24 @@ import java.util.Scanner;
 import util.TypedAttribute;
 import util.Utils;
 
-public class Album {
+public class Album implements Entity {
 
 	private final static String insertAlbumSQL = "INSERT INTO ALBUM VALUES (?, ?, ?, ?);";
 	private final static String editAlbumSQL = " UPDATE ALBUM SET Name=?, Length=?, Year=? WHERE Inventory_ID=?";
 
-	public static int insert(Connection conn, Scanner s) throws SQLException {
-		int id = InventoryItem.insert(conn, s);
+	private LinkedList<TypedAttribute> data;
+	
+	public Album() {
+		this.data = null;
+	}
+	
+	public Album(LinkedList<TypedAttribute> data) {
+		this.data = data;
+	}
+	
+	public int insert(Connection conn, Scanner s) throws SQLException {
+		InventoryItem parentItem = new InventoryItem();
+		int id = parentItem.insert(conn, s);
 		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "ALBUM");
 		PreparedStatement insertAlbumStmt = conn.prepareStatement(insertAlbumSQL);
@@ -39,29 +50,33 @@ public class Album {
 		return id;
 	}
 
-	public static void edit(Connection conn, Scanner s) throws SQLException {
-		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "ALBUM");
+	public void edit(Connection conn, Scanner s) throws SQLException {
 		PreparedStatement editAlbumStmt = conn.prepareStatement(editAlbumSQL);
 		int i = 1;
-		int id = 0;
 
-		for (TypedAttribute a : colSet) {
-			if (a.name.equals("Inventory_ID")) {
-				System.out.print("Provide the ID of the item you want to edit: ");
-				id = Integer.parseInt(s.nextLine());
-			} else {
+		for (TypedAttribute a : this.data) {
+			if (!a.name.equals("Inventory_ID")) {
 				a.promptForValue(s);
-				a.fillInStmt(editAlbumStmt, i++);
 			}
+			
+			a.fillInStmt(editAlbumStmt, i++);
 		}
 
-		editAlbumStmt.setInt(i, id);
-
-		editAlbumStmt.executeUpdate();
+		editAlbumStmt.execute();
 	}
 
-	public static void search(Connection conn, Scanner s) throws SQLException {
-
+	public static Album searchForOne(Connection conn, Scanner s) throws SQLException {
+		ResultSet rs = Album.search(conn, s);
+		if (rs.next()) {
+			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "ALBUM");
+			Utils.fillRowData(rs, rowData);
+			return new Album(rowData);
+		} else {
+			return null;
+		}
+	}
+	
+	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		System.out.println("Which field do you want to search by?");
 		System.out.println("1: Name | 2: Length | 3: Year | 4: EXIT: ");
 		String input = s.nextLine();
@@ -95,28 +110,13 @@ public class Album {
 			System.out.println("Invalid input");
 			break;
 		}
+		
 		if (searchAlbumSQLstmt != null) {
 			ResultSet rs = searchAlbumSQLstmt.executeQuery();
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int columnCount = rsmd.getColumnCount();
-			for (int i = 1; i <= columnCount; i++) {
-				String value = rsmd.getColumnName(i);
-				System.out.print(value);
-				if (i < columnCount)
-					System.out.print(",  ");
-			}
-			System.out.print("\n");
-			while (rs.next()) {
-				for (int i = 1; i <= columnCount; i++) {
-					String columnValue = rs.getString(i);
-					System.out.print(columnValue);
-					if (i < columnCount)
-						System.out.print(",  ");
-				}
-				System.out.print("\n");
-			}
+			return rs;
 		} else {
 			System.out.println("No search performed");
+			return null;
 		}
 	}
 }

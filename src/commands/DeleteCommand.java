@@ -15,5 +15,4 @@ public class DeleteCommand {
 			e.printStackTrace();
 		}
 	}
-
 }

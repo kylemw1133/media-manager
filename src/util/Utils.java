@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 
 public class Utils {
-		
+
 	public static int getNextOrdinal(Connection conn, String sql, String name) throws SQLException {
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
@@ -16,7 +16,7 @@ public class Utils {
 		stmt.close();
 		return maxID + 1;
 	}
-	
+
 	/**
 	 * Gets all attributes of an inventory item type. If the type is not found, only
 	 * the basic inventory item attributes are returned.
@@ -30,6 +30,13 @@ public class Utils {
 		return colNameSet;
 	}
 
+	public static void fillRowData(ResultSet rs, LinkedList<TypedAttribute> rowData) throws SQLException {
+		for (TypedAttribute ta : rowData) {
+			ta.value = rs.getObject(ta.name);
+		}
+	}
+
+	
 	/**
 	 * Gets the columns of a table in the database.
 	 *

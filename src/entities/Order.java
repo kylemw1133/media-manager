@@ -3,6 +3,7 @@ package entities;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
@@ -11,7 +12,7 @@ import java.util.Scanner;
 import util.TypedAttribute;
 import util.Utils;
 
-public class Order {
+public class Order implements Entity {
 
 	private final static String insertOrderSQL = "INSERT INTO [ORDER] VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	private final static String selectOrderSQL = "SELECT * FROM [ORDER] WHERE Order_ID=?;";
@@ -19,18 +20,31 @@ public class Order {
 	private final static String updateOrderSQL = "UPDATE [ORDER] SET Status='FULFILLED' WHERE Order_ID=?";
 	private static final String maxOrderIDSQL = "SELECT MAX(Order_ID) AS Max_ID FROM [ORDER];";
 
+	private LinkedList<TypedAttribute> data;
+	
+	public Order() {
+		this.data = null;
+	}
+	
+	public Order(LinkedList<TypedAttribute> data) {
+		this.data = data;
+	}
+	
+	
 	public static int getNextOrderID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxOrderIDSQL, "Max_ID");
 	}
 
-	public static void insert(Connection conn, Scanner s) throws SQLException {
+	public int insert(Connection conn, Scanner s) throws SQLException {
+		int id = 0;
 		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "ORDER");
 		PreparedStatement insertOrderStmt = conn.prepareStatement(insertOrderSQL);
 
 		for (TypedAttribute a : colSet) {
 			if (a.name.equals("Order_ID")) {
-				a.value = getNextOrderID(conn);
+				id = getNextOrderID(conn);
+				a.value = id;
 			} else {
 				a.promptForValue(s);
 			}
@@ -40,9 +54,11 @@ public class Order {
 
 		insertOrderStmt.execute();
 		insertOrderStmt.close();
+
+		return id;
 	}
 
-	public static void activate(Connection conn, Scanner s) throws SQLException {
+	public void activate(Connection conn, Scanner s) throws SQLException {
 		// Get an order
 		// Get the associated inventory item
 		// increase the items quantity by the order's quantity
@@ -87,5 +103,82 @@ public class Order {
 			System.out.println("Activation cancelled.");
 		}
 		selectOrderStatement.close();
+	}
+	
+	public static Order searchForOne(Connection conn, Scanner s) throws SQLException {
+		ResultSet rs = Album.search(conn, s);
+		if (rs.first()) {
+			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "ORDER");
+			Utils.fillRowData(rs, rowData);
+			return new Order(rowData);
+		} else {
+			return null;
+		}
+	}
+	
+	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
+		System.out.println("Which field do you want to search by?");
+		System.out.println("1: Name | 2: Length | 3: Year | 4: EXIT: ");
+		String input = s.nextLine();
+		String searchInputString = "";
+		int searchInputInt;
+		PreparedStatement searchAlbumSQLstmt = null;
+		switch (input) {
+		case "1":
+			System.out.println("Enter search name");
+			searchInputString = s.nextLine();
+			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE name = ?;");
+			searchAlbumSQLstmt.setString(1, searchInputString);
+			break;
+		case "2":
+			System.out.println("Enter search Length");
+			searchInputInt = Integer.parseInt(s.nextLine());
+			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE length = ?;");
+			searchAlbumSQLstmt.setInt(1, searchInputInt);
+			break;
+		case "3":
+			System.out.println("Enter search year");
+			searchInputString = s.nextLine();
+			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE year = ?;");
+			searchAlbumSQLstmt.setString(1, searchInputString);
+			break;
+
+		case "4":
+			System.out.println("Exit");
+			break;
+		default:
+			System.out.println("Invalid input");
+			break;
+		}
+		if (searchAlbumSQLstmt != null) {
+			ResultSet rs = searchAlbumSQLstmt.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int columnCount = rsmd.getColumnCount();
+			for (int i = 1; i <= columnCount; i++) {
+				String value = rsmd.getColumnName(i);
+				System.out.print(value);
+				if (i < columnCount)
+					System.out.print(",  ");
+			}
+			System.out.print("\n");
+			while (rs.next()) {
+				for (int i = 1; i <= columnCount; i++) {
+					String columnValue = rs.getString(i);
+					System.out.print(columnValue);
+					if (i < columnCount)
+						System.out.print(",  ");
+				}
+				System.out.print("\n");
+			}
+		} else {
+			System.out.println("No search performed");
+		}
+		return null;
+	}
+
+	@Override
+	public void edit(Connection conn, Scanner s) throws SQLException {
+		// TODO Auto-generated method stub
+
 	}
 }
