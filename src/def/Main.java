@@ -58,7 +58,7 @@ public class Main {
 		boolean promptUser = true;
 
 		Scanner s = new Scanner(System.in);
-		
+				
 		while (promptUser) {
 			System.out.print("Enter db command (add, edit, delete, search, order, report, exit): ");
 			String command = s.nextLine();

@@ -4,9 +4,21 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 
 public class Utils {
+	
+	private static final String maxInventoryIDSQL = "SELECT MAX(Inventory_ID) AS Max_ID FROM INVENTORY_ITEM;";
+	
+	public static int getNextInventoryID(Connection conn) throws SQLException {
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery(maxInventoryIDSQL);
+        int maxID = rs.getInt("Max_ID");
+        stmt.close();
+		return maxID + 1;
+	}
+	
 	/**
 	 * Gets all attributes of an inventory item type. If the type is not found, only
 	 * the basic inventory item attributes are returned.

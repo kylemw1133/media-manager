@@ -22,18 +22,20 @@ public class InventoryItem {
 		PreparedStatement insertInventoryItemStmt = conn.prepareStatement(insertInventoryItemSQL);
 
 		for (TypedAttribute a : colSet) {
-			a.promptForValue(s);
-			a.fillInStmt(insertInventoryItemStmt, i);
-
 			if (a.name.equals("Inventory_ID")) {
-				id = (int) a.value;
+				id = Utils.getNextInventoryID(conn);
+				a.setValue(id);
+			} else {
+				a.promptForValue(s);
 			}
-
+			
+			a.fillInStmt(insertInventoryItemStmt, i);
 			i++;
 		}
 
-		insertInventoryItemStmt.executeUpdate();
-
+		insertInventoryItemStmt.execute();
+		insertInventoryItemStmt.close();
+		
 		return id;
 	}
 
@@ -67,7 +69,7 @@ public class InventoryItem {
 		while (id.equals("") || !id.matches("\\-?\\d+")) {
 			id = s.nextLine();
 		}
-
+		
 		deleteInventoryItemStmt.setString(1, id);
 		deleteInventoryItemStmt.executeQuery();
 
