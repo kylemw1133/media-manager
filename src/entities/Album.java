@@ -60,68 +60,64 @@ public class Album {
 		editAlbumStmt.executeUpdate();
 	}
 
-	public static void search(Connection conn, Scanner s) {
-		try {
-			Statement stmt = conn.createStatement();
-			System.out.println("Which field do you want to search by?");
-			System.out.println("1: Name | 2: Length | 3: Year | 4: EXIT: ");
-			String input = s.nextLine();
-			String searchInputString = "";
-			int searchInputInt;
-			String searchCol = "";
-			String searchAlbumSQL = "";
-			switch (input) {
-				case "1":
-					System.out.println("Enter search Name");
-					searchCol = "name";
-					searchInputString = s.nextLine();
-					searchAlbumSQL = "SELECT * FROM ALBUM WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
-					break;
-				case "2":
-					System.out.println("Enter search Length");
-					searchCol = "length";
-					searchInputInt = Integer.parseInt(s.nextLine());
-					searchAlbumSQL = "SELECT * FROM ALBUM WHERE " + searchCol + "=" + searchInputInt + ";";
-					break;
-				case "3":
-					System.out.println("Enter search Year");
-					searchCol = "year";
-					searchInputInt = Integer.parseInt(s.nextLine());
-					searchAlbumSQL = "SELECT * FROM ALBUM WHERE " + searchCol + "=" + searchInputInt + ";";
-					break;
+	public static void search(Connection conn, Scanner s) throws SQLException {
+		Statement stmt = conn.createStatement();
+		System.out.println("Which field do you want to search by?");
+		System.out.println("1: Name | 2: Length | 3: Year | 4: EXIT: ");
+		String input = s.nextLine();
+		String searchInputString = "";
+		int searchInputInt;
+		String searchCol = "";
+		String searchAlbumSQL = "";
+		switch (input) {
+		case "1":
+			System.out.println("Enter search Name");
+			searchCol = "name";
+			searchInputString = s.nextLine();
+			searchAlbumSQL = "SELECT * FROM ALBUM WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
+			break;
+		case "2":
+			System.out.println("Enter search Length");
+			searchCol = "length";
+			searchInputInt = Integer.parseInt(s.nextLine());
+			searchAlbumSQL = "SELECT * FROM ALBUM WHERE " + searchCol + "=" + searchInputInt + ";";
+			break;
+		case "3":
+			System.out.println("Enter search Year");
+			searchCol = "year";
+			searchInputInt = Integer.parseInt(s.nextLine());
+			searchAlbumSQL = "SELECT * FROM ALBUM WHERE " + searchCol + "=" + searchInputInt + ";";
+			break;
 
-				case "4":
-					System.out.println("Exit");
-					break;
-				default:
-					System.out.println("Invalid input");
-					break;
+		case "4":
+			System.out.println("Exit");
+			break;
+		default:
+			System.out.println("Invalid input");
+			break;
+		}
+		if (searchCol != "") {
+			ResultSet rs = stmt.executeQuery(searchAlbumSQL);
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int columnCount = rsmd.getColumnCount();
+			for (int i = 1; i <= columnCount; i++) {
+				String value = rsmd.getColumnName(i);
+				System.out.print(value);
+				if (i < columnCount)
+					System.out.print(",  ");
 			}
-			if (searchCol != "") {
-				ResultSet rs = stmt.executeQuery(searchAlbumSQL);
-				ResultSetMetaData rsmd = rs.getMetaData();
-				int columnCount = rsmd.getColumnCount();
+			System.out.print("\n");
+			while (rs.next()) {
 				for (int i = 1; i <= columnCount; i++) {
-					String value = rsmd.getColumnName(i);
-					System.out.print(value);
+					String columnValue = rs.getString(i);
+					System.out.print(columnValue);
 					if (i < columnCount)
 						System.out.print(",  ");
 				}
 				System.out.print("\n");
-				while (rs.next()) {
-					for (int i = 1; i <= columnCount; i++) {
-						String columnValue = rs.getString(i);
-						System.out.print(columnValue);
-						if (i < columnCount)
-							System.out.print(",  ");
-					}
-					System.out.print("\n");
-				}
-			} else {
-				System.out.println("No search performed");
 			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+		} else {
+			System.out.println("No search performed");
 		}
 	}
 }

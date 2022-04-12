@@ -15,10 +15,6 @@ public class TypedAttribute {
 		dataType = t;
 		value = null;
 	}
-	
-	public void setValue(Object v) {
-		this.value = v;
-	}
 
 	public void promptForValue(Scanner s) {
 		System.out.print("Provide a value for " + this.name + ": ");

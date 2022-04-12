@@ -24,7 +24,7 @@ public class InventoryItem {
 		for (TypedAttribute a : colSet) {
 			if (a.name.equals("Inventory_ID")) {
 				id = Utils.getNextInventoryID(conn);
-				a.setValue(id);
+				a.value = id;
 			} else {
 				a.promptForValue(s);
 			}

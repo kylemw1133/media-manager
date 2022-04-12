@@ -19,7 +19,7 @@ public class TVShow {
 	private final static String insertTVShowSQL = "INSERT INTO TV_SHOW VALUES (?, ?, ?, ?);";
 	private final static String retrieveTVShowSQL = "SELECT * FROM TV_SHOW;";
 	private final static String editTVShowSQL = " UPDATE TV_SHOW SET Name=?, Year=?, Rating=? WHERE Inventory_ID=?;";
-	
+
 	public static int insert(Connection conn, Scanner s) throws SQLException {
 		int id = InventoryItem.insert(conn, s);
 		int i = 1;
@@ -36,12 +36,12 @@ public class TVShow {
 			a.fillInStmt(insertTVShowStmt, i);
 			i++;
 		}
-		
+
 		insertTVShowStmt.executeUpdate();
-		
+
 		return id;
 	}
-	
+
 	public static void edit(Connection conn, Scanner s) throws SQLException {
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "TV_SHOW");
 		PreparedStatement editTVShowStmt = conn.prepareStatement(editTVShowSQL);
@@ -57,75 +57,71 @@ public class TVShow {
 				a.fillInStmt(editTVShowStmt, i++);
 			}
 		}
-		
+
 		editTVShowStmt.setInt(i, id);
-		
+
 		editTVShowStmt.executeUpdate();
 	}
-	
-	public static void search(Connection conn, Scanner s) {
-		try {
-			Statement stmt = conn.createStatement();
-			System.out.println("Which field do you want to search by?");
-			System.out.println("1: Name | 2: Year | 3: Rating | 4: EXIT: ");
-			String input = s.nextLine();
-			String searchInputString = "";
-			int searchInputInt;
-			String searchCol = "";
-			String searchTVShowSQL = "";
-			switch (input) {
-				case "1":
-					System.out.println("Enter search Name");
-					searchCol = "name";
-					searchInputString = s.nextLine();
-					searchTVShowSQL = "SELECT * FROM TV_SHOW WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
-					break;
-		
-				case "2":
-					System.out.println("Enter search Year");
-					searchCol = "year";
-					searchInputInt = Integer.parseInt(s.nextLine());
-					searchTVShowSQL = "SELECT * FROM TV_SHOW WHERE " + searchCol + "=" + searchInputInt + ";";
-					break;
 
-				case "3":
-					System.out.println("Enter search rating");
-					searchCol = "name";
-					searchInputString = s.nextLine();
-					searchTVShowSQL = "SELECT * FROM TV_SHOW WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
-					break;
-				case "4":
-					System.out.println("Exit");
-					break;
-				default:
-					System.out.println("Invalid input");
-					break;
+	public static void search(Connection conn, Scanner s) throws SQLException {
+		Statement stmt = conn.createStatement();
+		System.out.println("Which field do you want to search by?");
+		System.out.println("1: Name | 2: Year | 3: Rating | 4: EXIT: ");
+		String input = s.nextLine();
+		String searchInputString = "";
+		int searchInputInt;
+		String searchCol = "";
+		String searchTVShowSQL = "";
+		switch (input) {
+		case "1":
+			System.out.println("Enter search Name");
+			searchCol = "name";
+			searchInputString = s.nextLine();
+			searchTVShowSQL = "SELECT * FROM TV_SHOW WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
+			break;
+
+		case "2":
+			System.out.println("Enter search Year");
+			searchCol = "year";
+			searchInputInt = Integer.parseInt(s.nextLine());
+			searchTVShowSQL = "SELECT * FROM TV_SHOW WHERE " + searchCol + "=" + searchInputInt + ";";
+			break;
+
+		case "3":
+			System.out.println("Enter search rating");
+			searchCol = "name";
+			searchInputString = s.nextLine();
+			searchTVShowSQL = "SELECT * FROM TV_SHOW WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
+			break;
+		case "4":
+			System.out.println("Exit");
+			break;
+		default:
+			System.out.println("Invalid input");
+			break;
+		}
+		if (searchCol != "") {
+			ResultSet rs = stmt.executeQuery(searchTVShowSQL);
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int columnCount = rsmd.getColumnCount();
+			for (int i = 1; i <= columnCount; i++) {
+				String value = rsmd.getColumnName(i);
+				System.out.print(value);
+				if (i < columnCount)
+					System.out.print(",  ");
 			}
-			if (searchCol != "") {
-				ResultSet rs = stmt.executeQuery(searchTVShowSQL);
-				ResultSetMetaData rsmd = rs.getMetaData();
-				int columnCount = rsmd.getColumnCount();
+			System.out.print("\n");
+			while (rs.next()) {
 				for (int i = 1; i <= columnCount; i++) {
-					String value = rsmd.getColumnName(i);
-					System.out.print(value);
+					String columnValue = rs.getString(i);
+					System.out.print(columnValue);
 					if (i < columnCount)
 						System.out.print(",  ");
 				}
 				System.out.print("\n");
-				while (rs.next()) {
-					for (int i = 1; i <= columnCount; i++) {
-						String columnValue = rs.getString(i);
-						System.out.print(columnValue);
-						if (i < columnCount)
-							System.out.print(",  ");
-					}
-					System.out.print("\n");
-				}
-			} else {
-				System.out.println("No search performed");
 			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+		} else {
+			System.out.println("No search performed");
 		}
 	}
 }

@@ -12,7 +12,8 @@ public class SearchCommand {
 		System.out.print("Enter the type (album, movie, tvshow, audiobook): ");
 		String type = s.nextLine();
 
-		switch (type) {
+		try {
+			switch (type) {
 			case "album":
 				Album.search(conn, s);
 				break;
@@ -27,6 +28,10 @@ public class SearchCommand {
 				break;
 			default:
 				System.out.println("Invalid item type");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
