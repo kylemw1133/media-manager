@@ -15,11 +15,13 @@ public class Order {
 
 	private final static String insertOrderSQL = "INSERT INTO [ORDER] VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	private final static String selectOrderSQL = "SELECT * FROM [ORDER] WHERE Order_ID=?;";
-	private final static String updateInventorySQL = "UPDATE INVENTORY_ITEM SET Quantity=? "
-	+ "WHERE INVENTORY_ITEM.Inventory_ID=?";
-	
-	private final static String updateOrderSQL = "UPDATE [ORDER] SET Status='FULFILLED'"
-			+ "WHERE Order_ID=?";
+	private final static String updateInventorySQL = "UPDATE INVENTORY_ITEM SET Quantity=? WHERE INVENTORY_ITEM.Inventory_ID=?";
+	private final static String updateOrderSQL = "UPDATE [ORDER] SET Status='FULFILLED' WHERE Order_ID=?";
+	private static final String maxOrderIDSQL = "SELECT MAX(Order_ID) AS Max_ID FROM [ORDER];";
+
+	public static int getNextOrderID(Connection conn) throws SQLException {
+		return Utils.getNextOrdinal(conn, maxOrderIDSQL, "Max_ID");
+	}
 
 	public static void insert(Connection conn, Scanner s) throws SQLException {
 		int i = 1;
@@ -28,7 +30,7 @@ public class Order {
 
 		for (TypedAttribute a : colSet) {
 			if (a.name.equals("Order_ID")) {
-				a.value = Utils.getNextOrderID(conn);
+				a.value = getNextOrderID(conn);
 			} else {
 				a.promptForValue(s);
 			}
@@ -76,7 +78,7 @@ public class Order {
 
 			stmt.executeUpdate(updateOrderSQL);
 			stmt.close();
-			
+
 			PreparedStatement updateStmt = conn.prepareStatement(updateInventorySQL);
 			updateStmt.setInt(1, newQuantity);
 			updateStmt.setInt(2, inventoryID);

@@ -2,7 +2,9 @@ package entities;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -14,7 +16,12 @@ public class InventoryItem {
 	private final static String insertInventoryItemSQL = "INSERT INTO INVENTORY_ITEM VALUES (?, ?, ?, ?);";
 	private final static String editInventoryItemSQL = " UPDATE INVENTORY_ITEM SET Quantity=?, Format=?, Location=? WHERE Inventory_ID=?;";
 	private final static String deleteInventoryItemSQL = "DELETE FROM INVENTORY_ITEM WHERE Inventory_ID = ?;";
+	private static final String maxInventoryIDSQL = "SELECT MAX(Inventory_ID) AS Max_ID FROM INVENTORY_ITEM;";
 
+	public static int getNextInventoryID(Connection conn) throws SQLException {
+		return Utils.getNextOrdinal(conn, maxInventoryIDSQL, "Max_ID");
+	}
+	
 	public static int insert(Connection conn, Scanner s) throws SQLException {
 		int id = 0;
 		int i = 1;
@@ -23,7 +30,7 @@ public class InventoryItem {
 
 		for (TypedAttribute a : colSet) {
 			if (a.name.equals("Inventory_ID")) {
-				id = Utils.getNextInventoryID(conn);
+				id = getNextInventoryID(conn);
 				a.value = id;
 			} else {
 				a.promptForValue(s);

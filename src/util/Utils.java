@@ -8,23 +8,12 @@ import java.sql.Statement;
 import java.util.LinkedList;
 
 public class Utils {
-	
-	private static final String maxInventoryIDSQL = "SELECT MAX(Inventory_ID) AS Max_ID FROM INVENTORY_ITEM;";
-	private static final String maxOrderIDSQL = "SELECT MAX(Order_ID) AS Max_ID FROM [ORDER];";
-	
-	public static int getNextInventoryID(Connection conn) throws SQLException {
+		
+	public static int getNextOrdinal(Connection conn, String sql, String name) throws SQLException {
 		Statement stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery(maxInventoryIDSQL);
-        int maxID = rs.getInt("Max_ID");
-        stmt.close();
-		return maxID + 1;
-	}
-	
-	public static int getNextOrderID(Connection conn) throws SQLException {
-		Statement stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery(maxOrderIDSQL);
-        int maxID = rs.getInt("Max_ID");
-        stmt.close();
+		ResultSet rs = stmt.executeQuery(sql);
+		int maxID = rs.getInt(name);
+		stmt.close();
 		return maxID + 1;
 	}
 	
