@@ -60,22 +60,18 @@ public class Main {
 		Scanner s = new Scanner(System.in);
 		
 		while (promptUser) {
-			System.out.print("Enter db command (add, edit, delete, search, order, report, print, exit): ");
+			System.out.print("Enter db command (add, edit, delete, search, order, report, exit): ");
 			String command = s.nextLine();
 			switch (command) {
 			case "add":
-				try {
-					AddCommand.exec(conn, s);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				AddCommand.exec(conn, s);
 				break;
 			case "edit":
 				EditCommand.exec(conn, s);
 				break;
 			case "delete":
 				DeleteCommand.exec(conn, s);
+				break;
 			case "search":
 				SearchCommand.exec(conn, s);
 				break;

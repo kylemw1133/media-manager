@@ -8,7 +8,7 @@ import entities.*;
 
 public class AddCommand {
 
-	public static void exec(Connection conn, Scanner s) throws SQLException {
+	public static void exec(Connection conn, Scanner s) {
 		System.out.print("Enter type of item to add (album, movie, tvshow, audiobook): ");
 		String type = s.nextLine();
 		
