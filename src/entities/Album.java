@@ -61,32 +61,31 @@ public class Album {
 	}
 
 	public static void search(Connection conn, Scanner s) throws SQLException {
-		Statement stmt = conn.createStatement();
+
 		System.out.println("Which field do you want to search by?");
 		System.out.println("1: Name | 2: Length | 3: Year | 4: EXIT: ");
 		String input = s.nextLine();
 		String searchInputString = "";
 		int searchInputInt;
-		String searchCol = "";
-		String searchAlbumSQL = "";
+		PreparedStatement searchAlbumSQLstmt = null;
 		switch (input) {
 		case "1":
-			System.out.println("Enter search Name");
-			searchCol = "name";
+			System.out.println("Enter search name");
 			searchInputString = s.nextLine();
-			searchAlbumSQL = "SELECT * FROM ALBUM WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
+			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE name = ?;");
+			searchAlbumSQLstmt.setString(1, searchInputString);
 			break;
 		case "2":
 			System.out.println("Enter search Length");
-			searchCol = "length";
 			searchInputInt = Integer.parseInt(s.nextLine());
-			searchAlbumSQL = "SELECT * FROM ALBUM WHERE " + searchCol + "=" + searchInputInt + ";";
+			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE length = ?;");
+			searchAlbumSQLstmt.setInt(1, searchInputInt);
 			break;
 		case "3":
-			System.out.println("Enter search Year");
-			searchCol = "year";
-			searchInputInt = Integer.parseInt(s.nextLine());
-			searchAlbumSQL = "SELECT * FROM ALBUM WHERE " + searchCol + "=" + searchInputInt + ";";
+			System.out.println("Enter search year");
+			searchInputString = s.nextLine();
+			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE year = ?;");
+			searchAlbumSQLstmt.setString(1, searchInputString);
 			break;
 
 		case "4":
@@ -96,8 +95,8 @@ public class Album {
 			System.out.println("Invalid input");
 			break;
 		}
-		if (searchCol != "") {
-			ResultSet rs = stmt.executeQuery(searchAlbumSQL);
+		if (searchAlbumSQLstmt != null) {
+			ResultSet rs = searchAlbumSQLstmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int columnCount = rsmd.getColumnCount();
 			for (int i = 1; i <= columnCount; i++) {

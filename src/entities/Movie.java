@@ -143,40 +143,36 @@ public class Movie {
 	}
 
 	public static void search(Connection conn, Scanner s) throws SQLException {
-		Statement stmt = conn.createStatement();
 		System.out.println("Which field do you want to search by?");
 		System.out.println("1: Name | 2: Length | 3: Year | 4: Content_Rating | 5: EXIT");
 		String input = s.nextLine();
 		String searchInputString = "";
 		int searchInputInt;
-		String searchCol = "";
-		String searchMovieSQL = "";
+		PreparedStatement searchMovieSQLstmt = null;
 		switch (input) {
 		case "1":
 			System.out.println("Enter search name");
-			searchCol = "name";
 			searchInputString = s.nextLine();
-			searchMovieSQL = "SELECT * FROM MOVIE WHERE " + searchCol + "=" + "\"" + searchInputString + "\";";
+			searchMovieSQLstmt = conn.prepareStatement("SELECT * FROM MOVIE WHERE name = ?;");
+			searchMovieSQLstmt.setString(1, searchInputString);
 			break;
 		case "2":
 			System.out.println("Enter search Length");
-			searchCol = "length";
 			searchInputInt = Integer.parseInt(s.nextLine());
-			searchMovieSQL = "SELECT * FROM MOVIE WHERE " + searchCol + "=" + searchInputInt + ";";
-
+			searchMovieSQLstmt = conn.prepareStatement("SELECT * FROM MOVIE WHERE length = ?;");
+			searchMovieSQLstmt.setInt(1, searchInputInt);
 			break;
 		case "3":
 			System.out.println("Enter search Year");
-			searchCol = "year";
 			searchInputInt = Integer.parseInt(s.nextLine());
-			searchMovieSQL = "SELECT * FROM MOVIE WHERE " + searchCol + "=" + searchInputInt + ";";
-
+			searchMovieSQLstmt = conn.prepareStatement("SELECT * FROM MOVIE WHERE year = ?;");
+			searchMovieSQLstmt.setInt(1, searchInputInt);
 			break;
 		case "4":
 			System.out.println("Enter search Content_Rating");
-			searchCol = "content_rating";
 			searchInputString = s.nextLine();
-			searchMovieSQL = "SELECT * FROM MOVIE WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
+			searchMovieSQLstmt = conn.prepareStatement("SELECT * FROM MOVIE WHERE content_rating = ?;");
+			searchMovieSQLstmt.setString(1, searchInputString);
 			break;
 		case "5":
 			System.out.println("Exit");
@@ -185,9 +181,9 @@ public class Movie {
 			System.out.println("Invalid input");
 			break;
 		}
-		if (searchCol != "") {
+		if (searchMovieSQLstmt != null) {
 
-			ResultSet rs = stmt.executeQuery(searchMovieSQL);
+			ResultSet rs = searchMovieSQLstmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int columnCount = rsmd.getColumnCount();
 			for (int i = 1; i <= columnCount; i++) {
