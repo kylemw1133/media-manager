@@ -3,11 +3,7 @@ package def;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Scanner;
 
 import commands.AddCommand;
@@ -16,8 +12,6 @@ import commands.EditCommand;
 import commands.OrderCommand;
 import commands.ReportCommand;
 import commands.SearchCommand;
-import entities.Album;
-import entities.InventoryItem;
 
 public class Main {
 

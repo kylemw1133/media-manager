@@ -27,11 +27,16 @@ public class Order {
 		PreparedStatement insertOrderStmt = conn.prepareStatement(insertOrderSQL);
 
 		for (TypedAttribute a : colSet) {
-			a.promptForValue(s);
+			if (a.name.equals("Order_ID")) {
+				a.value = Utils.getNextOrderID(conn);
+			} else {
+				a.promptForValue(s);
+			}
+
 			a.fillInStmt(insertOrderStmt, i++);
 		}
 
-		insertOrderStmt.executeUpdate();
+		insertOrderStmt.execute();
 		insertOrderStmt.close();
 	}
 

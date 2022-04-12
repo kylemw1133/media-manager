@@ -1,5 +1,6 @@
 .classpath
+.settings
 .project
+.vscode
 bin
 *.db
-/populated_project_database.sql
