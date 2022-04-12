@@ -64,34 +64,32 @@ public class TVShow {
 	}
 
 	public static void search(Connection conn, Scanner s) throws SQLException {
-		Statement stmt = conn.createStatement();
 		System.out.println("Which field do you want to search by?");
 		System.out.println("1: Name | 2: Year | 3: Rating | 4: EXIT: ");
 		String input = s.nextLine();
 		String searchInputString = "";
-		int searchInputInt;
-		String searchCol = "";
-		String searchTVShowSQL = "";
+		PreparedStatement searchTVShowSQLstmt = null;
 		switch (input) {
 		case "1":
-			System.out.println("Enter search Name");
-			searchCol = "name";
+			System.out.println("Enter search name");
 			searchInputString = s.nextLine();
-			searchTVShowSQL = "SELECT * FROM TV_SHOW WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
+			searchTVShowSQLstmt = conn.prepareStatement("SELECT * FROM TV_SHOW WHERE name = ?;");
+			searchTVShowSQLstmt.setString(1, searchInputString);
+		
 			break;
 
 		case "2":
-			System.out.println("Enter search Year");
-			searchCol = "year";
-			searchInputInt = Integer.parseInt(s.nextLine());
-			searchTVShowSQL = "SELECT * FROM TV_SHOW WHERE " + searchCol + "=" + searchInputInt + ";";
+			System.out.println("Enter search year");
+			searchInputString = s.nextLine();
+			searchTVShowSQLstmt = conn.prepareStatement("SELECT * FROM TV_SHOW WHERE year = ?;");
+			searchTVShowSQLstmt.setString(1, searchInputString);
 			break;
 
 		case "3":
 			System.out.println("Enter search rating");
-			searchCol = "name";
 			searchInputString = s.nextLine();
-			searchTVShowSQL = "SELECT * FROM TV_SHOW WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
+			searchTVShowSQLstmt = conn.prepareStatement("SELECT * FROM TV_SHOW WHERE rating = ?;");
+			searchTVShowSQLstmt.setString(1, searchInputString);
 			break;
 		case "4":
 			System.out.println("Exit");
@@ -100,8 +98,8 @@ public class TVShow {
 			System.out.println("Invalid input");
 			break;
 		}
-		if (searchCol != "") {
-			ResultSet rs = stmt.executeQuery(searchTVShowSQL);
+		if (searchTVShowSQLstmt!=null) {
+			ResultSet rs = searchTVShowSQLstmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int columnCount = rsmd.getColumnCount();
 			for (int i = 1; i <= columnCount; i++) {

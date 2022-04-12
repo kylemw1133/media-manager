@@ -111,44 +111,43 @@ public class Audiobook {
 	}
 
 	public static void search(Connection conn, Scanner s) throws SQLException {
-		Statement stmt = conn.createStatement();
 		System.out.println("Which field do you want to search by?");
 		System.out.println("1: Author_ID | 2: Length | 3: Year | 4: Name | 5: Reader | 6: EXIT: ");
 		String input = s.nextLine();
 		String searchInputString = "";
 		int searchInputInt;
-		String searchCol = "";
-		String searchAudiobookSQL = "";
+		PreparedStatement searchAudiobookSQLstmt = null;
 		switch (input) {
 		case "1":
-			System.out.println("Enter search authorID");
-			searchCol = "author_id";
+			
+			System.out.println("Enter search author id");
 			searchInputInt = Integer.parseInt(s.nextLine());
-			searchAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE " + searchCol + "=" + searchInputInt + ";";
+			searchAudiobookSQLstmt = conn.prepareStatement("SELECT * FROM AUDIOBOOK WHERE Author_ID = ?;");
+			searchAudiobookSQLstmt.setInt(1, searchInputInt);
 			break;
 		case "2":
 			System.out.println("Enter search Length");
-			searchCol = "length";
 			searchInputInt = Integer.parseInt(s.nextLine());
-			searchAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE " + searchCol + "=" + searchInputInt + ";";
+			searchAudiobookSQLstmt = conn.prepareStatement("SELECT * FROM AUDIOBOOK WHERE length = ?;");
+			searchAudiobookSQLstmt.setInt(1, searchInputInt);
 			break;
 		case "3":
 			System.out.println("Enter search Year");
-			searchCol = "year";
 			searchInputInt = Integer.parseInt(s.nextLine());
-			searchAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE " + searchCol + "=" + searchInputInt + ";";
+			searchAudiobookSQLstmt = conn.prepareStatement("SELECT * FROM AUDIOBOOK WHERE year = ?;");
+			searchAudiobookSQLstmt.setInt(1, searchInputInt);
 			break;
 		case "4":
-			System.out.println("Enter search Name");
-			searchCol = "name";
+			System.out.println("Enter search name");
 			searchInputString = s.nextLine();
-			searchAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
+			searchAudiobookSQLstmt = conn.prepareStatement("SELECT * FROM AUDIOBOOK WHERE name = ?;");
+			searchAudiobookSQLstmt.setString(1, searchInputString);
 			break;
 		case "5":
 			System.out.println("Enter search Reader");
-			searchCol = "reader";
 			searchInputString = s.nextLine();
-			searchAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE " + searchCol + "=" + "\"" + searchInputString + "\"; ";
+			searchAudiobookSQLstmt = conn.prepareStatement("SELECT * FROM AUDIOBOOK WHERE reader = ?;");
+			searchAudiobookSQLstmt.setString(1, searchInputString);
 			break;
 		case "6":
 			System.out.println("Exit");
@@ -157,8 +156,8 @@ public class Audiobook {
 			System.out.println("Invalid input");
 			break;
 		}
-		if (searchCol != "") {
-			ResultSet rs = stmt.executeQuery(searchAudiobookSQL);
+		if (searchAudiobookSQLstmt != null) {
+			ResultSet rs = searchAudiobookSQLstmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int columnCount = rsmd.getColumnCount();
 			for (int i = 1; i <= columnCount; i++) {
