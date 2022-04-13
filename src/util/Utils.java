@@ -23,7 +23,7 @@ public class Utils {
 			String idCol) throws SQLException {
 		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, tableName);
-		PreparedStatement insertAlbumStmt = conn.prepareStatement(insertSQL);
+		PreparedStatement insertStmt = conn.prepareStatement(insertSQL);
 
 		for (TypedAttribute a : colSet) {
 			if (a.name.equals(idCol)) {
@@ -32,12 +32,11 @@ public class Utils {
 				a.promptForValue(s);
 			}
 
-			a.fillInStmt(insertAlbumStmt, i);
-			i++;
+			a.fillInStmt(insertStmt, i++);
 		}
 
-		insertAlbumStmt.execute();
-		insertAlbumStmt.close();
+		insertStmt.execute();
+		insertStmt.close();
 
 		return id;
 	}

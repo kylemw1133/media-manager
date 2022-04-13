@@ -1,6 +1,7 @@
 package entities;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -15,6 +16,8 @@ public class Artist implements Entity {
 	private final static String editArtistSQL = " UPDATE ARTIST SET Name=? WHERE Artist_ID=?";
 	private static final String maxArtistIDSQL = "SELECT MAX(Artist_ID) AS Max_ID FROM ARTIST;";
 
+	private final static String insertAlbumArtistSQL = "INSERT INTO ALBUM_ARTIST VALUES (?, ?);";
+	
 	public int id;
 	public LinkedList<TypedAttribute> data;
 
@@ -46,13 +49,11 @@ public class Artist implements Entity {
 	@Override
 	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException {
 		int key = 0;
-		Artist a = new Artist();
 
 		if (insert) {
-			key = (int) a.insert(conn, s);
+			key = (int) this.insert(conn, s);
 		} else {
-			a = Artist.searchForOne(conn, s);
-			key = a.id;
+			key = Director.searchForOne(conn, s).id;
 		}
 
 		return key;
@@ -61,6 +62,28 @@ public class Artist implements Entity {
 	@Override
 	public String toString() {
 		return Utils.rowDataToString(this.data);
+	}
+	
+	public static void insertMultiple(Connection conn, Scanner s, int inventoryID) throws SQLException {
+		int input;
+		do {
+			System.out.println("| 1: Create Artist | 2: Choose Artist | 3: Finish with Artists |");
+			input = Integer.parseInt(s.nextLine());
+
+			if (input == 3) {
+				break;
+			}
+
+			Artist a = new Artist();
+			int aID = (int) a.insertOrSearch(conn, s, input == 1);
+						
+			PreparedStatement insertJoinTupleStmt = conn.prepareStatement(insertAlbumArtistSQL);
+			insertJoinTupleStmt.setInt(1, inventoryID);
+			insertJoinTupleStmt.setInt(2, aID);
+			insertJoinTupleStmt.execute();
+		} while (input != 3);
+		
+		System.out.println("Finished with Artists.");
 	}
 
 	public static Artist searchForOne(Connection conn, Scanner s) throws SQLException {

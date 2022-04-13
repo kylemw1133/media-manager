@@ -35,7 +35,12 @@ public class Album implements Entity {
 	public Object insert(Connection conn, Scanner s) throws SQLException {
 		InventoryItem parentItem = new InventoryItem();
 		int id = (int) parentItem.insert(conn, s);
-		return Utils.executeInsertion(conn, s, id, insertAlbumSQL, "ALBUM", "Inventory_ID");
+		Utils.executeInsertion(conn, s, id, insertAlbumSQL, "ALBUM", "Inventory_ID");
+		
+		Artist.insertMultiple(conn, s, id);
+		Track.insertMultiple(conn, s, id);
+		
+		return id;
 	}
 
 	@Override
