@@ -10,57 +10,72 @@ import java.util.Scanner;
 import util.TypedAttribute;
 import util.Utils;
 
-public class InventoryItem implements Entity {
+public class Person implements Entity {
 
-	private final static String insertInventoryItemSQL = "INSERT INTO INVENTORY_ITEM VALUES (?, ?, ?, ?);";
-	private final static String editInventoryItemSQL = " UPDATE INVENTORY_ITEM SET Quantity=?, Format=?, Location=? WHERE Inventory_ID=?;";
+	private final static String insertPersonSQL = "INSERT INTO PERSON VALUES (?, ?, ?);";
+	private final static String editPersonSQL = " UPDATE PERSON SET P_Email=?, P_Address=?, P_Name=? WHERE P_Email=?;";
+
 	private final static String deleteInventoryItemSQL = "DELETE FROM INVENTORY_ITEM WHERE Inventory_ID = ?;";
 	private static final String maxInventoryIDSQL = "SELECT MAX(Inventory_ID) AS Max_ID FROM INVENTORY_ITEM;";
 
 	private final static String getQuantitySQL = "SELECT Quantity FROM INVENTORY_ITEM WHERE Inventory_ID=?";
 	private final static String updateQuantitySQL = "UPDATE INVENTORY_ITEM SET Quantity=? WHERE Inventory_ID=?";
 
-	public int id;
+	public String pEmail;
 	public LinkedList<TypedAttribute> data;
 
-	public InventoryItem() {
+	public Person() {
 		this.data = null;
 	}
 
-	public InventoryItem(LinkedList<TypedAttribute> data) {
+	public Person(LinkedList<TypedAttribute> data) {
 		this.data = data;
 
 		for (TypedAttribute ta : this.data) {
-			if (ta.name.equals("Inventory_ID")) {
-				this.id = (int) ta.value;
+			if (ta.name.equals("P_Email")) {
+				this.pEmail = (String) ta.value;
 			}
 		}
 	}
 
 	@Override
 	public Object insert(Connection conn, Scanner s) throws SQLException {
-		int id = getNextInventoryID(conn);
-		Utils.executeInsertion(conn, s, id, insertInventoryItemSQL, "INVENTORY_ITEM", "Inventory_ID");
-		Genre.insertMultiple(conn, s, id);
-		return id;
+		String pEmail = "";
+		int i = 1;
+		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "PERSON");
+		PreparedStatement insertStmt = conn.prepareStatement(insertPersonSQL);
 
+		for (TypedAttribute a : colSet) {
+			a.promptForValue(s);
+
+			if (a.name.equals("P_Email")) {
+				pEmail = (String) a.value;
+			}
+
+			a.fillInStmt(insertStmt, i++);
+		}
+
+		insertStmt.execute();
+		insertStmt.close();
+
+		return pEmail;
 	}
 
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
-		Utils.executeEdit(conn, s, this.data, editInventoryItemSQL, "Inventory_ID");
+		Utils.executeEdit(conn, s, this.data, editPersonSQL, "P_Email");
 	}
 
 	@Override
 	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException {
-		int key = 0;
-		InventoryItem a = new InventoryItem();
+		String key = "";
+		Person a = new Person();
 
 		if (insert) {
-			key = (int) a.insert(conn, s);
+			key = (String) a.insert(conn, s);
 		} else {
-			a = InventoryItem.searchForOne(conn, s);
-			key = a.id;
+			a = Person.searchForOne(conn, s);
+			key = a.pEmail;
 		}
 
 		return key;
@@ -77,29 +92,8 @@ public class InventoryItem implements Entity {
 		}
 
 		deleteInventoryItemStmt.setString(1, id);
-		deleteInventoryItemStmt.execute();
+		deleteInventoryItemStmt.executeQuery();
 		deleteInventoryItemStmt.close();
-	}
-
-	public static void changeQuantity(Connection conn, int id, int delta) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement(getQuantitySQL);
-		stmt.setInt(1, id);
-		ResultSet rs = stmt.executeQuery();
-
-		rs.next();
-		int prevQuantity = rs.getInt("Quantity");
-		int newQuantity = prevQuantity + delta;
-		
-		if (newQuantity < 0) {
-			newQuantity = 0;
-		}
-
-		stmt.close();
-		stmt = conn.prepareStatement(updateQuantitySQL);
-		stmt.setInt(1, newQuantity);
-		stmt.setInt(2, id);
-		stmt.execute();
-		stmt.close();
 	}
 
 	@Override
@@ -107,22 +101,27 @@ public class InventoryItem implements Entity {
 		return Utils.rowDataToString(this.data);
 	}
 
-	public static InventoryItem searchForOne(Connection conn, Scanner s) throws SQLException {
+	public static String insertSingle(Connection conn, Scanner s) throws SQLException {
+		System.out.println("| 1: Create Person | 2: Search for Person |");
+		int input = Integer.parseInt(s.nextLine());
+
+		Person p = new Person();
+		String pEmail = (String) p.insertOrSearch(conn, s, input == 1);
+		return pEmail;
+	}
+
+	public static Person searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs.next()) {
-			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "INVENTORY_ITEM");
+			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "PERSON");
 			Utils.fillRowData(rs, rowData);
-			return new InventoryItem(rowData);
+			return new Person(rowData);
 		} else {
 			return null;
 		}
 	}
 
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
-		return Utils.executeSearch(conn, s, "INVENTORY_ITEM");
-	}
-
-	public static int getNextInventoryID(Connection conn) throws SQLException {
-		return Utils.getNextOrdinal(conn, maxInventoryIDSQL, "Max_ID");
+		return Utils.executeSearch(conn, s, "PERSON");
 	}
 }

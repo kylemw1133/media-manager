@@ -1,0 +1,19 @@
+#+Media Manager
+
+TODO List:
+
+* TODO Entering new artists, albums, tracks, genres, length, year into the database as the music collection is expanded
+* TODO Entering new movies, start role actors, director, genres, length, year, content rating into the database as the video collection is expanded
+* TODO Entering new author, audiobooks, chapters, genres, length, year into the database as the audiobook collection is expanded
+* TODO Entering and keeping track of new media items ordered (but still not received): albums, videos and audiobooks, with number of copies purchase, price and an estimated date of arrival.
+* TODO Transferring new media items that arrive to the current media inventory (removing them from the inventory of the media items ordered)
+* TODO Keeping track of inventory: physical copies of albums, videos and audiobooks with their location, as well as electronic copies/licenses for digital copies of albums/videos/audiobooks. There could be several physical copies of albums/videos/audiobooks as well as electronic copies
+* TODO Registering a person for a library card, deactivating old or lost library cards. A patron can have only one card. First name, last name, address of the patrons are needed as well as the email address.
+* TODO Editing existing entries in the database to correct errors
+* TODO Deleting entries in the database in the case of lost items
+* TODO Displaying entries in the database based on user entered criteria
+* TODO Searching the database for artists, actors, authors, albums, audiobooks, movies and music tracks
+* TODO Listing all checkouts (physical, digital, or both) for a patron
+* TODO Check out instances of physical media to a patron using a library card, keeping track of the due date.
+* TODO Check out instances of digital media to a patron using a library card, keeping track of the due date
+* TODO Registering into the system the items returned by patrons.

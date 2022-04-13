@@ -64,7 +64,8 @@ public class EditCommand {
 			}
 
 			if (e != null) {
-				System.out.println("Preparing to edit item of type: " + type);
+				System.out.println("Preparing to edit the following item of type: " + type);
+				System.out.println(e.toString());
 				e.edit(conn, s);
 				System.out.println("Edit Finished.");
 			} else {

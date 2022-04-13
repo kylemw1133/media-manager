@@ -49,6 +49,18 @@ public class AddCommand {
 			case "tvshow":
 				e = new TVShow();
 				break;
+				
+			// People
+			case "person":
+				e = new Person();
+				break;
+			case "patron":
+				e = new Patron();
+				break;
+			case "staff":
+				e = new Staff();
+				break;
+			
 			default:
 				System.out.println("Invalid item type");
 			}
