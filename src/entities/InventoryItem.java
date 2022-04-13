@@ -20,8 +20,8 @@ public class InventoryItem implements Entity {
 	private final static String getQuantitySQL = "SELECT Quantity FROM INVENTORY_ITEM WHERE Inventory_ID=?";
 	private final static String updateQuantitySQL = "UPDATE INVENTORY_ITEM SET Quantity=? WHERE Inventory_ID=?";
 
-	private int id;
-	private LinkedList<TypedAttribute> data;
+	public int id;
+	public LinkedList<TypedAttribute> data;
 
 	public InventoryItem() {
 		this.data = null;
@@ -38,14 +38,32 @@ public class InventoryItem implements Entity {
 	}
 
 	@Override
-	public int insert(Connection conn, Scanner s) throws SQLException {
+	public Object insert(Connection conn, Scanner s) throws SQLException {
 		int id = getNextInventoryID(conn);
-		return Utils.executeInsertion(conn, s, id, insertInventoryItemSQL, "INVENTORY_ITEM", "Inventory_ID");
+		Utils.executeInsertion(conn, s, id, insertInventoryItemSQL, "INVENTORY_ITEM", "Inventory_ID");
+		Genre.insertMultiple(conn, s, id);
+		return id;
+
 	}
 
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editInventoryItemSQL, "Inventory_ID");
+	}
+
+	@Override
+	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException {
+		int key = 0;
+		InventoryItem a = new InventoryItem();
+
+		if (insert) {
+			key = (int) a.insert(conn, s);
+		} else {
+			a = InventoryItem.searchForOne(conn, s);
+			key = a.id;
+		}
+
+		return key;
 	}
 
 	public static void delete(Connection conn, Scanner s) throws SQLException {

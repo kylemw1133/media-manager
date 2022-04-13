@@ -15,7 +15,8 @@ public class Actor implements Entity {
 	private final static String editActorSQL = " UPDATE ACTOR SET Name=? WHERE Actor_ID=?";
 	private static final String maxActorSQL = "SELECT MAX(Actor_ID) AS Max_ID FROM Actor;";
 
-	private LinkedList<TypedAttribute> data;
+	public int id;
+	public LinkedList<TypedAttribute> data;
 
 	public Actor() {
 		this.data = null;
@@ -23,10 +24,16 @@ public class Actor implements Entity {
 
 	public Actor(LinkedList<TypedAttribute> data) {
 		this.data = data;
+
+		for (TypedAttribute ta : this.data) {
+			if (ta.name.equals("Actor_ID")) {
+				this.id = (int) ta.value;
+			}
+		}
 	}
 
 	@Override
-	public int insert(Connection conn, Scanner s) throws SQLException {
+	public Object insert(Connection conn, Scanner s) throws SQLException {
 		int id = getNextActorID(conn);
 		return Utils.executeInsertion(conn, s, id, insertActorSQL, "ACTOR", "Actor_ID");
 	}
@@ -37,16 +44,31 @@ public class Actor implements Entity {
 	}
 
 	@Override
+	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException {
+		int key = 0;
+		Actor a = new Actor();
+
+		if (insert) {
+			key = (int) a.insert(conn, s);
+		} else {
+			a = Actor.searchForOne(conn, s);
+			key = a.id;
+		}
+
+		return key;
+	}
+
+	@Override
 	public String toString() {
 		return Utils.rowDataToString(this.data);
 	}
 
-	public static Album searchForOne(Connection conn, Scanner s) throws SQLException {
+	public static Actor searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {
 			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "ACTOR");
 			Utils.fillRowData(rs, rowData);
-			return new Album(rowData);
+			return new Actor(rowData);
 		} else {
 			return null;
 		}

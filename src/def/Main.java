@@ -33,7 +33,6 @@ public class Main {
 				// Provides some positive assurance the connection and/or creation was
 				// successful.
 				DatabaseMetaData meta = conn.getMetaData();
-				System.out.println("The driver name is " + meta.getDriverName());
 				System.out.println("The connection to the database was successful.");
 			} else {
 				// Provides some feedback in case the connection failed but did not throw an
@@ -48,7 +47,6 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("This is a new run");
 		Connection conn = initializeDB(DATABASE);
 		boolean promptUser = true;
 

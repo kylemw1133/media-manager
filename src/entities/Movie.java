@@ -17,7 +17,8 @@ public class Movie implements Entity {
 	private final static String insertStarsInSQL = "INSERT INTO STARS VALUES(?, ?, ?);";
 	private final static String insertDirectsSQL = "INSERT INTO DIRECTS VALUES(?, ?);";
 
-	private LinkedList<TypedAttribute> data;
+	public int id;
+	public LinkedList<TypedAttribute> data;
 
 	public Movie() {
 		this.data = null;
@@ -25,12 +26,18 @@ public class Movie implements Entity {
 
 	public Movie(LinkedList<TypedAttribute> data) {
 		this.data = data;
+
+		for (TypedAttribute ta : this.data) {
+			if (ta.name.equals("Inventory_ID")) {
+				this.id = (int) ta.value;
+			}
+		}
 	}
 
 	@Override
-	public int insert(Connection conn, Scanner s) throws SQLException {
+	public Object insert(Connection conn, Scanner s) throws SQLException {
 		InventoryItem parentItem = new InventoryItem();
-		int id = parentItem.insert(conn, s);
+		int id = (int) parentItem.insert(conn, s);
 		Utils.executeInsertion(conn, s, id, insertMovieSQL, "MOVIE", "Inventory_ID");
 
 		// adding Actor STARS in Movie relation (cheap solution)
@@ -39,7 +46,7 @@ public class Movie implements Entity {
 			System.out.println("1: Add actor | 2: exit");
 			if (Integer.parseInt(s.nextLine()) == 1) {
 				Entity e = new Actor();
-				int actor_id = e.insert(conn, s);
+				int actor_id = (int) e.insert(conn, s);
 				System.out.println("What is the role of the actor? ");
 				String role = s.nextLine();
 				PreparedStatement insertActorMovieRelationStmt = conn.prepareStatement(insertStarsInSQL);
@@ -57,7 +64,7 @@ public class Movie implements Entity {
 			System.out.println("1: Add Director | 2: exit");
 			if (Integer.parseInt(s.nextLine()) == 1) {
 				Entity e = new Director();
-				int director_id = e.insert(conn, s);
+				int director_id = (int) e.insert(conn, s);
 				PreparedStatement insertActorMovieRelationStmt = conn.prepareStatement(insertDirectsSQL);
 				insertActorMovieRelationStmt.setInt(1, id);
 				insertActorMovieRelationStmt.setInt(2, director_id);
@@ -74,6 +81,21 @@ public class Movie implements Entity {
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editMovieSQL, "Inventory_ID");
+	}
+
+	@Override
+	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException {
+		int key = 0;
+		Movie a = new Movie();
+
+		if (insert) {
+			key = (int) a.insert(conn, s);
+		} else {
+			a = Movie.searchForOne(conn, s);
+			key = a.id;
+		}
+
+		return key;
 	}
 
 	@Override

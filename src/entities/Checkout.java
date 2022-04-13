@@ -41,7 +41,7 @@ public class Checkout implements Entity {
 	}
 
 	@Override
-	public int insert(Connection conn, Scanner s) throws SQLException {
+	public Object insert(Connection conn, Scanner s) throws SQLException {
 		int id = getNextCheckoutID(conn);
 		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "CHECKOUT");
@@ -73,6 +73,21 @@ public class Checkout implements Entity {
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editCheckoutSQL, "Order_ID");
+	}
+
+	@Override
+	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException {
+		int key = 0;
+		Checkout a = new Checkout();
+
+		if (insert) {
+			key = (int) a.insert(conn, s);
+		} else {
+			a = Checkout.searchForOne(conn, s);
+			key = a.checkoutID;
+		}
+
+		return key;
 	}
 
 	@Override

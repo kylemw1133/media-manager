@@ -14,7 +14,8 @@ public class Audiobook implements Entity {
 	private final static String insertAudiobookSQL = "INSERT INTO AUDIOBOOK VALUES (?, ?, ?, ?, ?, ?);";
 	private final static String editAudiobookSQL = " UPDATE AUDIOBOOK SET Author_ID=?, Length=?, Year=?, Name=?, Reader=? WHERE Inventory_ID=?";
 
-	private LinkedList<TypedAttribute> data;
+	public int id;
+	public LinkedList<TypedAttribute> data;
 
 	public Audiobook() {
 		this.data = null;
@@ -22,18 +23,39 @@ public class Audiobook implements Entity {
 
 	public Audiobook(LinkedList<TypedAttribute> data) {
 		this.data = data;
+
+		for (TypedAttribute ta : this.data) {
+			if (ta.name.equals("Inventory_ID")) {
+				this.id = (int) ta.value;
+			}
+		}
 	}
 
 	@Override
-	public int insert(Connection conn, Scanner s) throws SQLException {
+	public Object insert(Connection conn, Scanner s) throws SQLException {
 		InventoryItem parentItem = new InventoryItem();
-		int id = parentItem.insert(conn, s);
+		int id = (int) parentItem.insert(conn, s);
 		return Utils.executeInsertion(conn, s, id, insertAudiobookSQL, "AUDIOBOOK", "Inventory_ID");
 	}
 
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editAudiobookSQL, "Inventory_ID");
+	}
+
+	@Override
+	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException {
+		int key = 0;
+		Audiobook a = new Audiobook();
+
+		if (insert) {
+			key = (int) a.insert(conn, s);
+		} else {
+			a = Audiobook.searchForOne(conn, s);
+			key = a.id;
+		}
+
+		return key;
 	}
 
 	@Override

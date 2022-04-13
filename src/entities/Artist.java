@@ -15,7 +15,8 @@ public class Artist implements Entity {
 	private final static String editArtistSQL = " UPDATE ARTIST SET Name=? WHERE Artist_ID=?";
 	private static final String maxArtistIDSQL = "SELECT MAX(Artist_ID) AS Max_ID FROM ARTIST;";
 
-	private LinkedList<TypedAttribute> data;
+	public int id;
+	public LinkedList<TypedAttribute> data;
 
 	public Artist() {
 		this.data = null;
@@ -23,10 +24,16 @@ public class Artist implements Entity {
 
 	public Artist(LinkedList<TypedAttribute> data) {
 		this.data = data;
+
+		for (TypedAttribute ta : this.data) {
+			if (ta.name.equals("Artist_ID")) {
+				this.id = (int) ta.value;
+			}
+		}
 	}
 
 	@Override
-	public int insert(Connection conn, Scanner s) throws SQLException {
+	public Object insert(Connection conn, Scanner s) throws SQLException {
 		int id = getNextArtistID(conn);
 		return Utils.executeInsertion(conn, s, id, insertArtistSQL, "ARTIST", "Artist_ID");
 	}
@@ -34,6 +41,21 @@ public class Artist implements Entity {
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editArtistSQL, "Artist_ID");
+	}
+
+	@Override
+	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException {
+		int key = 0;
+		Artist a = new Artist();
+
+		if (insert) {
+			key = (int) a.insert(conn, s);
+		} else {
+			a = Artist.searchForOne(conn, s);
+			key = a.id;
+		}
+
+		return key;
 	}
 
 	@Override

@@ -19,9 +19,10 @@ public class Order implements Entity {
 	private final static String updateOrderSQL = "UPDATE [ORDER] SET Status='FULFILLED' WHERE Order_ID=?";
 	private static final String maxOrderIDSQL = "SELECT MAX(Order_ID) AS Max_ID FROM [ORDER];";
 
-	private int inventoryItemID;
-	private int copies;
-	private LinkedList<TypedAttribute> data;
+	public int orderID;
+	public int inventoryItemID;
+	public int copies;
+	public LinkedList<TypedAttribute> data;
 
 	public Order() {
 		this.data = null;
@@ -31,7 +32,9 @@ public class Order implements Entity {
 		this.data = data;
 
 		for (TypedAttribute ta : this.data) {
-			if (ta.name.equals("Inventory_ID")) {
+			if (ta.name.equals("Order_ID")) {
+				this.orderID = (int) ta.value;
+			} else if (ta.name.equals("Inventory_ID")) {
 				this.inventoryItemID = (int) ta.value;
 			} else if (ta.name.equals("Copies")) {
 				this.copies = (int) ta.value;
@@ -40,7 +43,7 @@ public class Order implements Entity {
 	}
 
 	@Override
-	public int insert(Connection conn, Scanner s) throws SQLException {
+	public Object insert(Connection conn, Scanner s) throws SQLException {
 		int id = getNextOrderID(conn);
 		return Utils.executeInsertion(conn, s, id, insertOrderSQL, "ORDER", "Order_ID");
 	}
@@ -48,6 +51,21 @@ public class Order implements Entity {
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
 //		Utils.executeEdit(conn, s, this.data, editOrderSQL, "Order_ID");
+	}
+
+	@Override
+	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException {
+		int key = 0;
+		Order a = new Order();
+
+		if (insert) {
+			key = (int) a.insert(conn, s);
+		} else {
+			a = Order.searchForOne(conn, s);
+			key = a.orderID;
+		}
+
+		return key;
 	}
 
 	public void activate(Connection conn, Scanner s) throws SQLException {
