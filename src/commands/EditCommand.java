@@ -23,6 +23,7 @@ import entities.Patron;
 import entities.Person;
 import entities.Season;
 import entities.Staff;
+import entities.Seller;
 import entities.TVShow;
 import entities.Track;
 
@@ -104,6 +105,11 @@ public class EditCommand {
 				break;
 			case "card":
 				e = Card.searchForOne(conn, s);
+				break;
+
+			// Seller
+			case "seller":
+				e = Seller.searchForOne(conn, s);
 				break;
 
 			default:

@@ -16,6 +16,7 @@ import entities.Movie;
 import entities.Patron;
 import entities.Person;
 import entities.Staff;
+import entities.Seller;
 import entities.TVShow;
 import entities.Track;
 
@@ -78,6 +79,11 @@ public class AddCommand {
 			// Card
 			case "card":
 				e = new Card();
+				break;
+
+			// Seller
+			case "seller":
+				e = new Seller();
 				break;
 
 			default:

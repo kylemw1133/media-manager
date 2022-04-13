@@ -22,6 +22,7 @@ import entities.Patron;
 import entities.Person;
 import entities.Season;
 import entities.Staff;
+import entities.Seller;
 import entities.TVShow;
 import entities.Track;
 import util.Utils;
@@ -103,6 +104,11 @@ public class SearchCommand {
 				break;
 			case "card":
 				rs = Card.search(conn, s);
+				break;
+
+			// Seller
+			case "seller":
+				rs = Seller.search(conn, s);
 				break;
 
 			default:

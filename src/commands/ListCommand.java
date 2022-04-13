@@ -21,6 +21,7 @@ import entities.Order;
 import entities.Patron;
 import entities.Person;
 import entities.Season;
+import entities.Seller;
 import entities.Staff;
 import entities.TVShow;
 import entities.Track;
@@ -103,6 +104,11 @@ public class ListCommand {
 				break;
 			case "card":
 				rs = Card.list(conn);
+				break;
+
+			// Seller
+			case "seller":
+				rs = Seller.list(conn);
 				break;
 
 			default:
