@@ -13,8 +13,9 @@ import util.Utils;
 public class Season implements Entity {
 
 	private final static String insertSeasonSQL = "INSERT INTO SEASON VALUES (?, ?, ?)";
-	private final static String editSeasonSQL = "UPDATE SEASON SET Season_Year=? WHERE Inventory_ID=? AND Season_Number=?";
-
+	private final static String editSeasonSQL = "UPDATE SEASON "
+			+ "SET Inventory_ID=?, Season_Number=?, Season_Year=? "
+			+ "WHERE Inventory_ID=? AND Season_Number=?;";
 	private static final String maxSeasonNumberSQL = "SELECT MAX(Season_Number) AS Max_Season_Number FROM SEASON WHERE Inventory_ID=?;";
 
 	public int inventoryID;
@@ -73,7 +74,29 @@ public class Season implements Entity {
 
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
-		Utils.executeEdit(conn, s, this.data, editSeasonSQL, "Inventory_ID");
+		PreparedStatement editStmt = conn.prepareStatement(editSeasonSQL);
+		int i = 1;
+		int id = 0;
+		int seasonNo = 0;
+
+		for (TypedAttribute a : this.data) {
+			if (a.name.contains("Inventory_ID")) {
+				id = (int) a.value;
+			} else if (a.name.contains("Season_Number")) {
+				seasonNo = (int) a.value;
+				a.promptForValue(s);
+			} else {
+				a.promptForValue(s);
+			}
+
+			a.fillInStmt(editStmt, i++);
+		}
+
+		editStmt.setInt(i++, id);
+		editStmt.setInt(i, seasonNo);
+
+		editStmt.execute();
+		editStmt.close();
 	}
 
 	@Override
@@ -114,7 +137,7 @@ public class Season implements Entity {
 	public static Season searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {
-			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "ALBUM");
+			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "SEASON");
 			Utils.fillRowData(rs, rowData);
 			return new Season(rowData);
 		} else {
@@ -123,11 +146,11 @@ public class Season implements Entity {
 	}
 
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
-		return Utils.executeSearch(conn, s, "ALBUM");
+		return Utils.executeSearch(conn, s, "SEASON");
 	}
 
                     public static ResultSet list(Connection conn) throws SQLException {
-        return Utils.executeList(conn, "ALBUM");
+        return Utils.executeList(conn, "SEASON");
     }
 
 	public int getNextSeasonNumber(Connection conn) throws SQLException {

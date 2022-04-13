@@ -45,7 +45,7 @@ public class Patron implements Entity {
 		int cardID = 0;
 		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "PATRON");
-		PreparedStatement insertStmt = conn.prepareStatement(insertPatronSQL);
+		PreparedStatement insertStmt = conn.prepareStatement(editPatronSQL);
 
 		for (TypedAttribute a : colSet) {
 			if (a.name.equals("P_Email")) {
@@ -69,7 +69,22 @@ public class Patron implements Entity {
 
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
-		Utils.executeEdit(conn, s, this.data, editPatronSQL, "P_Email");
+		PreparedStatement editStmt = conn.prepareStatement(editPatronSQL);
+		int i = 1;
+		String pEmail = "";
+
+		for (TypedAttribute a : this.data) {
+			if (a.name.contains("P_Email")) {
+				pEmail = (String) a.value;
+			}
+
+			a.promptForValue(s);
+			a.fillInStmt(editStmt, i++);
+		}
+
+		editStmt.setString(i, pEmail);
+		editStmt.execute();
+		editStmt.close();
 	}
 	
 	public ResultSet listCheckouts(Connection conn) throws SQLException {

@@ -13,8 +13,10 @@ import util.Utils;
 public class Episode implements Entity {
 
 	private final static String insertEpisodeSQL = "INSERT INTO EPISODE VALUES (?, ?, ?, ?, ?);";
-	private final static String editEpisodeSQL = " UPDATE EPISODE SET Director_ID=?, Episode_Name=?, Episode_Length=? WHERE Inventory_ID=? AND Season_Number=?";
-
+	private final static String editEpisodeSQL = "UPDATE EPISODE "
+			+ "SET Inventory_ID=?, Season_Number=?, Director_ID=?, Episode_Name=?, Episode_Length=? "
+			+ "WHERE Inventory_ID=? AND Season_Number=? AND Episode_Name=?;";
+	
 	public int inventoryID;
 	public int seasonNo;
 	public String name;
@@ -72,7 +74,34 @@ public class Episode implements Entity {
 
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
-		Utils.executeEdit(conn, s, this.data, editEpisodeSQL, "Actor_ID");
+		PreparedStatement editStmt = conn.prepareStatement(editEpisodeSQL);
+		int i = 1;
+		int id = 0;
+		int seasonNo = 0;
+		String episodeName = "";
+
+		for (TypedAttribute a : this.data) {
+			if (a.name.contains("Inventory_ID")) {
+				id = (int) a.value;
+			} else if (a.name.contains("Season_Number")) {
+				seasonNo = (int) a.value;
+				a.promptForValue(s);
+			} else if (a.name.contains("Episode_Name")) {
+				episodeName = (String) a.value;
+				a.promptForValue(s);
+			} else {
+				a.promptForValue(s);
+			}
+
+			a.fillInStmt(editStmt, i++);
+		}
+
+		editStmt.setInt(i++, id);
+		editStmt.setInt(i++, seasonNo);
+		editStmt.setString(i, episodeName);
+
+		editStmt.execute();
+		editStmt.close();
 	}
 
 	@Override

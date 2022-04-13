@@ -41,29 +41,29 @@
   - [X] search audiobooks
   - [X] list tv shows
   - [X] search tv shows
-- [-] Registering a person for a library card, deactivating old or lost library cards. A patron can have only one card. First name, last name, address of the patrons are needed as well as the email address.
+- [X] Registering a person for a library card, deactivating old or lost library cards. A patron can have only one card. First name, last name, address of the patrons are needed as well as the email address.
   - [X] insert patron
   - [X] insert card
-  - [ ] edit patron
-  - [ ] edit card
-- [ ] Editing existing entries in the database to correct errors
-  - [ ] edit artist
-  - [ ] edit album
-  - [ ] edit track
-  - [ ] edit movie
-  - [ ] edit actor
-  - [ ] edit director
-  - [ ] edit author
-  - [ ] edit audiobook
-  - [ ] edit chapter (weak)
-  - [ ] edit TV show
-  - [ ] edit season (weak)
-  - [ ] edit episode (weak)
-  - [ ] edit order
-  - [ ] edit person
-  - [ ] edit patron
-  - [ ] edit staff
-  - [ ] edit card
+  - [X] edit patron
+  - [X] edit card
+- [X] Editing existing entries in the database to correct errors
+  - [X] edit artist
+  - [X] edit album
+  - [X] edit track
+  - [X] edit movie
+  - [X] edit actor
+  - [X] edit director
+  - [X] edit author
+  - [X] edit audiobook
+  - [X] edit chapter (weak)
+  - [X] edit TV show
+  - [X] edit season (weak)
+  - [X] edit episode (weak)
+  - [X] edit order
+  - [X] edit person
+  - [X] edit patron
+  - [X] edit staff
+  - [X] edit card
 - [ ] Deleting entries in the database in the case of lost items
   - [ ] delete artist
   - [ ] delete album

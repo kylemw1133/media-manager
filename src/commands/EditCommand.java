@@ -10,12 +10,19 @@ import entities.Album;
 import entities.Artist;
 import entities.Audiobook;
 import entities.Author;
+import entities.Card;
 import entities.Chapter;
+import entities.Checkout;
 import entities.Director;
 import entities.Entity;
 import entities.Episode;
+import entities.InventoryItem;
 import entities.Movie;
+import entities.Order;
+import entities.Patron;
+import entities.Person;
 import entities.Season;
+import entities.Staff;
 import entities.TVShow;
 import entities.Track;
 
@@ -72,6 +79,34 @@ public class EditCommand {
 			case "episode":
 				e = Episode.searchForOne(conn, s);
 				break;
+				
+				
+			case "inventory_item":
+				e = InventoryItem.searchForOne(conn, s);
+				break;
+
+			// Order and Checkout
+			case "order":
+				e = Order.searchForOne(conn, s);
+				break;
+			case "checkout":
+				e = Checkout.searchForOne(conn, s);
+				break;
+				
+			// People
+			case "person":
+				e = Person.searchForOne(conn, s);
+				break;
+			case "patron":
+				e = Patron.searchForOne(conn, s);
+				break;
+			case "staff":
+				e = Staff.searchForOne(conn, s);
+				break;
+			case "card":
+				e = Card.searchForOne(conn, s);
+				break;
+				
 			default:
 				System.out.println("Invalid item type");
 			}

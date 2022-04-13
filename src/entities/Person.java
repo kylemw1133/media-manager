@@ -63,7 +63,22 @@ public class Person implements Entity {
 
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
-		Utils.executeEdit(conn, s, this.data, editPersonSQL, "P_Email");
+		PreparedStatement editStmt = conn.prepareStatement(editPersonSQL);
+		int i = 1;
+		String pEmail = "";
+
+		for (TypedAttribute a : this.data) {
+			if (a.name.contains("P_Email")) {
+				pEmail = (String) a.value;
+			}
+
+			a.promptForValue(s);
+			a.fillInStmt(editStmt, i++);
+		}
+
+		editStmt.setString(i, pEmail);
+		editStmt.execute();
+		editStmt.close();
 	}
 
 	@Override
@@ -125,7 +140,7 @@ public class Person implements Entity {
 		return Utils.executeSearch(conn, s, "PERSON");
 	}
 
-            public static ResultSet list(Connection conn) throws SQLException {
-        return Utils.executeList(conn, "PERSON");
-    }
+	public static ResultSet list(Connection conn) throws SQLException {
+		return Utils.executeList(conn, "PERSON");
+	}
 }

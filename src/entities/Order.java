@@ -13,7 +13,8 @@ import util.Utils;
 public class Order implements Entity {
 
 	private final static String insertOrderSQL = "INSERT INTO [ORDER] VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-//	private final static String editOrderSQL = "UPDATE [ORDER] SET Name=?, Length=?, Year=? WHERE Inventory_ID=?";
+	private final static String editOrderSQL = "UPDATE [ORDER] SET P_Email=?, Seller_ID=?, Inventory_ID=?, Date=?, ETA=?, Status=?, Copies=?, Price=? "
+			+ "WHERE Order_ID=?";
 	private final static String selectOrderSQL = "SELECT * FROM [ORDER] WHERE Order_ID=?;";
 	private final static String updateInventorySQL = "UPDATE INVENTORY_ITEM SET Quantity=? WHERE INVENTORY_ITEM.Inventory_ID=?";
 	private final static String fulfillOrderSQL = "UPDATE [ORDER] SET Status='Fulfilled' WHERE Order_ID=?";
@@ -50,7 +51,7 @@ public class Order implements Entity {
 
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
-//		Utils.executeEdit(conn, s, this.data, editOrderSQL, "Order_ID");
+		Utils.executeEdit(conn, s, this.data, editOrderSQL, "Order_ID");
 	}
 
 	@Override

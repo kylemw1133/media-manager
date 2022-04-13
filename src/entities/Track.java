@@ -1,6 +1,7 @@
 package entities;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -12,9 +13,12 @@ import util.Utils;
 public class Track implements Entity {
 
 	private final static String insertTrackSQL = "INSERT INTO TRACK VALUES (?, ?, ?, ?, ?);";
-	private final static String editTrackSQL = " UPDATE TRACK SET Artist_ID=?, Name=?, Year=?, Length=? WHERE Inventory_ID=?, Name=?";
+	private final static String editTrackSQL = "UPDATE TRACK "
+			+ "SET Inventory_ID=?, Artist_ID=?, Name=?, Year=?, Length=? "
+			+ "WHERE Inventory_ID=? AND Name=?;";
 
 	public int inventoryID;
+	public String name;
 	public LinkedList<TypedAttribute> data;
 
 	public Track() {
@@ -32,6 +36,8 @@ public class Track implements Entity {
 		for (TypedAttribute ta : this.data) {
 			if (ta.name.equals("Inventory_ID")) {
 				this.inventoryID = (int) ta.value;
+			} else if (ta.name.equals("Name")) {
+				this.name = (String) ta.value;
 			}
 		}
 	}
@@ -43,7 +49,29 @@ public class Track implements Entity {
 
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
-		Utils.executeEdit(conn, s, this.data, editTrackSQL, "Inventory_ID");
+		PreparedStatement editStmt = conn.prepareStatement(editTrackSQL);
+		int i = 1;
+		int id = 0;
+		String name = "";
+
+		for (TypedAttribute a : this.data) {
+			if (a.name.contains("Inventory_ID")) {
+				id = (int) a.value;
+			} else if (a.name.contains("Name")) {
+				name = (String) a.value;
+				a.promptForValue(s);
+			} else {
+				a.promptForValue(s);
+			}
+
+			a.fillInStmt(editStmt, i++);
+		}
+
+		editStmt.setInt(i++, id);
+		editStmt.setString(i, name);
+
+		editStmt.execute();
+		editStmt.close();
 	}
 
 	@Override
@@ -84,7 +112,7 @@ public class Track implements Entity {
 	public static Track searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {
-			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "ACTOR");
+			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "TRACK");
 			Utils.fillRowData(rs, rowData);
 			return new Track(rowData);
 		} else {
@@ -92,14 +120,11 @@ public class Track implements Entity {
 		}
 	}
 
-
-        public static ResultSet list(Connection conn) throws SQLException {
-        return Utils.executeList(conn, "ACTOR");
-    }
-
-
-
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
-		return Utils.executeSearch(conn, s, "ACTOR");
+		return Utils.executeSearch(conn, s, "TRACK");
+	}
+
+	public static ResultSet list(Connection conn) throws SQLException {
+		return Utils.executeList(conn, "TRACK");
 	}
 }

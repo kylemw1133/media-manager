@@ -1,6 +1,7 @@
 package entities;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -12,7 +13,9 @@ import util.Utils;
 public class Chapter implements Entity {
 
 	private final static String insertChapterSQL = "INSERT INTO CHAPTER VALUES (?, ?, ?)";
-	private final static String editChapterSQL = " UPDATE CHAPTER SET Name=?, Length=? WHERE Inventory_ID=?, Name=?";
+	private final static String editChapterSQL = "UPDATE CHAPTER "
+			+ "SET Inventory_ID=?, Name=?, Length=? "
+			+ "WHERE Inventory_ID=? AND Name=?;";
 
 	public int inventoryID;
 	public String name;
@@ -46,7 +49,29 @@ public class Chapter implements Entity {
 
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
-		Utils.executeEdit(conn, s, this.data, editChapterSQL, "Inventory_ID");
+		PreparedStatement editStmt = conn.prepareStatement(editChapterSQL);
+		int i = 1;
+		int id = 0;
+		String name = "";
+
+		for (TypedAttribute a : this.data) {
+			if (a.name.contains("Inventory_ID")) {
+				id = (int) a.value;
+			} else if (a.name.contains("Name")) {
+				name = (String) a.value;
+				a.promptForValue(s);
+			} else {
+				a.promptForValue(s);
+			}
+
+			a.fillInStmt(editStmt, i++);
+		}
+
+		editStmt.setInt(i++, id);
+		editStmt.setString(i, name);
+
+		editStmt.execute();
+		editStmt.close();
 	}
 
 	@Override

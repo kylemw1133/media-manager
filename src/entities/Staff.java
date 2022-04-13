@@ -13,7 +13,7 @@ import util.Utils;
 public class Staff implements Entity {
 
 	private final static String insertStaffSQL = "INSERT INTO STAFF VALUES (?, ?, ?);";
-	private final static String editStaffSQL = " UPDATE STAFF SET Staff_Salted_Password=?, Staff_Username=? WHERE P_Email=?";
+	private final static String editStaffSQL = " UPDATE STAFF SET P_Email=?, Staff_Salted_Password=?, Staff_Username=? WHERE P_Email=?";
 
 	public String pEmail;
 	public LinkedList<TypedAttribute> data;
@@ -58,7 +58,22 @@ public class Staff implements Entity {
 
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
-		Utils.executeEdit(conn, s, this.data, editStaffSQL, "P_Email");
+		PreparedStatement editStmt = conn.prepareStatement(editStaffSQL);
+		int i = 1;
+		String pEmail = "";
+
+		for (TypedAttribute a : this.data) {
+			if (a.name.contains("P_Email")) {
+				pEmail = (String) a.value;
+			}
+
+			a.promptForValue(s);
+			a.fillInStmt(editStmt, i++);
+		}
+
+		editStmt.setString(i, pEmail);
+		editStmt.execute();
+		editStmt.close();
 	}
 
 	@Override

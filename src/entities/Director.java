@@ -46,6 +46,11 @@ public class Director implements Entity {
 	}
 
 	@Override
+	public String toString() {
+		return Utils.rowDataToString(this.data);
+	}
+
+	@Override
 	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException {
 		int key = 0;
 
@@ -82,7 +87,7 @@ public class Director implements Entity {
 
 	public static Director searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
-		if (rs.first()) {
+		if (rs.next()) {
 			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "DIRECTOR");
 			Utils.fillRowData(rs, rowData);
 			return new Director(rowData);
