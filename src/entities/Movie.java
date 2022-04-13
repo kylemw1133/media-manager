@@ -48,9 +48,6 @@ public class Movie implements Entity {
 		}
 
 		insertMovieStmt.executeUpdate();
-
-		insertMovieStmt.executeUpdate();
-
 		return id;
 	}
 
