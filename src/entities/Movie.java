@@ -18,7 +18,9 @@ public class Movie implements Entity {
 	private final static String retrieveMovieSQL = "SELECT * FROM MOVIE;";
 	private final static String selectMovieSQL = "SELECT * FROM MOVIE WHERE Inventory_ID = ?";
 	private final static String editMovieSQL = "UPDATE MOVIE SET ? WHERE Inventory_ID = ?";
-
+	private final static String insertStarsInSQL = "INSERT INTO STARS VALUES(?, ?, ?);";
+	private final static String insertDirectsSQL = "INSERT INTO DIRECTS VALUES(?, ?);";
+	
 	private LinkedList<TypedAttribute> data;
 	
 	public Movie() {
@@ -39,16 +41,49 @@ public class Movie implements Entity {
 		for (TypedAttribute a : colSet) {
 			if (a.name.equals("Inventory_ID")) {
 				a.value = id;
-			} else {
+			} 
+			else {
 				a.promptForValue(s);
 			}
-
+			
 			a.fillInStmt(insertMovieStmt, i);
 			i++;
 		}
-
-		insertMovieStmt.executeUpdate();
-
+		//adding Actor STARS in Movie relation (cheap solution)
+		boolean addActor = true;
+		while(addActor) {
+			System.out.println("1: Add actor | 2: exit");
+				if(Integer.parseInt(s.nextLine())==1){
+					Entity e = new Actor();
+					int actor_id = e.insert(conn, s);
+					System.out.println("What is the role of the actor? ");
+					String role = s.nextLine();
+					PreparedStatement insertActorMovieRelationStmt = conn.prepareStatement(insertStarsInSQL);
+					insertActorMovieRelationStmt.setInt(1, id);
+					insertActorMovieRelationStmt.setInt(2, actor_id);
+					insertActorMovieRelationStmt.setString(2, role);
+					insertActorMovieRelationStmt.executeUpdate();
+				} else {
+					addActor = false;
+				}
+		}
+		//adding Director DIRECTS Movie relation (cheap solution)
+		boolean addDirector = true;
+		while(addDirector) {
+			System.out.println("1: Add Director | 2: exit");
+				if(Integer.parseInt(s.nextLine())==1){
+					Entity e = new Director();
+					int director_id = e.insert(conn, s);
+					PreparedStatement insertActorMovieRelationStmt = conn.prepareStatement(insertDirectsSQL);
+					insertActorMovieRelationStmt.setInt(1, id);
+					insertActorMovieRelationStmt.setInt(2, director_id);
+				
+					insertActorMovieRelationStmt.executeUpdate();
+				} else {
+					addDirector = false;
+				}
+		}
+		
 		insertMovieStmt.executeUpdate();
 
 		return id;
