@@ -64,10 +64,10 @@ public class Card implements Entity {
 		return Utils.rowDataToString(this.data);
 	}
 
-	public static void insertMultiple(Connection conn, Scanner s, int inventoryID) throws SQLException {
+	public static void insertSingle(Connection conn, Scanner s, int inventoryID) throws SQLException {
 		int input;
 		do {
-			System.out.println("| 1: Create Actor | 2: Choose Actor | 3: Finish with Actors |");
+			System.out.println("| 1: Create Card | 2: Choose Card | 3: Finish with Actors |");
 			input = Integer.parseInt(s.nextLine());
 
 			if (input == 3) {

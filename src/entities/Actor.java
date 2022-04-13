@@ -77,7 +77,7 @@ public class Actor implements Entity {
 			Actor a = new Actor();
 			int aID = (int) a.insertOrSearch(conn, s, input == 1);
 			
-			System.out.println("Provide the Role: ");
+			System.out.print("Provide the Role: ");
 			String role = s.nextLine();
 			
 			PreparedStatement insertJoinTupleStmt = conn.prepareStatement(insertStarsSQL);

@@ -1,9 +1,11 @@
 package entities;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -16,7 +18,7 @@ public class Order implements Entity {
 //	private final static String editOrderSQL = "UPDATE [ORDER] SET Name=?, Length=?, Year=? WHERE Inventory_ID=?";
 	private final static String selectOrderSQL = "SELECT * FROM [ORDER] WHERE Order_ID=?;";
 	private final static String updateInventorySQL = "UPDATE INVENTORY_ITEM SET Quantity=? WHERE INVENTORY_ITEM.Inventory_ID=?";
-	private final static String updateOrderSQL = "UPDATE [ORDER] SET Status='FULFILLED' WHERE Order_ID=?";
+	private final static String fulfillOrderSQL = "UPDATE [ORDER] SET Status='Fulfilled' WHERE Order_ID=?";
 	private static final String maxOrderIDSQL = "SELECT MAX(Order_ID) AS Max_ID FROM [ORDER];";
 
 	public int orderID;
@@ -52,6 +54,11 @@ public class Order implements Entity {
 	public void edit(Connection conn, Scanner s) throws SQLException {
 //		Utils.executeEdit(conn, s, this.data, editOrderSQL, "Order_ID");
 	}
+	
+	@Override
+	public String toString() {
+		return Utils.rowDataToString(this.data);
+	}
 
 	@Override
 	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException {
@@ -69,36 +76,23 @@ public class Order implements Entity {
 	}
 
 	public void activate(Connection conn, Scanner s) throws SQLException {
-		// Get an order
-		// Get the associated inventory item
-		// increase the items quantity by the order's quantity
-		// change the order status
-		PreparedStatement selectOrderStatement = conn.prepareStatement(selectOrderSQL);
+		System.out.println("Activating this order.");
+		System.out.println(this.toString());
+		System.out.println("Activating order item...");
 
-		System.out.println("Enter the order ID to fulfill:");
+		// Updating order record;
+		PreparedStatement fulfillOrderStmt = conn.prepareStatement(fulfillOrderSQL);
+		fulfillOrderStmt.setInt(1, this.orderID);
+		fulfillOrderStmt.execute();
 
-		String order_id = "";
-		// repeat promp for inventory id until user inputs a valid integer
-		while (order_id.equals("") || !order_id.matches("\\-?\\d+")) {
-			order_id = s.nextLine();
-		}
-
-		ResultSet rs = selectOrderStatement.executeQuery();
-		System.out.println(
-				"Do you wish to activate this order? Quantity will be increased and order status will change from PENDING to FULFILLED.");
-		Utils.printRecords(rs);
-		System.out.println("Y/N");
-
-		String input = s.nextLine();
-		if (input.equals("Y")) {
-			System.out.println("Activating order...");
-			InventoryItem.changeQuantity(conn, this.inventoryItemID, this.copies);
-		} else {
-			System.out.println("Activation cancelled.");
-		}
-		selectOrderStatement.close();
+		// Updating inventory_item record;
+		InventoryItem.changeQuantity(conn, this.inventoryItemID, this.copies);
 	}
 
+	public static ResultSet list(Connection conn) throws SQLException {
+		return Utils.executeList(conn, "ORDER");
+	}
+	
 	public static Order searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {

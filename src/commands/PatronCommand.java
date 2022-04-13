@@ -18,6 +18,9 @@ public class PatronCommand {
 //				Patron p = Patron
 //				p.insert(conn, s);
 				break;
+			case "list-checkouts":
+//				Patron p = Patron.searchForOne(conn, s);
+//				c.returnCheckout(conn, s);
 			case "return":
 				Checkout c = Checkout.searchForOne(conn, s);
 				c.returnCheckout(conn, s);

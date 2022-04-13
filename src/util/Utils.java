@@ -79,11 +79,18 @@ public class Utils {
 		}
 
 		TypedAttribute chosenAttribute = colSet.get(input - 1);
-		String selectCheckoutSQL = "SELECT * FROM " + tableName + " WHERE " + chosenAttribute.name + "=?;";
+		String selectCheckoutSQL = "SELECT * FROM [" + tableName + "] WHERE " + chosenAttribute.name + "=?;";
 		PreparedStatement selectCheckoutStmt = conn.prepareStatement(selectCheckoutSQL);
 		chosenAttribute.promptForValue(s);
 		chosenAttribute.fillInStmt(selectCheckoutStmt, 1);
 		ResultSet rs = selectCheckoutStmt.executeQuery();
+		return rs;
+	}
+	
+	public static ResultSet executeList(Connection conn, String tableName) throws SQLException {
+		Statement listStmt = conn.createStatement();
+		String listSQL = "SELECT * FROM [" + tableName + "];";
+		ResultSet rs = listStmt.executeQuery(listSQL);
 		return rs;
 	}
 

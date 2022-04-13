@@ -8,28 +8,28 @@
 
 * TODO List:
 
-- [ ] Entering new artists, albums, tracks, genres, length, year into the database as the music collection is expanded
-  - [ ] insert artist
-  - [ ] insert album
-  - [ ] insert track
-- [ ] Entering new movies, start role actors, director, genres, length, year, content rating into the database as the video collection is expanded
-  - [ ] insert movie
-  - [ ] insert actor
-  - [ ] insert director
-- [ ] Entering new author, audiobooks, chapters, genres, length, year into the database as the audiobook collection is expanded
-  - [ ] insert author
-  - [ ] insert audiobook
-  - [ ] insert chapter (weak)
-- [ ] TVSHOW ADDITION
-  - [ ] insert TV show
-  - [ ] insert season (weak)
-  - [ ] insert episode (weak)
-- [ ] Entering and keeping track of new media items ordered (but still not received): albums, videos and audiobooks, with number of copies purchase, price and an estimated date of arrival.
-  - [ ] insert order
-  - [ ] search orders
-  - [ ] list orders
-- [ ] Transferring new media items that arrive to the current media inventory (removing them from the inventory of the media items ordered)
-  - [ ] activate order
+- [X] Entering new artists, albums, tracks, genres, length, year into the database as the music collection is expanded
+  - [X] insert artist
+  - [X] insert album
+  - [X] insert track
+- [X] Entering new movies, start role actors, director, genres, length, year, content rating into the database as the video collection is expanded
+  - [X] insert movie
+  - [X] insert actor
+  - [X] insert director
+- [X] Entering new author, audiobooks, chapters, genres, length, year into the database as the audiobook collection is expanded
+  - [X] insert author
+  - [X] insert audiobook
+  - [X] insert chapters when inserting audiobook (weak)
+- [X] TVSHOW ADDITION
+  - [X] insert TV show
+  - [X] insert season (weak)
+  - [X] insert episode (weak)
+- [X] Entering and keeping track of new media items ordered (but still not received): albums, videos and audiobooks, with number of copies purchase, price and an estimated date of arrival.
+  - [X] insert order
+  - [X] search orders
+  - [X] list orders
+- [X] Transferring new media items that arrive to the current media inventory (removing them from the inventory of the media items ordered)
+  - [X] activate order
 - [ ] Keeping track of inventory: physical copies of albums, videos and audiobooks with their location, as well as electronic copies/licenses for digital copies of albums/videos/audiobooks. There could be several physical copies of albums/videos/audiobooks as well as electronic copies
   - [ ] list inventory items
   - [ ] search inventory items

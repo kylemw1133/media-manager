@@ -12,8 +12,8 @@ import util.Utils;
 
 public class Track implements Entity {
 
-	private final static String insertTrackSQL = "INSERT INTO TRACK VALUES (?, ?);";
-	private final static String editTrackSQL = " UPDATE TRACK SET Name=? WHERE Actor_ID=?";
+	private final static String insertTrackSQL = "INSERT INTO TRACK VALUES (?, ?, ?, ?, ?);";
+	private final static String editTrackSQL = " UPDATE TRACK SET Artist_ID=?, Name=?, Year=?, Length=? WHERE Inventory_ID=?, Name=?";
 	
 	public int inventoryID;
 	public LinkedList<TypedAttribute> data;
@@ -44,7 +44,7 @@ public class Track implements Entity {
 
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
-		Utils.executeEdit(conn, s, this.data, editTrackSQL, "Actor_ID");
+		Utils.executeEdit(conn, s, this.data, editTrackSQL, "Inventory_ID");
 	}
 
 	@Override

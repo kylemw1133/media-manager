@@ -14,9 +14,9 @@ public class Season implements Entity {
 
 	private final static String insertSeasonSQL = "INSERT INTO SEASON VALUES (?, ?, ?)";
 	private final static String editSeasonSQL = "UPDATE SEASON SET Season_Year=? WHERE Inventory_ID=? AND Season_Number=?";
-	
+
 	private static final String maxSeasonNumberSQL = "SELECT MAX(Season_Number) AS Max_Season_Number FROM SEASON WHERE Inventory_ID=?;";
-	
+
 	public int inventoryID;
 	public int seasonNo;
 	public LinkedList<TypedAttribute> data;
@@ -24,7 +24,7 @@ public class Season implements Entity {
 	public Season() {
 		this.data = null;
 	}
-	
+
 	public Season(int id) {
 		this.inventoryID = id;
 		this.data = null;
@@ -49,6 +49,8 @@ public class Season implements Entity {
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "SEASON");
 		PreparedStatement insertStmt = conn.prepareStatement(insertSeasonSQL);
 
+		System.out.println(colSet);
+
 		for (TypedAttribute a : colSet) {
 			if (a.name.equals("Inventory_ID")) {
 				a.value = this.inventoryID;
@@ -64,9 +66,8 @@ public class Season implements Entity {
 		insertStmt.execute();
 		insertStmt.close();
 
-		Utils.executeInsertion(conn, s, this.inventoryID, insertSeasonSQL, "SEASON", "Inventory_ID");
 		Episode.insertMultiple(conn, s, this.inventoryID, this.seasonNo);
-		
+
 		return this.seasonNo;
 	}
 
@@ -92,7 +93,7 @@ public class Season implements Entity {
 	public String toString() {
 		return Utils.rowDataToString(this.data);
 	}
-	
+
 	public static void insertMultiple(Connection conn, Scanner s, int inventoryID) throws SQLException {
 		int input;
 		do {
@@ -106,7 +107,7 @@ public class Season implements Entity {
 			Season se = new Season(inventoryID);
 			int seID = (int) se.insert(conn, s);
 		} while (input != 2);
-		
+
 		System.out.println("Finished with Seasons.");
 	}
 
@@ -124,13 +125,13 @@ public class Season implements Entity {
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		return Utils.executeSearch(conn, s, "ALBUM");
 	}
-	
+
 	public int getNextSeasonNumber(Connection conn) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement(maxSeasonNumberSQL);
 		stmt.setInt(1, this.inventoryID);
 		ResultSet rs = stmt.executeQuery();
 		int maxID = rs.getInt("Max_Season_Number");
 		stmt.close();
-		return maxID + 1;	
+		return maxID + 1;
 	}
 }
