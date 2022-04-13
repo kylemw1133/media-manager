@@ -35,7 +35,11 @@ public class Audiobook implements Entity {
 	public Object insert(Connection conn, Scanner s) throws SQLException {
 		InventoryItem parentItem = new InventoryItem();
 		int id = (int) parentItem.insert(conn, s);
-		return Utils.executeInsertion(conn, s, id, insertAudiobookSQL, "AUDIOBOOK", "Inventory_ID");
+		Utils.executeInsertion(conn, s, id, insertAudiobookSQL, "AUDIOBOOK", "Inventory_ID");
+		
+		Chapter.insertMultiple(conn, s, id);
+		
+		return id;
 	}
 
 	@Override

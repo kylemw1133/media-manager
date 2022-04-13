@@ -16,6 +16,7 @@ public class Chapter implements Entity {
 	private final static String editChapterSQL = " UPDATE CHAPTER SET Name=?, Length=? WHERE Inventory_ID=?, Name=?";
 	
 	public int inventoryID;
+	public String name;
 	public LinkedList<TypedAttribute> data;
 
 	public Chapter() {
@@ -33,6 +34,8 @@ public class Chapter implements Entity {
 		for (TypedAttribute ta : this.data) {
 			if (ta.name.equals("Inventory_ID")) {
 				this.inventoryID = (int) ta.value;
+			} else if (ta.name.equals("Name")) {
+				this.name = (String) ta.value;
 			}
 		}
 	}
@@ -68,24 +71,24 @@ public class Chapter implements Entity {
 	public static void insertMultiple(Connection conn, Scanner s, int inventoryID) throws SQLException {
 		int input;
 		do {
-			System.out.println("| 1: Create Track | 2: Finish with Track |");
+			System.out.println("| 1: Create Chapter | 2: Finish with Chapters |");
 			input = Integer.parseInt(s.nextLine());
 
 			if (input == 2) {
 				break;
 			}
 
-			Chapter t = new Chapter(inventoryID);
-			int tID = (int) t.insert(conn, s);
+			Chapter c = new Chapter(inventoryID);
+			int cID = (int) c.insert(conn, s);
 		} while (input != 2);
 		
-		System.out.println("Finished with Tracks.");
+		System.out.println("Finished with Chapters.");
 	}
 	
 	public static Chapter searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {
-			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "ACTOR");
+			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "CHAPTER");
 			Utils.fillRowData(rs, rowData);
 			return new Chapter(rowData);
 		} else {
@@ -94,6 +97,6 @@ public class Chapter implements Entity {
 	}
 
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
-		return Utils.executeSearch(conn, s, "ACTOR");
+		return Utils.executeSearch(conn, s, "CHAPTER");
 	}
 }
