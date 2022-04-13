@@ -14,7 +14,7 @@ import util.Utils;
 
 public class Audiobook implements Entity {
 
-	private final static String insertAudiobookSQL = "INSERT INTO AUDIOBOOK VALUES (? ? ? ? ? ?);";
+	private final static String insertAudiobookSQL = "INSERT INTO AUDIOBOOK VALUES (?, ?, ?, ?, ?, ?);";
 	private final static String selectAudiobookSQL = "SELECT * FROM AUDIOBOOK WHERE Inventory_ID=?;";
 	// private final static String editAudiobookSQL = "UPDATE AUDIOBOOK SET ? WHERE
 	// Inventory_ID = ?;";

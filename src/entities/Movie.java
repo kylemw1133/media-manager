@@ -49,6 +49,7 @@ public class Movie implements Entity {
 			a.fillInStmt(insertMovieStmt, i);
 			i++;
 		}
+<<<<<<< HEAD
 		//adding Actor STARS in Movie relation (cheap solution)
 		boolean addActor = true;
 		while(addActor) {
