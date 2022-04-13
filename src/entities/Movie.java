@@ -31,21 +31,7 @@ public class Movie implements Entity {
 	public int insert(Connection conn, Scanner s) throws SQLException {
 		InventoryItem parentItem = new InventoryItem();
 		int id = parentItem.insert(conn, s);
-		int i = 1;
-		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "MOVIE");
-		PreparedStatement insertMovieStmt = conn.prepareStatement(insertMovieSQL);
-
-		for (TypedAttribute a : colSet) {
-			if (a.name.equals("Inventory_ID")) {
-				a.value = id;
-			}
-			else {
-				a.promptForValue(s);
-			}
-
-			a.fillInStmt(insertMovieStmt, i);
-			i++;
-		}
+		Utils.executeInsertion(conn, s, id, insertMovieSQL, "MOVIE", "Inventory_ID");
 
 		//adding Actor STARS in Movie relation (cheap solution)
 		boolean addActor = true;
@@ -81,9 +67,6 @@ public class Movie implements Entity {
 					addDirector = false;
 				}
 		}
-
-		insertMovieStmt.execute();
-		insertMovieStmt.close();
 
 		return id;
 	}

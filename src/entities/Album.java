@@ -13,7 +13,7 @@ import util.Utils;
 public class Album implements Entity {
 
 	private final static String insertAlbumSQL = "INSERT INTO ALBUM VALUES (?, ?, ?, ?);";
-	private final static String editAlbumSQL = " UPDATE ALBUM SET Name=?, Length=?, Year=? WHERE Inventory_ID=?";
+	private final static String editAlbumSQL = "UPDATE ALBUM SET Name=?, Length=?, Year=? WHERE Inventory_ID=?";
 
 	private LinkedList<TypedAttribute> data;
 

@@ -80,7 +80,7 @@ public class Utils {
 
 		for (TypedAttribute ta : rowData) {
 			s.append(" ");
-			s.append(ta.value.toString());
+			s.append(ta.value);
 			s.append(" |");
 		}
 

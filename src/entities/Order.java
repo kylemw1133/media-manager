@@ -14,12 +14,14 @@ import util.Utils;
 public class Order implements Entity {
 
 	private final static String insertOrderSQL = "INSERT INTO [ORDER] VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-	private final static String editOrderSQL = "INSERT INTO [ORDER] VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+//	private final static String editOrderSQL = "UPDATE [ORDER] SET Name=?, Length=?, Year=? WHERE Inventory_ID=?";
 	private final static String selectOrderSQL = "SELECT * FROM [ORDER] WHERE Order_ID=?;";
 	private final static String updateInventorySQL = "UPDATE INVENTORY_ITEM SET Quantity=? WHERE INVENTORY_ITEM.Inventory_ID=?";
 	private final static String updateOrderSQL = "UPDATE [ORDER] SET Status='FULFILLED' WHERE Order_ID=?";
 	private static final String maxOrderIDSQL = "SELECT MAX(Order_ID) AS Max_ID FROM [ORDER];";
 
+	private int inventoryItemID;
+	private int copies;
 	private LinkedList<TypedAttribute> data;
 
 	public Order() {
@@ -28,35 +30,25 @@ public class Order implements Entity {
 
 	public Order(LinkedList<TypedAttribute> data) {
 		this.data = data;
+		
+		for (TypedAttribute ta : this.data) {
+			if (ta.name.equals("Inventory_ID")) {
+				this.inventoryItemID = (int) ta.value;
+			} else if (ta.name.equals("Copies")) {
+				this.copies = (int) ta.value;
+			}
+		}
 	}
 
 	@Override
 	public int insert(Connection conn, Scanner s) throws SQLException {
-		int id = 0;
-		int i = 1;
-		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "ORDER");
-		PreparedStatement insertOrderStmt = conn.prepareStatement(insertOrderSQL);
-
-		for (TypedAttribute a : colSet) {
-			if (a.name.equals("Order_ID")) {
-				id = getNextOrderID(conn);
-				a.value = id;
-			} else {
-				a.promptForValue(s);
-			}
-
-			a.fillInStmt(insertOrderStmt, i++);
-		}
-
-		insertOrderStmt.execute();
-		insertOrderStmt.close();
-
-		return id;
+		int id = getNextOrderID(conn);
+		return Utils.executeInsertion(conn, s, id, insertOrderSQL, "ORDER", "Order_ID");
 	}
 
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
-		Utils.executeEdit(conn, s, this.data, editOrderSQL, "Order_ID");
+//		Utils.executeEdit(conn, s, this.data, editOrderSQL, "Order_ID");
 	}
 
 	public void activate(Connection conn, Scanner s) throws SQLException {
@@ -83,23 +75,7 @@ public class Order implements Entity {
 		String input = s.nextLine();
 		if (input.equals("Y")) {
 			System.out.println("Activating order...");
-			Statement stmt = conn.createStatement();
-			rs = stmt.executeQuery(
-					"SELECT INVENTORY_ITEM.Quantity, [ORDER].Copies, INVENTORY_ITEM.Inventory_ID FROM INVENTORY_ITEM, [ORDER] WHERE INVENTORY_ITEM.Inventory_ID = [ORDER].Inventory_ID AND Order_ID="
-							+ order_id);
-
-			rs.next();
-			int prevQuantity = rs.getInt("Quantity");
-			int newQuantity = prevQuantity + rs.getInt("Copies");
-			int inventoryID = rs.getInt("Inventory_ID");
-
-			stmt.executeUpdate(updateOrderSQL);
-			stmt.close();
-
-			PreparedStatement updateStmt = conn.prepareStatement(updateInventorySQL);
-			updateStmt.setInt(1, newQuantity);
-			updateStmt.setInt(2, inventoryID);
-			updateStmt.execute();
+			InventoryItem.changeQuantity(conn, this.inventoryItemID, this.copies);
 		} else {
 			System.out.println("Activation cancelled.");
 		}

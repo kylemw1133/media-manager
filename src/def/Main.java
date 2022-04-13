@@ -10,6 +10,7 @@ import commands.AddCommand;
 import commands.DeleteCommand;
 import commands.EditCommand;
 import commands.OrderCommand;
+import commands.CheckoutCommand;
 import commands.ReportCommand;
 import commands.SearchCommand;
 
@@ -54,7 +55,7 @@ public class Main {
 		Scanner s = new Scanner(System.in);
 
 		while (promptUser) {
-			System.out.print("Enter db command (add, edit, delete, search, order, report, exit): ");
+			System.out.print("Enter db command (add, edit, delete, search, order, checkout, report, exit): ");
 			String command = s.nextLine();
 			switch (command) {
 			case "add":
@@ -71,6 +72,9 @@ public class Main {
 				break;
 			case "order":
 				OrderCommand.exec(conn, s);
+				break;
+			case "checkout":
+				CheckoutCommand.exec(conn, s);
 				break;
 			case "report":
 				ReportCommand.exec(conn, s);

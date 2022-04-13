@@ -29,25 +29,7 @@ public class TVShow implements Entity {
 	public int insert(Connection conn, Scanner s) throws SQLException {
 		InventoryItem parentItem = new InventoryItem();
 		int id = parentItem.insert(conn, s);
-		int i = 1;
-		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "TV_SHOW");
-		PreparedStatement insertTVShowStmt = conn.prepareStatement(insertTVShowSQL);
-
-		for (TypedAttribute a : colSet) {
-			if (a.name == "Inventory_ID") {
-				a.value = id;
-			} else {
-				a.promptForValue(s);
-			}
-
-			a.fillInStmt(insertTVShowStmt, i);
-			i++;
-		}
-
-		insertTVShowStmt.execute();
-		insertTVShowStmt.close();
-
-		return id;
+		return Utils.executeInsertion(conn, s, id, insertTVShowSQL, "TV_SHOW", "Inventory_ID");
 	}
 
 	@Override

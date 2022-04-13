@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -17,6 +18,10 @@ public class InventoryItem implements Entity {
 	private final static String deleteInventoryItemSQL = "DELETE FROM INVENTORY_ITEM WHERE Inventory_ID = ?;";
 	private static final String maxInventoryIDSQL = "SELECT MAX(Inventory_ID) AS Max_ID FROM INVENTORY_ITEM;";
 
+	private final static String getQuantitySQL = "SELECT Quantity FROM INVENTORY_ITEM WHERE Inventory_ID=?";
+	private final static String updateQuantitySQL = "UPDATE INVENTORY_ITEM SET Quantity=? WHERE Inventory_ID=?";
+
+	private int id;
 	private LinkedList<TypedAttribute> data;
 
 	public InventoryItem() {
@@ -25,6 +30,12 @@ public class InventoryItem implements Entity {
 
 	public InventoryItem(LinkedList<TypedAttribute> data) {
 		this.data = data;
+
+		for (TypedAttribute ta : this.data) {
+			if (ta.name.equals("Inventory_ID")) {
+				this.id = (int) ta.value;
+			}
+		}
 	}
 
 	@Override
@@ -51,6 +62,23 @@ public class InventoryItem implements Entity {
 		deleteInventoryItemStmt.setString(1, id);
 		deleteInventoryItemStmt.executeQuery();
 		deleteInventoryItemStmt.close();
+	}
+
+	public static void changeQuantity(Connection conn, int id, int delta) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement(getQuantitySQL);
+		stmt.setInt(1, id);
+		ResultSet rs = stmt.executeQuery();
+
+		rs.next();
+		int prevQuantity = rs.getInt("Quantity");
+		int newQuantity = prevQuantity + delta;
+
+		stmt.close();
+		stmt = conn.prepareStatement(updateQuantitySQL);
+		stmt.setInt(1, newQuantity);
+		stmt.setInt(2, id);
+		stmt.execute();
+		stmt.close();
 	}
 
 	public static InventoryItem searchForOne(Connection conn, Scanner s) throws SQLException {
