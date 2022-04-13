@@ -54,16 +54,20 @@ public class Album implements Entity {
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		PreparedStatement editAlbumStmt = conn.prepareStatement(editAlbumSQL);
 		int i = 1;
+		int id = 0;
 
 		for (TypedAttribute a : this.data) {
-			if (!a.name.equals("Inventory_ID")) {
+			if (a.name.equals("Inventory_ID")) {
+				id = (int) a.value;
+			} else {
 				a.promptForValue(s);
+				a.fillInStmt(editAlbumStmt, i++);
 			}
-			
-			a.fillInStmt(editAlbumStmt, i++);
 		}
 		
+		editAlbumStmt.setInt(i, id);
 		editAlbumStmt.execute();
+		editAlbumStmt.close();
 	}
 	
 	@Override
