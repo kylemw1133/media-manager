@@ -60,12 +60,14 @@ public class Checkout implements Entity {
 				a.promptForValue(s);
 			}
 
-			a.fillInStmt(insertAlbumStmt, i);
-			i++;
+			a.fillInStmt(insertAlbumStmt, i++);
 		}
-
+		
 		insertAlbumStmt.execute();
 		insertAlbumStmt.close();
+		
+		// Updating inventory_item record;
+		InventoryItem.changeQuantity(conn, this.inventoryItemID, -1);
 
 		return id;
 	}
