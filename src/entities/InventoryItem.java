@@ -87,24 +87,28 @@ public class InventoryItem implements Entity {
 	}
 
 	public static void changeQuantity(Connection conn, int id, int delta) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement(getQuantitySQL);
-		stmt.setInt(1, id);
-		ResultSet rs = stmt.executeQuery();
+		PreparedStatement getQuantityStmt = conn.prepareStatement(getQuantitySQL);
+		getQuantityStmt.setInt(1, id);
+		ResultSet rs = getQuantityStmt.executeQuery();
 
-		rs.next();
-		int prevQuantity = rs.getInt("Quantity");
-		int newQuantity = prevQuantity + delta;
+		int newQuantity = 0;
+		if (rs.next()) {
+			int prevQuantity = rs.getInt("Quantity");
+			newQuantity = prevQuantity + delta;
 
-		if (newQuantity < 0) {
-			newQuantity = 0;
+			if (newQuantity < 0) {
+				newQuantity = 0;
+			}
 		}
 
-		stmt.close();
-		stmt = conn.prepareStatement(updateQuantitySQL);
-		stmt.setInt(1, newQuantity);
-		stmt.setInt(2, id);
-		stmt.execute();
-		stmt.close();
+		getQuantityStmt.close();
+
+		PreparedStatement setQuantityStmt = conn.prepareStatement(updateQuantitySQL);
+		setQuantityStmt.setInt(1, newQuantity);
+		setQuantityStmt.setInt(2, id);
+		setQuantityStmt.execute();
+		
+		System.out.println("New Quantity for Item: " + newQuantity);
 	}
 
 	public static InventoryItem searchForOne(Connection conn, Scanner s) throws SQLException {

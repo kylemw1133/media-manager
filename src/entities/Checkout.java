@@ -50,14 +50,16 @@ public class Checkout implements Entity {
 		for (TypedAttribute a : colSet) {
 			if (a.name.equals("Checkout_ID")) {
 				a.value = id;
-			} else if (a.name.equals("Inventory_ID")) {
-				this.inventoryItemID = 1;
-				a.value = 1;
-			} else if (a.name.equals("Card_ID")) {
-				this.cardItemID = 1;
-				a.value = 1;
+			} else if (a.name.equals("Return_Date")) {
+				a.value = null;
+			} else if (a.name.equals("Checkout_Status")) {
+				a.value = "CheckedOut";
 			} else {
 				a.promptForValue(s);
+			}
+			
+			if (a.name.equals("Inventory_ID")) {
+				this.inventoryItemID = (int) a.value;
 			}
 
 			a.fillInStmt(insertAlbumStmt, i++);
@@ -68,7 +70,7 @@ public class Checkout implements Entity {
 
 		// Updating inventory_item record;
 		InventoryItem.changeQuantity(conn, this.inventoryItemID, -1);
-
+		
 		return id;
 	}
 
