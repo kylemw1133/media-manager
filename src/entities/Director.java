@@ -101,8 +101,8 @@ public class Director implements Entity {
 	}
 
 	public static ResultSet list(Connection conn) throws SQLException {
-        return Utils.executeList(conn, "DIRECTOR");
-    }
+		return Utils.executeList(conn, "DIRECTOR");
+	}
 
 	public static int getNextDirectorID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxDirectorIDSQL, "Max_ID");

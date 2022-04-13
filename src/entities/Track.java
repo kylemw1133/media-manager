@@ -14,8 +14,7 @@ public class Track implements Entity {
 
 	private final static String insertTrackSQL = "INSERT INTO TRACK VALUES (?, ?, ?, ?, ?);";
 	private final static String editTrackSQL = "UPDATE TRACK "
-			+ "SET Inventory_ID=?, Artist_ID=?, Name=?, Year=?, Length=? "
-			+ "WHERE Inventory_ID=? AND Name=?;";
+			+ "SET Inventory_ID=?, Artist_ID=?, Name=?, Year=?, Length=? " + "WHERE Inventory_ID=? AND Name=?;";
 
 	public int inventoryID;
 	public String name;

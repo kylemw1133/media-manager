@@ -13,8 +13,7 @@ import util.Utils;
 public class Season implements Entity {
 
 	private final static String insertSeasonSQL = "INSERT INTO SEASON VALUES (?, ?, ?)";
-	private final static String editSeasonSQL = "UPDATE SEASON "
-			+ "SET Inventory_ID=?, Season_Number=?, Season_Year=? "
+	private final static String editSeasonSQL = "UPDATE SEASON " + "SET Inventory_ID=?, Season_Number=?, Season_Year=? "
 			+ "WHERE Inventory_ID=? AND Season_Number=?;";
 	private static final String maxSeasonNumberSQL = "SELECT MAX(Season_Number) AS Max_Season_Number FROM SEASON WHERE Inventory_ID=?;";
 
@@ -149,9 +148,9 @@ public class Season implements Entity {
 		return Utils.executeSearch(conn, s, "SEASON");
 	}
 
-                    public static ResultSet list(Connection conn) throws SQLException {
-        return Utils.executeList(conn, "SEASON");
-    }
+	public static ResultSet list(Connection conn) throws SQLException {
+		return Utils.executeList(conn, "SEASON");
+	}
 
 	public int getNextSeasonNumber(Connection conn) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement(maxSeasonNumberSQL);

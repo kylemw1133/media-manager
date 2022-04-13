@@ -5,7 +5,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import entities.*;
+import entities.Actor;
+import entities.Album;
+import entities.Artist;
+import entities.Audiobook;
+import entities.Author;
+import entities.Card;
+import entities.Chapter;
+import entities.Checkout;
+import entities.Director;
+import entities.Episode;
+import entities.InventoryItem;
+import entities.Movie;
+import entities.Order;
+import entities.Patron;
+import entities.Person;
+import entities.Season;
+import entities.Staff;
+import entities.TVShow;
+import entities.Track;
 import util.Utils;
 
 public class SearchCommand {
@@ -39,7 +57,7 @@ public class SearchCommand {
 				rs = Director.search(conn, s);
 				break;
 
-				// Bullet 3:
+			// Bullet 3:
 			case "author":
 				rs = Author.search(conn, s);
 				break;
@@ -60,7 +78,7 @@ public class SearchCommand {
 			case "episode":
 				rs = Episode.search(conn, s);
 				break;
-				
+
 			case "inventory_item":
 				rs = InventoryItem.search(conn, s);
 				break;
@@ -72,7 +90,7 @@ public class SearchCommand {
 			case "checkout":
 				rs = Checkout.search(conn, s);
 				break;
-				
+
 			// People
 			case "person":
 				rs = Person.search(conn, s);

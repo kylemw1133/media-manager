@@ -57,8 +57,8 @@ public class EditCommand {
 			case "director":
 				e = Director.searchForOne(conn, s);
 				break;
-				
-				// Bullet 3:
+
+			// Bullet 3:
 			case "author":
 				e = Author.searchForOne(conn, s);
 				break;
@@ -79,8 +79,7 @@ public class EditCommand {
 			case "episode":
 				e = Episode.searchForOne(conn, s);
 				break;
-				
-				
+
 			case "inventory_item":
 				e = InventoryItem.searchForOne(conn, s);
 				break;
@@ -92,7 +91,7 @@ public class EditCommand {
 			case "checkout":
 				e = Checkout.searchForOne(conn, s);
 				break;
-				
+
 			// People
 			case "person":
 				e = Person.searchForOne(conn, s);
@@ -106,7 +105,7 @@ public class EditCommand {
 			case "card":
 				e = Card.searchForOne(conn, s);
 				break;
-				
+
 			default:
 				System.out.println("Invalid item type");
 			}

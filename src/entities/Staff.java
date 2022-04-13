@@ -109,7 +109,7 @@ public class Staff implements Entity {
 		return Utils.executeSearch(conn, s, "STAFF");
 	}
 
-                public static ResultSet list(Connection conn) throws SQLException {
-        return Utils.executeList(conn, "STAFF");
-    }
+	public static ResultSet list(Connection conn) throws SQLException {
+		return Utils.executeList(conn, "STAFF");
+	}
 }

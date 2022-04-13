@@ -13,8 +13,7 @@ import util.Utils;
 public class Chapter implements Entity {
 
 	private final static String insertChapterSQL = "INSERT INTO CHAPTER VALUES (?, ?, ?)";
-	private final static String editChapterSQL = "UPDATE CHAPTER "
-			+ "SET Inventory_ID=?, Name=?, Length=? "
+	private final static String editChapterSQL = "UPDATE CHAPTER " + "SET Inventory_ID=?, Name=?, Length=? "
 			+ "WHERE Inventory_ID=? AND Name=?;";
 
 	public int inventoryID;

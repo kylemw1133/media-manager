@@ -80,7 +80,7 @@ public class TVShow implements Entity {
 		return Utils.executeSearch(conn, s, "TV_SHOW");
 	}
 
-                public static ResultSet list(Connection conn) throws SQLException {
-        return Utils.executeList(conn, "TV_SHOW");
-    }
+	public static ResultSet list(Connection conn) throws SQLException {
+		return Utils.executeList(conn, "TV_SHOW");
+	}
 }

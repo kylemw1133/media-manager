@@ -6,7 +6,15 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import commands.*;
+import commands.AddCommand;
+import commands.CheckoutCommand;
+import commands.DeleteCommand;
+import commands.EditCommand;
+import commands.ListCommand;
+import commands.OrderCommand;
+import commands.PatronCommand;
+import commands.ReportCommand;
+import commands.SearchCommand;
 
 public class Main {
 
@@ -47,11 +55,10 @@ public class Main {
 		Scanner s = new Scanner(System.in);
 
 		while (promptUser) {
-			System.out.println("Commands: add, edit, delete, search, list, "
-					+ "patron, order, checkout, report, exit");
+			System.out.println("Commands: add, edit, delete, search, list, " + "patron, order, checkout, report, exit");
 			System.out.print("PROMPT> ");
 			String command = s.nextLine();
-			
+
 			switch (command) {
 			case "add":
 				AddCommand.exec(conn, s);

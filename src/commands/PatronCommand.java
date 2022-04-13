@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import entities.Checkout;
 import entities.Patron;
 import util.Utils;
 

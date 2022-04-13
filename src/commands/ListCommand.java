@@ -5,7 +5,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import entities.*;
+import entities.Actor;
+import entities.Album;
+import entities.Artist;
+import entities.Audiobook;
+import entities.Author;
+import entities.Card;
+import entities.Chapter;
+import entities.Checkout;
+import entities.Director;
+import entities.Episode;
+import entities.InventoryItem;
+import entities.Movie;
+import entities.Order;
+import entities.Patron;
+import entities.Person;
+import entities.Season;
+import entities.Staff;
+import entities.TVShow;
+import entities.Track;
 import util.Utils;
 
 public class ListCommand {

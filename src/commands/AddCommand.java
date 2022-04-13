@@ -50,7 +50,7 @@ public class AddCommand {
 				e = new Director();
 				break;
 
-				// Bullet 3:
+			// Bullet 3:
 			case "author":
 				e = new Author();
 				break;
@@ -74,7 +74,7 @@ public class AddCommand {
 			case "staff":
 				e = new Staff();
 				break;
-				
+
 			// Card
 			case "card":
 				e = new Card();

@@ -16,7 +16,7 @@ public class Episode implements Entity {
 	private final static String editEpisodeSQL = "UPDATE EPISODE "
 			+ "SET Inventory_ID=?, Season_Number=?, Director_ID=?, Episode_Name=?, Episode_Length=? "
 			+ "WHERE Inventory_ID=? AND Season_Number=? AND Episode_Name=?;";
-	
+
 	public int inventoryID;
 	public int seasonNo;
 	public String name;
@@ -154,7 +154,7 @@ public class Episode implements Entity {
 		return Utils.executeSearch(conn, s, "EPISODE");
 	}
 
-                    public static ResultSet list(Connection conn) throws SQLException {
-        return Utils.executeList(conn, "EPISODE");
-    }
+	public static ResultSet list(Connection conn) throws SQLException {
+		return Utils.executeList(conn, "EPISODE");
+	}
 }
