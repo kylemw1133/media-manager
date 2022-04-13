@@ -1,19 +1,126 @@
 #+Media Manager
+* Inventory Item Types:
 
-TODO List:
+1. albums
+2. movies
+3. audiobooks
+4. tv shows
 
-* TODO Entering new artists, albums, tracks, genres, length, year into the database as the music collection is expanded
-* TODO Entering new movies, start role actors, director, genres, length, year, content rating into the database as the video collection is expanded
-* TODO Entering new author, audiobooks, chapters, genres, length, year into the database as the audiobook collection is expanded
-* TODO Entering and keeping track of new media items ordered (but still not received): albums, videos and audiobooks, with number of copies purchase, price and an estimated date of arrival.
-* TODO Transferring new media items that arrive to the current media inventory (removing them from the inventory of the media items ordered)
-* TODO Keeping track of inventory: physical copies of albums, videos and audiobooks with their location, as well as electronic copies/licenses for digital copies of albums/videos/audiobooks. There could be several physical copies of albums/videos/audiobooks as well as electronic copies
-* TODO Registering a person for a library card, deactivating old or lost library cards. A patron can have only one card. First name, last name, address of the patrons are needed as well as the email address.
-* TODO Editing existing entries in the database to correct errors
-* TODO Deleting entries in the database in the case of lost items
-* TODO Displaying entries in the database based on user entered criteria
-* TODO Searching the database for artists, actors, authors, albums, audiobooks, movies and music tracks
-* TODO Listing all checkouts (physical, digital, or both) for a patron
-* TODO Check out instances of physical media to a patron using a library card, keeping track of the due date.
-* TODO Check out instances of digital media to a patron using a library card, keeping track of the due date
-* TODO Registering into the system the items returned by patrons.
+* TODO List:
+
+- [ ] Entering new artists, albums, tracks, genres, length, year into the database as the music collection is expanded
+  - [ ] insert artist
+  - [ ] insert album
+  - [ ] insert track
+- [ ] Entering new movies, start role actors, director, genres, length, year, content rating into the database as the video collection is expanded
+  - [ ] insert movie
+  - [ ] insert actor
+  - [ ] insert director
+- [ ] Entering new author, audiobooks, chapters, genres, length, year into the database as the audiobook collection is expanded
+  - [ ] insert author
+  - [ ] insert audiobook
+  - [ ] insert chapter (weak)
+- [ ] TVSHOW ADDITION
+  - [ ] insert TV show
+  - [ ] insert season (weak)
+  - [ ] insert episode (weak)
+- [ ] Entering and keeping track of new media items ordered (but still not received): albums, videos and audiobooks, with number of copies purchase, price and an estimated date of arrival.
+  - [ ] insert order
+  - [ ] search orders
+  - [ ] list orders
+- [ ] Transferring new media items that arrive to the current media inventory (removing them from the inventory of the media items ordered)
+  - [ ] activate order
+- [ ] Keeping track of inventory: physical copies of albums, videos and audiobooks with their location, as well as electronic copies/licenses for digital copies of albums/videos/audiobooks. There could be several physical copies of albums/videos/audiobooks as well as electronic copies
+  - [ ] list inventory items
+  - [ ] search inventory items
+  - [ ] list albums
+  - [ ] search albums
+  - [ ] list movies
+  - [ ] search movies
+  - [ ] list audiobooks
+  - [ ] search audiobooks
+  - [ ] list tv shows
+  - [ ] search tv shows
+- [ ] Registering a person for a library card, deactivating old or lost library cards. A patron can have only one card. First name, last name, address of the patrons are needed as well as the email address.
+  - [ ] insert patron
+  - [ ] insert card
+- [ ] Editing existing entries in the database to correct errors
+  - [ ] edit artist
+  - [ ] edit album
+  - [ ] edit track
+  - [ ] edit movie
+  - [ ] edit actor
+  - [ ] edit director
+  - [ ] edit author
+  - [ ] edit audiobook
+  - [ ] edit chapter (weak)
+  - [ ] edit TV show
+  - [ ] edit season (weak)
+  - [ ] edit episode (weak)
+  - [ ] edit order
+  - [ ] edit person
+  - [ ] edit patron
+  - [ ] edit staff
+  - [ ] edit card
+- [ ] Deleting entries in the database in the case of lost items
+  - [ ] delete artist
+  - [ ] delete album
+  - [ ] delete track
+  - [ ] delete movie
+  - [ ] delete actor
+  - [ ] delete director
+  - [ ] delete author
+  - [ ] delete audiobook
+  - [ ] delete chapter (weak)
+  - [ ] delete TV show
+  - [ ] delete season (weak)
+  - [ ] delete episode (weak)
+  - [ ] delete order
+  - [ ] delete person
+  - [ ] delete patron
+  - [ ] delete staff
+  - [ ] delete card
+- [ ] Displaying entries in the database based on user entered criteria
+  - [ ] search artist
+  - [ ] search album
+  - [ ] search track
+  - [ ] search movie
+  - [ ] search actor
+  - [ ] search director
+  - [ ] search author
+  - [ ] search audiobook
+  - [ ] search chapter (weak)
+  - [ ] search TV show
+  - [ ] search season (weak)
+  - [ ] search episode (weak)
+  - [ ] search order
+  - [ ] search person
+  - [ ] search patron
+  - [ ] search staff
+  - [ ] search card
+- [ ] Searching the database for artists, actors, authors, albums, audiobooks, movies and music tracks
+  - [ ] search artist
+  - [ ] search album
+  - [ ] search track
+  - [ ] search movie
+  - [ ] search actor
+  - [ ] search director
+  - [ ] search author
+  - [ ] search audiobook
+  - [ ] search chapter (weak)
+  - [ ] search TV show
+  - [ ] search season (weak)
+  - [ ] search episode (weak)
+  - [ ] search order
+  - [ ] search person
+  - [ ] search patron
+  - [ ] search staff
+  - [ ] search card
+- [ ] Listing all checkouts (physical, digital, or both) for a patron
+  - [ ] patron getAllCheckouts
+- [ ] Check out instances of physical media to a patron using a library card, keeping track of the due date.
+  - [ ] checkout command > place
+- [ ] Check out instances of digital media to a patron using a library card, keeping track of the due date
+  - [ ] checkout command > place
+- [ ] Registering into the system the items returned by patrons.
+  - [ ] checkout command > return
