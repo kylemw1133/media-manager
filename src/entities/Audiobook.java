@@ -46,6 +46,9 @@ public class Audiobook implements Entity {
 			a.fillInStmt(insertAudiobookStmt, i);
 			i++;
 		}
+		
+		insertAudiobookStmt.execute();
+		insertAudiobookStmt.close();
 
 		return id;
 	}
@@ -122,7 +125,7 @@ public class Audiobook implements Entity {
 
 	public static Audiobook searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = Album.search(conn, s);
-		if (rs.first()) {
+		if (rs.next()) {
 			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "AUDIOBOOK");
 			Utils.fillRowData(rs, rowData);
 			return new Audiobook(rowData);

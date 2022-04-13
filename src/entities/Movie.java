@@ -47,7 +47,9 @@ public class Movie implements Entity {
 			i++;
 		}
 
-		insertMovieStmt.executeUpdate();
+		insertMovieStmt.execute();
+		insertMovieStmt.close();
+
 		return id;
 	}
 
@@ -125,7 +127,7 @@ public class Movie implements Entity {
 
 	public static Movie searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = Album.search(conn, s);
-		if (rs.first()) {
+		if (rs.next()) {
 			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "MOVIE");
 			Utils.fillRowData(rs, rowData);
 			return new Movie(rowData);

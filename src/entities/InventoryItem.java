@@ -106,29 +106,29 @@ public class InventoryItem implements Entity {
 	
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		System.out.println("Which field do you want to search by?");
-		System.out.println("1: Name | 2: Length | 3: Year | 4: EXIT: ");
+		System.out.println("1: Quantity | 2: Format | 3: Location | 4: EXIT: ");
 		String input = s.nextLine();
 		String searchInputString = "";
 		int searchInputInt;
-		PreparedStatement searchAlbumSQLstmt = null;
+		PreparedStatement searchInventoryItemSQLStmt = null;
 		switch (input) {
 		case "1":
 			System.out.println("Enter search name");
 			searchInputString = s.nextLine();
-			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE name = ?;");
-			searchAlbumSQLstmt.setString(1, searchInputString);
+			searchInventoryItemSQLStmt = conn.prepareStatement("SELECT * FROM INVENTORY_ITEM WHERE Quantity = ?;");
+			searchInventoryItemSQLStmt.setString(1, searchInputString);
 			break;
 		case "2":
 			System.out.println("Enter search Length");
 			searchInputInt = Integer.parseInt(s.nextLine());
-			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE length = ?;");
-			searchAlbumSQLstmt.setInt(1, searchInputInt);
+			searchInventoryItemSQLStmt = conn.prepareStatement("SELECT * FROM INVENTORY_ITEM WHERE Format = ?;");
+			searchInventoryItemSQLStmt.setInt(1, searchInputInt);
 			break;
 		case "3":
 			System.out.println("Enter search year");
 			searchInputString = s.nextLine();
-			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE year = ?;");
-			searchAlbumSQLstmt.setString(1, searchInputString);
+			searchInventoryItemSQLStmt = conn.prepareStatement("SELECT * FROM INVENTORY_ITEM WHERE Location = ?;");
+			searchInventoryItemSQLStmt.setString(1, searchInputString);
 			break;
 
 		case "4":
@@ -138,29 +138,13 @@ public class InventoryItem implements Entity {
 			System.out.println("Invalid input");
 			break;
 		}
-		if (searchAlbumSQLstmt != null) {
-			ResultSet rs = searchAlbumSQLstmt.executeQuery();
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int columnCount = rsmd.getColumnCount();
-			for (int i = 1; i <= columnCount; i++) {
-				String value = rsmd.getColumnName(i);
-				System.out.print(value);
-				if (i < columnCount)
-					System.out.print(",  ");
-			}
-			System.out.print("\n");
-			while (rs.next()) {
-				for (int i = 1; i <= columnCount; i++) {
-					String columnValue = rs.getString(i);
-					System.out.print(columnValue);
-					if (i < columnCount)
-						System.out.print(",  ");
-				}
-				System.out.print("\n");
-			}
+		
+		if (searchInventoryItemSQLStmt != null) {
+			ResultSet rs = searchInventoryItemSQLStmt.executeQuery();
+			return rs;
 		} else {
 			System.out.println("No search performed");
+			return null;
 		}
-		return null;
 	}
 }

@@ -45,7 +45,8 @@ public class Album implements Entity {
 			i++;
 		}
 
-		insertAlbumStmt.executeUpdate();
+		insertAlbumStmt.execute();
+		insertAlbumStmt.close();
 
 		return id;
 	}
@@ -61,8 +62,21 @@ public class Album implements Entity {
 			
 			a.fillInStmt(editAlbumStmt, i++);
 		}
-
+		
 		editAlbumStmt.execute();
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer s = new StringBuffer("|");
+		
+		for (TypedAttribute ta : this.data) {
+			s.append(" ");
+			s.append(ta.value.toString());
+			s.append(" |");
+		}
+		
+		return s.toString();
 	}
 
 	public static Album searchForOne(Connection conn, Scanner s) throws SQLException {
@@ -83,6 +97,7 @@ public class Album implements Entity {
 		String searchInputString = "";
 		int searchInputInt;
 		PreparedStatement searchAlbumSQLstmt = null;
+		
 		switch (input) {
 		case "1":
 			System.out.println("Enter search name");
@@ -102,7 +117,6 @@ public class Album implements Entity {
 			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE year = ?;");
 			searchAlbumSQLstmt.setString(1, searchInputString);
 			break;
-
 		case "4":
 			System.out.println("Exit");
 			break;

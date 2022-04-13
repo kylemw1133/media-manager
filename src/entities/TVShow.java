@@ -48,7 +48,8 @@ public class TVShow implements Entity {
 			i++;
 		}
 
-		insertTVShowStmt.executeUpdate();
+		insertTVShowStmt.execute();
+		insertTVShowStmt.close();
 
 		return id;
 	}
@@ -76,7 +77,7 @@ public class TVShow implements Entity {
 
 	public static TVShow searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = Album.search(conn, s);
-		if (rs.first()) {
+		if (rs.next()) {
 			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "TV_SHOW");
 			Utils.fillRowData(rs, rowData);
 			return new TVShow(rowData);

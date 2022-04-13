@@ -37,7 +37,13 @@ public class EditCommand {
 				return;
 			}
 
-			e.edit(conn, s);
+			if (e != null) {
+				System.out.println("Editing:");
+				System.out.println(e.toString());
+				e.edit(conn, s);
+			} else {
+				System.out.println("No Entity Found.");
+			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}

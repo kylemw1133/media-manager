@@ -107,7 +107,7 @@ public class Order implements Entity {
 	
 	public static Order searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = Album.search(conn, s);
-		if (rs.first()) {
+		if (rs.next()) {
 			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "ORDER");
 			Utils.fillRowData(rs, rowData);
 			return new Order(rowData);
@@ -150,30 +150,14 @@ public class Order implements Entity {
 			System.out.println("Invalid input");
 			break;
 		}
+		
 		if (searchAlbumSQLstmt != null) {
 			ResultSet rs = searchAlbumSQLstmt.executeQuery();
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int columnCount = rsmd.getColumnCount();
-			for (int i = 1; i <= columnCount; i++) {
-				String value = rsmd.getColumnName(i);
-				System.out.print(value);
-				if (i < columnCount)
-					System.out.print(",  ");
-			}
-			System.out.print("\n");
-			while (rs.next()) {
-				for (int i = 1; i <= columnCount; i++) {
-					String columnValue = rs.getString(i);
-					System.out.print(columnValue);
-					if (i < columnCount)
-						System.out.print(",  ");
-				}
-				System.out.print("\n");
-			}
+			return rs;
 		} else {
 			System.out.println("No search performed");
+			return null;
 		}
-		return null;
 	}
 
 	@Override
