@@ -9,6 +9,7 @@ import entities.Album;
 import entities.Artist;
 import entities.Audiobook;
 import entities.Author;
+import entities.Card;
 import entities.Director;
 import entities.Entity;
 import entities.Movie;
@@ -47,6 +48,7 @@ public class AddCommand {
 				break;
 			case "director":
 				e = new Director();
+				break;
 
 				// Bullet 3:
 			case "author":
@@ -71,6 +73,11 @@ public class AddCommand {
 				break;
 			case "staff":
 				e = new Staff();
+				break;
+				
+			// Card
+			case "card":
+				e = new Card();
 				break;
 
 			default:

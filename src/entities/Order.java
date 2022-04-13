@@ -87,10 +87,6 @@ public class Order implements Entity {
 		InventoryItem.changeQuantity(conn, this.inventoryItemID, this.copies);
 	}
 
-	public static ResultSet list(Connection conn) throws SQLException {
-		return Utils.executeList(conn, "ORDER");
-	}
-
 	public static Order searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {
@@ -106,9 +102,9 @@ public class Order implements Entity {
 		return Utils.executeSearch(conn, s, "ORDER");
 	}
 
-                public static ResultSet list(Connection conn) throws SQLException {
-        return Utils.executeList(conn, "ORDER");
-    }
+	public static ResultSet list(Connection conn) throws SQLException {
+		return Utils.executeList(conn, "ORDER");
+	}
 
 	public static int getNextOrderID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxOrderIDSQL, "Max_ID");

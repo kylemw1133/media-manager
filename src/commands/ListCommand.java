@@ -37,23 +37,40 @@ public class ListCommand {
 				break;
 			case "director":
 				rs = Director.list(conn);
+				break;
 
-				// Bullet 3:
+			// Bullet 3:
 			case "author":
 				rs = Author.list(conn);
 				break;
 			case "audiobook":
 				rs = Audiobook.list(conn);
 				break;
-			// No chapter because its a weak entity.
+			case "chapter":
+				rs = Chapter.list(conn);
+				break;
 
 			// Extra:
 			case "tvshow":
 				rs = TVShow.list(conn);
 				break;
-				
+			case "season":
+				rs = Season.list(conn);
+				break;
+			case "episode":
+				rs = Episode.list(conn);
+				break;
+
 			case "inventory_item":
 				rs = InventoryItem.list(conn);
+				break;
+
+			// Order and Checkout
+			case "order":
+				rs = Order.list(conn);
+				break;
+			case "checkout":
+				rs = Checkout.list(conn);
 				break;
 
 			// People
@@ -65,6 +82,9 @@ public class ListCommand {
 				break;
 			case "staff":
 				rs = Staff.list(conn);
+				break;
+			case "card":
+				rs = Card.list(conn);
 				break;
 
 			default:

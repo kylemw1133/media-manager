@@ -41,9 +41,11 @@
   - [X] search audiobooks
   - [X] list tv shows
   - [X] search tv shows
-- [ ] Registering a person for a library card, deactivating old or lost library cards. A patron can have only one card. First name, last name, address of the patrons are needed as well as the email address.
-  - [ ] insert patron
-  - [ ] insert card
+- [-] Registering a person for a library card, deactivating old or lost library cards. A patron can have only one card. First name, last name, address of the patrons are needed as well as the email address.
+  - [X] insert patron
+  - [X] insert card
+  - [ ] edit patron
+  - [ ] edit card
 - [ ] Editing existing entries in the database to correct errors
   - [ ] edit artist
   - [ ] edit album
@@ -80,42 +82,42 @@
   - [ ] delete patron
   - [ ] delete staff
   - [ ] delete card
-- [ ] Displaying entries in the database based on user entered criteria
-  - [ ] search artist
-  - [ ] search album
-  - [ ] search track
-  - [ ] search movie
-  - [ ] search actor
-  - [ ] search director
-  - [ ] search author
-  - [ ] search audiobook
-  - [ ] search chapter (weak)
-  - [ ] search TV show
-  - [ ] search season (weak)
-  - [ ] search episode (weak)
-  - [ ] search order
-  - [ ] search person
-  - [ ] search patron
-  - [ ] search staff
-  - [ ] search card
-- [ ] Searching the database for artists, actors, authors, albums, audiobooks, movies and music tracks
-  - [ ] search artist
-  - [ ] search album
-  - [ ] search track
-  - [ ] search movie
-  - [ ] search actor
-  - [ ] search director
-  - [ ] search author
-  - [ ] search audiobook
-  - [ ] search chapter (weak)
-  - [ ] search TV show
-  - [ ] search season (weak)
-  - [ ] search episode (weak)
-  - [ ] search order
-  - [ ] search person
-  - [ ] search patron
-  - [ ] search staff
-  - [ ] search card
+- [X] Displaying entries in the database based on user entered criteria
+  - [X] search artist
+  - [X] search album
+  - [X] search track
+  - [X] search movie
+  - [X] search actor
+  - [X] search director
+  - [X] search author
+  - [X] search audiobook
+  - [X] search chapter (weak)
+  - [X] search TV show
+  - [X] search season (weak)
+  - [X] search episode (weak)
+  - [X] search order
+  - [X] search person
+  - [X] search patron
+  - [X] search staff
+  - [X] search card
+- [X] Searching the database for artists, actors, authors, albums, audiobooks, movies and music tracks
+  - [X] search artist
+  - [X] search album
+  - [X] search track
+  - [X] search movie
+  - [X] search actor
+  - [X] search director
+  - [X] search author
+  - [X] search audiobook
+  - [X] search chapter (weak)
+  - [X] search TV show
+  - [X] search season (weak)
+  - [X] search episode (weak)
+  - [X] search order
+  - [X] search person
+  - [X] search patron
+  - [X] search staff
+  - [X] search card
 - [X] Listing all checkouts (physical, digital, or both) for a patron
   - [X] patron listCheckouts
 - [ ] Check out instances of physical media to a patron using a library card, keeping track of the due date.

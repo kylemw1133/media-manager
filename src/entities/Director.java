@@ -95,7 +95,7 @@ public class Director implements Entity {
 		return Utils.executeSearch(conn, s, "DIRECTOR");
 	}
 
-                public static ResultSet list(Connection conn) throws SQLException {
+	public static ResultSet list(Connection conn) throws SQLException {
         return Utils.executeList(conn, "DIRECTOR");
     }
 

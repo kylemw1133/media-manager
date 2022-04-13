@@ -5,19 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import entities.Actor;
-import entities.Album;
-import entities.Artist;
-import entities.Audiobook;
-import entities.Author;
-import entities.Director;
-import entities.InventoryItem;
-import entities.Movie;
-import entities.Patron;
-import entities.Person;
-import entities.Staff;
-import entities.TVShow;
-import entities.Track;
+import entities.*;
 import util.Utils;
 
 public class SearchCommand {
@@ -49,6 +37,7 @@ public class SearchCommand {
 				break;
 			case "director":
 				rs = Director.search(conn, s);
+				break;
 
 				// Bullet 3:
 			case "author":
@@ -57,17 +46,33 @@ public class SearchCommand {
 			case "audiobook":
 				rs = Audiobook.search(conn, s);
 				break;
-			// No chapter because its a weak entity.
+			case "chapter":
+				rs = Chapter.search(conn, s);
+				break;
 
 			// Extra:
 			case "tvshow":
 				rs = TVShow.search(conn, s);
 				break;
-
+			case "season":
+				rs = Season.search(conn, s);
+				break;
+			case "episode":
+				rs = Episode.search(conn, s);
+				break;
+				
 			case "inventory_item":
 				rs = InventoryItem.search(conn, s);
 				break;
 
+			// Order and Checkout
+			case "order":
+				rs = Order.search(conn, s);
+				break;
+			case "checkout":
+				rs = Checkout.search(conn, s);
+				break;
+				
 			// People
 			case "person":
 				rs = Person.search(conn, s);
@@ -77,6 +82,9 @@ public class SearchCommand {
 				break;
 			case "staff":
 				rs = Staff.search(conn, s);
+				break;
+			case "card":
+				rs = Card.search(conn, s);
 				break;
 
 			default:

@@ -49,7 +49,8 @@ public class EditCommand {
 				break;
 			case "director":
 				e = Director.searchForOne(conn, s);
-
+				break;
+				
 				// Bullet 3:
 			case "author":
 				e = Author.searchForOne(conn, s);

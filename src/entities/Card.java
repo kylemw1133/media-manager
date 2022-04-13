@@ -12,11 +12,9 @@ import util.Utils;
 
 public class Card implements Entity {
 
-	private final static String insertCardSQL = "INSERT INTO Actor VALUES (?, ?);";
-	private final static String editCardSQL = " UPDATE ACTOR SET Name=? WHERE Actor_ID=?";
+	private final static String insertCardSQL = "INSERT INTO CARD VALUES (?, ?);";
+	private final static String editCardSQL = " UPDATE CARD SET Card_Creation_Date=? WHERE Card_ID=?";
 	private static final String maxCardSQL = "SELECT MAX(Card_ID) AS Max_ID FROM CARD;";
-
-	private final static String insertStarsSQL = "INSERT INTO STARS VALUES (?, ?, ?);";
 
 	public int id;
 	public LinkedList<TypedAttribute> data;
@@ -64,30 +62,13 @@ public class Card implements Entity {
 		return Utils.rowDataToString(this.data);
 	}
 
-	public static void insertSingle(Connection conn, Scanner s, int inventoryID) throws SQLException {
-		int input;
-		do {
-			System.out.println("| 1: Create Card | 2: Choose Card | 3: Finish with Actors |");
-			input = Integer.parseInt(s.nextLine());
+	public static int insertSingle(Connection conn, Scanner s) throws SQLException {
+		System.out.println("| 1: Create Card | 2: Search for Card |");
+		int input = Integer.parseInt(s.nextLine());
 
-			if (input == 3) {
-				break;
-			}
-
-			Card a = new Card();
-			int aID = (int) a.insertOrSearch(conn, s, input == 1);
-
-			System.out.println("Provide the Role: ");
-			String role = s.nextLine();
-
-			PreparedStatement insertJoinTupleStmt = conn.prepareStatement(insertStarsSQL);
-			insertJoinTupleStmt.setInt(1, inventoryID);
-			insertJoinTupleStmt.setInt(2, aID);
-			insertJoinTupleStmt.setString(3, role);
-			insertJoinTupleStmt.execute();
-		} while (input != 3);
-
-		System.out.println("Finished with Actors.");
+		Card c = new Card();
+		int cardID = (int) c.insertOrSearch(conn, s, input == 1);
+		return cardID;
 	}
 
 	public static Card searchForOne(Connection conn, Scanner s) throws SQLException {
@@ -105,9 +86,9 @@ public class Card implements Entity {
 		return Utils.executeSearch(conn, s, "CARD");
 	}
 
-                public static ResultSet list(Connection conn) throws SQLException {
-        return Utils.executeList(conn, "CARD");
-    }
+	public static ResultSet list(Connection conn) throws SQLException {
+		return Utils.executeList(conn, "CARD");
+	}
 
 	public static int getNextCardID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxCardSQL, "Max_ID");

@@ -42,6 +42,7 @@ public class Patron implements Entity {
 	@Override
 	public Object insert(Connection conn, Scanner s) throws SQLException {
 		String pEmail = "";
+		int cardID = 0;
 		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "PATRON");
 		PreparedStatement insertStmt = conn.prepareStatement(insertPatronSQL);
@@ -50,6 +51,9 @@ public class Patron implements Entity {
 			if (a.name.equals("P_Email")) {
 				pEmail = Person.insertSingle(conn, s);
 				a.value = pEmail;
+			} else if (a.name.equals("Card_ID")) {
+				cardID = Card.insertSingle(conn, s);
+				a.value = cardID;
 			} else {
 				a.promptForValue(s);
 			}
