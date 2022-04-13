@@ -47,9 +47,11 @@ public class Main {
 		Scanner s = new Scanner(System.in);
 
 		while (promptUser) {
-			System.out.print("Enter db command (add, edit, delete, search, list,"
-					+ " order, checkout, report, exit): ");
+			System.out.println("Commands: add, edit, delete, search, list, "
+					+ "patron, order, checkout, report, exit");
+			System.out.print("PROMPT> ");
 			String command = s.nextLine();
+			
 			switch (command) {
 			case "add":
 				AddCommand.exec(conn, s);
@@ -65,6 +67,9 @@ public class Main {
 				break;
 			case "list":
 				ListCommand.exec(conn, s);
+				break;
+			case "patron":
+				PatronCommand.exec(conn, s);
 				break;
 			case "order":
 				OrderCommand.exec(conn, s);

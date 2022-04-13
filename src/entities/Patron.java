@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -14,7 +15,13 @@ public class Patron implements Entity {
 
 	private final static String insertPatronSQL = "INSERT INTO PATRON VALUES (?, ?);";
 	private final static String editPatronSQL = " UPDATE PATRON SET P_Email=?, Card_ID=? WHERE P_Email=?";
-
+	private final static String listCheckoutsSQL = " SELECT CHECKOUT.Checkout_ID, CHECKOUT.Checkout_Status, CHECKOUT.Inventory_ID "
+			+ "FROM PATRON, CARD, CHECKOUT, INVENTORY_ITEM "
+			+ "WHERE PATRON.P_Email=? "
+			+ "AND CARD.Card_ID = Patron.Card_ID "
+			+ "AND CHECKOUT.Card_ID = CARD.Card_ID "
+			+ "AND INVENTORY_ITEM.Inventory_ID = CHECKOUT.Inventory_ID;";
+	
 	public String pEmail;
 	public LinkedList<TypedAttribute> data;
 
@@ -59,6 +66,13 @@ public class Patron implements Entity {
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editPatronSQL, "P_Email");
+	}
+	
+	public ResultSet listCheckouts(Connection conn) throws SQLException {
+		PreparedStatement listCheckoutsStmt = conn.prepareStatement(listCheckoutsSQL);
+		listCheckoutsStmt.setString(1, this.pEmail);
+		ResultSet rs = listCheckoutsStmt.executeQuery();
+		return rs;
 	}
 
 	@Override

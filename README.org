@@ -116,8 +116,8 @@
   - [ ] search patron
   - [ ] search staff
   - [ ] search card
-- [ ] Listing all checkouts (physical, digital, or both) for a patron
-  - [ ] patron getAllCheckouts
+- [X] Listing all checkouts (physical, digital, or both) for a patron
+  - [X] patron listCheckouts
 - [ ] Check out instances of physical media to a patron using a library card, keeping track of the due date.
   - [ ] checkout command > place
 - [ ] Check out instances of digital media to a patron using a library card, keeping track of the due date
