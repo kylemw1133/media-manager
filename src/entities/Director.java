@@ -1,6 +1,7 @@
 package entities;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -32,6 +33,21 @@ public class Director implements Entity {
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editDirectorSQL, "Director_ID");
+	}
+	
+	public static Director searchForOne(Connection conn, Scanner s) throws SQLException {
+		ResultSet rs = search(conn, s);
+		if (rs.first()) {
+			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "DIRECTOR");
+			Utils.fillRowData(rs, rowData);
+			return new Director(rowData);
+		} else {
+			return null;
+		}
+	}
+
+	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
+		return Utils.executeSearch(conn, s, "DIRECTOR");
 	}
 
 	public static int getNextDirectorID(Connection conn) throws SQLException {

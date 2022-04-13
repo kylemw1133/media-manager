@@ -81,9 +81,14 @@ public class InventoryItem implements Entity {
 		stmt.close();
 	}
 
+	@Override
+	public String toString() {
+		return Utils.rowDataToString(this.data);
+	}
+
 	public static InventoryItem searchForOne(Connection conn, Scanner s) throws SQLException {
-		ResultSet rs = InventoryItem.search(conn, s);
-		if (rs.first()) {
+		ResultSet rs = search(conn, s);
+		if (rs.next()) {
 			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "INVENTORY_ITEM");
 			Utils.fillRowData(rs, rowData);
 			return new InventoryItem(rowData);
@@ -93,47 +98,7 @@ public class InventoryItem implements Entity {
 	}
 
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
-		System.out.println("Which field do you want to search by?");
-		System.out.println("1: Quantity | 2: Format | 3: Location | 4: EXIT: ");
-		String input = s.nextLine();
-		String searchInputString = "";
-		int searchInputInt;
-		PreparedStatement searchInventoryItemSQLStmt = null;
-		switch (input) {
-		case "1":
-			System.out.println("Enter search name");
-			searchInputString = s.nextLine();
-			searchInventoryItemSQLStmt = conn.prepareStatement("SELECT * FROM INVENTORY_ITEM WHERE Quantity = ?;");
-			searchInventoryItemSQLStmt.setString(1, searchInputString);
-			break;
-		case "2":
-			System.out.println("Enter search Length");
-			searchInputInt = Integer.parseInt(s.nextLine());
-			searchInventoryItemSQLStmt = conn.prepareStatement("SELECT * FROM INVENTORY_ITEM WHERE Format = ?;");
-			searchInventoryItemSQLStmt.setInt(1, searchInputInt);
-			break;
-		case "3":
-			System.out.println("Enter search year");
-			searchInputString = s.nextLine();
-			searchInventoryItemSQLStmt = conn.prepareStatement("SELECT * FROM INVENTORY_ITEM WHERE Location = ?;");
-			searchInventoryItemSQLStmt.setString(1, searchInputString);
-			break;
-
-		case "4":
-			System.out.println("Exit");
-			break;
-		default:
-			System.out.println("Invalid input");
-			break;
-		}
-
-		if (searchInventoryItemSQLStmt != null) {
-			ResultSet rs = searchInventoryItemSQLStmt.executeQuery();
-			return rs;
-		} else {
-			System.out.println("No search performed");
-			return null;
-		}
+		return Utils.executeSearch(conn, s, "INVENTORY_ITEM");
 	}
 
 	public static int getNextInventoryID(Connection conn) throws SQLException {

@@ -68,6 +68,34 @@ public class Utils {
 		editStmt.execute();
 		editStmt.close();
 	}
+	
+	public static ResultSet executeSearch(Connection conn,
+			Scanner s,
+			String tableName) throws SQLException {
+		LinkedList<TypedAttribute> colSet = getColumns(conn, tableName);
+		StringBuilder sb = new StringBuilder();
+		int i;
+		for (i = 0; i < colSet.size(); i++) {
+			sb.append("| " + (i+1) + ": " + colSet.get(i).name + " ");
+		}
+		sb.append("| " + (i+1) + ": EXIT |");
+
+		System.out.println(sb.toString());
+		System.out.print("Provide the field number you want to search by: ");
+		int input = Integer.parseInt(s.nextLine());
+		
+		if (input < 1 || input > colSet.size()) {
+			return null;
+		}
+		
+		TypedAttribute chosenAttribute = colSet.get(input - 1);
+		String selectCheckoutSQL = "SELECT * FROM " + tableName + " WHERE " + chosenAttribute.name + "=?;";
+		PreparedStatement selectCheckoutStmt = conn.prepareStatement(selectCheckoutSQL);
+		chosenAttribute.promptForValue(s);
+		chosenAttribute.fillInStmt(selectCheckoutStmt, 1);
+		ResultSet rs = selectCheckoutStmt.executeQuery();
+		return rs;
+	}
 
 	public static void fillRowData(ResultSet rs, LinkedList<TypedAttribute> rowData) throws SQLException {
 		for (TypedAttribute ta : rowData) {

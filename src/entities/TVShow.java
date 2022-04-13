@@ -43,8 +43,8 @@ public class TVShow implements Entity {
 	}
 
 	public static TVShow searchForOne(Connection conn, Scanner s) throws SQLException {
-		ResultSet rs = Album.search(conn, s);
-		if (rs.next()) {
+		ResultSet rs = search(conn, s);
+		if (rs != null && rs.next()) {
 			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "TV_SHOW");
 			Utils.fillRowData(rs, rowData);
 			return new TVShow(rowData);
@@ -54,47 +54,6 @@ public class TVShow implements Entity {
 	}
 
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
-		System.out.println("Which field do you want to search by?");
-		System.out.println("1: Name | 2: Year | 3: Rating | 4: EXIT: ");
-		String input = s.nextLine();
-		String searchInputString = "";
-		PreparedStatement searchTVShowSQLstmt = null;
-		switch (input) {
-		case "1":
-			System.out.println("Enter search name");
-			searchInputString = s.nextLine();
-			searchTVShowSQLstmt = conn.prepareStatement("SELECT * FROM TV_SHOW WHERE name = ?;");
-			searchTVShowSQLstmt.setString(1, searchInputString);
-
-			break;
-
-		case "2":
-			System.out.println("Enter search year");
-			searchInputString = s.nextLine();
-			searchTVShowSQLstmt = conn.prepareStatement("SELECT * FROM TV_SHOW WHERE year = ?;");
-			searchTVShowSQLstmt.setString(1, searchInputString);
-			break;
-
-		case "3":
-			System.out.println("Enter search rating");
-			searchInputString = s.nextLine();
-			searchTVShowSQLstmt = conn.prepareStatement("SELECT * FROM TV_SHOW WHERE rating = ?;");
-			searchTVShowSQLstmt.setString(1, searchInputString);
-			break;
-		case "4":
-			System.out.println("Exit");
-			break;
-		default:
-			System.out.println("Invalid input");
-			break;
-		}
-
-		if (searchTVShowSQLstmt != null) {
-			ResultSet rs = searchTVShowSQLstmt.executeQuery();
-			return rs;
-		} else {
-			System.out.println("No search performed");
-			return null;
-		}
+		return Utils.executeSearch(conn, s, "TV_SHOW");
 	}
 }

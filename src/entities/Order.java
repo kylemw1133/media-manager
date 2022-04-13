@@ -83,8 +83,8 @@ public class Order implements Entity {
 	}
 
 	public static Order searchForOne(Connection conn, Scanner s) throws SQLException {
-		ResultSet rs = Album.search(conn, s);
-		if (rs.next()) {
+		ResultSet rs = search(conn, s);
+		if (rs != null && rs.next()) {
 			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "ORDER");
 			Utils.fillRowData(rs, rowData);
 			return new Order(rowData);
@@ -94,47 +94,7 @@ public class Order implements Entity {
 	}
 
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
-		System.out.println("Which field do you want to search by?");
-		System.out.println("1: Name | 2: Length | 3: Year | 4: EXIT: ");
-		String input = s.nextLine();
-		String searchInputString = "";
-		int searchInputInt;
-		PreparedStatement searchAlbumSQLstmt = null;
-		switch (input) {
-		case "1":
-			System.out.println("Enter search name");
-			searchInputString = s.nextLine();
-			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE name = ?;");
-			searchAlbumSQLstmt.setString(1, searchInputString);
-			break;
-		case "2":
-			System.out.println("Enter search Length");
-			searchInputInt = Integer.parseInt(s.nextLine());
-			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE length = ?;");
-			searchAlbumSQLstmt.setInt(1, searchInputInt);
-			break;
-		case "3":
-			System.out.println("Enter search year");
-			searchInputString = s.nextLine();
-			searchAlbumSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE year = ?;");
-			searchAlbumSQLstmt.setString(1, searchInputString);
-			break;
-
-		case "4":
-			System.out.println("Exit");
-			break;
-		default:
-			System.out.println("Invalid input");
-			break;
-		}
-
-		if (searchAlbumSQLstmt != null) {
-			ResultSet rs = searchAlbumSQLstmt.executeQuery();
-			return rs;
-		} else {
-			System.out.println("No search performed");
-			return null;
-		}
+		return Utils.executeSearch(conn, s, "ORDER");
 	}
 
 	public static int getNextOrderID(Connection conn) throws SQLException {

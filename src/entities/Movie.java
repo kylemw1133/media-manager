@@ -83,7 +83,7 @@ public class Movie implements Entity {
 
 	public static Movie searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
-		if (rs.next()) {
+		if (rs != null && rs.next()) {
 			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "MOVIE");
 			Utils.fillRowData(rs, rowData);
 			return new Movie(rowData);
@@ -93,51 +93,6 @@ public class Movie implements Entity {
 	}
 
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
-		System.out.println("Which field do you want to search by?");
-		System.out.println("1: Name | 2: Length | 3: Year | 4: Content_Rating | 5: EXIT");
-		String input = s.nextLine();
-		String searchInputString = "";
-		int searchInputInt;
-		PreparedStatement searchMovieSQLstmt = null;
-		switch (input) {
-		case "1":
-			System.out.println("Enter search name");
-			searchInputString = s.nextLine();
-			searchMovieSQLstmt = conn.prepareStatement("SELECT * FROM MOVIE WHERE name = ?;");
-			searchMovieSQLstmt.setString(1, searchInputString);
-			break;
-		case "2":
-			System.out.println("Enter search Length");
-			searchInputInt = Integer.parseInt(s.nextLine());
-			searchMovieSQLstmt = conn.prepareStatement("SELECT * FROM MOVIE WHERE length = ?;");
-			searchMovieSQLstmt.setInt(1, searchInputInt);
-			break;
-		case "3":
-			System.out.println("Enter search Year");
-			searchInputInt = Integer.parseInt(s.nextLine());
-			searchMovieSQLstmt = conn.prepareStatement("SELECT * FROM MOVIE WHERE year = ?;");
-			searchMovieSQLstmt.setInt(1, searchInputInt);
-			break;
-		case "4":
-			System.out.println("Enter search Content_Rating");
-			searchInputString = s.nextLine();
-			searchMovieSQLstmt = conn.prepareStatement("SELECT * FROM MOVIE WHERE content_rating = ?;");
-			searchMovieSQLstmt.setString(1, searchInputString);
-			break;
-		case "5":
-			System.out.println("Exit");
-			break;
-		default:
-			System.out.println("Invalid input");
-			break;
-		}
-
-		if (searchMovieSQLstmt != null) {
-			ResultSet rs = searchMovieSQLstmt.executeQuery();
-			return rs;
-		} else {
-			System.out.println("No search performed");
-			return null;
-		}
+		return Utils.executeSearch(conn, s, "MOVIE");
 	}
 }

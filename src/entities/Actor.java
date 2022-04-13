@@ -1,6 +1,7 @@
 package entities;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -35,6 +36,26 @@ public class Actor implements Entity {
 		Utils.executeEdit(conn, s, this.data, editActorSQL, "Actor_ID");
 	}
 
+	@Override
+	public String toString() {
+		return Utils.rowDataToString(this.data);
+	}
+
+	public static Album searchForOne(Connection conn, Scanner s) throws SQLException {
+		ResultSet rs = search(conn, s);
+		if (rs != null && rs.next()) {
+			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "ACTOR");
+			Utils.fillRowData(rs, rowData);
+			return new Album(rowData);
+		} else {
+			return null;
+		}
+	}
+
+	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
+		return Utils.executeSearch(conn, s, "ACTOR");
+	}
+	
 	public static int getNextActorID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxActorSQL, "Max_ID");
 	}

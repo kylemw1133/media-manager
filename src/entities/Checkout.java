@@ -1,10 +1,13 @@
 package entities;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -14,13 +17,11 @@ import util.Utils;
 public class Checkout implements Entity {
 
 	private final static String insertCheckoutSQL = "INSERT INTO CHECKOUT VALUES (?, ?, ?, ?, ?, ?, ?);";
-	private final static String editCheckoutSQL = "UPDATE CHECKOUT SET Card_ID=?, Inventory_ID=?, Return_Date=?, Checkout_Status=?, Start_Date=?, Due_Date=? WHERE Checkout_ID=?";
-	
-	private final static String selectCheckoutSQL = "SELECT * FROM CHECKOUT WHERE Order_ID=?;";
-	private final static String updateInventorySQL = "UPDATE INVENTORY_ITEM SET Quantity=? WHERE INVENTORY_ITEM.Inventory_ID=?";
-	private final static String updateOrderSQL = "UPDATE [ORDER] SET Status='FULFILLED' WHERE Order_ID=?";
+	private final static String editCheckoutSQL = "UPDATE CHECKOUT SET Card_ID=?, Inventory_ID=?, Return_Date=?, Checkout_Status=?, Start_Date=?, Due_Date=? WHERE Checkout_ID=?";	
+	private final static String returnCheckoutSQL = "UPDATE CHECKOUT SET Checkout_Status='Returned', Return_Date=? WHERE Checkout_ID=?";
 	private static final String maxCheckoutIDSQL = "SELECT MAX(Checkout_ID) AS Max_ID FROM CHECKOUT;";
 
+	private int checkoutID;
 	private int inventoryItemID;
 	private int cardItemID;
 	private LinkedList<TypedAttribute> data;
@@ -33,7 +34,9 @@ public class Checkout implements Entity {
 		this.data = data;
 
 		for (TypedAttribute ta : this.data) {
-			if (ta.name.equals("Inventory_ID")) {
+			if (ta.name.equals("Checkout_ID")) {
+				this.checkoutID = (int) ta.value;
+			} else if (ta.name.equals("Inventory_ID")) {
 				this.inventoryItemID = (int) ta.value;
 			}
 		}
@@ -80,19 +83,25 @@ public class Checkout implements Entity {
 	}
 
 	public void returnCheckout(Connection conn, Scanner s) throws SQLException {
-		// Get an order
-		// Get the associated inventory item
-		// increase the items quantity by the order's quantity
-		// change the order status	
 		System.out.println("Returning this checkout.");
 		System.out.println(this.toString());
 		System.out.println("Returning checked-out item...");
+		
+		// Updating checkout record;
+		PreparedStatement returnCheckoutStmt = conn.prepareStatement(returnCheckoutSQL);
+		LocalDate now = LocalDate.now();
+		Date date = Date.valueOf(now);
+		returnCheckoutStmt.setString(1, date.toString());
+		returnCheckoutStmt.setInt(2, this.checkoutID);
+		returnCheckoutStmt.execute();
+		
+		// Updating inventory_item record;
 		InventoryItem.changeQuantity(conn, this.inventoryItemID, 1);
 	}
 
 	public static Checkout searchForOne(Connection conn, Scanner s) throws SQLException {
-		ResultSet rs = Checkout.search(conn, s);
-		if (rs.next()) {
+		ResultSet rs = search(conn, s);
+		if (rs != null && rs.next()) {
 			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "CHECKOUT");
 			Utils.fillRowData(rs, rowData);
 			return new Checkout(rowData);
@@ -101,82 +110,8 @@ public class Checkout implements Entity {
 		}
 	}
 
-	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
-		System.out.println("Which field do you want to search by?");
-		
-		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "Checkout");
-		StringBuilder sb = new StringBuilder();
-		int i;
-		for (i = 0; i < colSet.size(); i++) {
-			sb.append("| " + (i+1) + ": " + colSet.get(i).name + " ");
-		}
-		sb.append("| " + (i+1) + ": EXIT |");
-
-		System.out.println(sb.toString());
-		int input = Integer.parseInt(s.nextLine());
-		TypedAttribute chosenAttribute = colSet.get(input - 1);
-		String selectCheckoutSQL = "SELECT * FROM CHECKOUT WHERE " + chosenAttribute.name + "=?;";
-		PreparedStatement selectCheckoutStmt = conn.prepareStatement(selectCheckoutSQL);
-		chosenAttribute.promptForValue(s);
-		chosenAttribute.fillInStmt(selectCheckoutStmt, 1);
-		ResultSet rs = selectCheckoutStmt.executeQuery();
-		return rs;
-		
-//		System.out.println("1: Card_ID | 2: Inventory_ID | 3: Return_Date | 4: Checkout_Status | 5: Start_Date | 6: Due_Date | 7: EXIT: ");
-//
-//		PreparedStatement searchCheckoutSQLstmt = null;
-//		switch (input) {
-//		case "1":
-//			System.out.println("Enter Card_ID");
-//			searchInputString = s.nextLine();
-//			searchCheckoutSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE name = ?;");
-//			searchCheckoutSQLstmt.setString(1, searchInputString);
-//			break;
-//		case "2":
-//			System.out.println("Enter Inventory_ID");
-//			searchInputInt = Integer.parseInt(s.nextLine());
-//			searchCheckoutSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE length = ?;");
-//			searchCheckoutSQLstmt.setInt(1, searchInputInt);
-//			break;
-//		case "3":
-//			System.out.println("Enter Return_Date");
-//			searchInputString = s.nextLine();
-//			searchCheckoutSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE year = ?;");
-//			searchCheckoutSQLstmt.setString(1, searchInputString);
-//			break;
-//		case "4":
-//			System.out.println("Enter Checkout_Status");
-//			searchInputString = s.nextLine();
-//			searchCheckoutSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE name = ?;");
-//			searchCheckoutSQLstmt.setString(1, searchInputString);
-//			break;
-//		case "5":
-//			System.out.println("Enter Start_Date");
-//			searchInputInt = Integer.parseInt(s.nextLine());
-//			searchCheckoutSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE length = ?;");
-//			searchCheckoutSQLstmt.setInt(1, searchInputInt);
-//			break;
-//		case "6":
-//			System.out.println("Enter Due_Date");
-//			searchInputString = s.nextLine();
-//			searchCheckoutSQLstmt = conn.prepareStatement("SELECT * FROM ALBUM WHERE year = ?;");
-//			searchCheckoutSQLstmt.setString(1, searchInputString);
-//			break;
-//		case "7":
-//			System.out.println("Exit");
-//			break;
-//		default:
-//			System.out.println("Invalid input");
-//			break;
-//		}
-//
-//		if (searchAlbumSQLstmt != null) {
-//			ResultSet rs = searchAlbumSQLstmt.executeQuery();
-//			return rs;
-//		} else {
-//			System.out.println("No search performed");
-//			return null;
-//		}
+	public static ResultSet search(Connection conn, Scanner s) throws SQLException {	
+		return Utils.executeSearch(conn, s, "CHECKOUT");
 	}
 
 	public static int getNextCheckoutID(Connection conn) throws SQLException {

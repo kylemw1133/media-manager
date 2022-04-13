@@ -1,6 +1,7 @@
 package entities;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -33,6 +34,26 @@ public class Artist implements Entity {
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editArtistSQL, "Artist_ID");
+	}
+
+	@Override
+	public String toString() {
+		return Utils.rowDataToString(this.data);
+	}
+
+	public static Artist searchForOne(Connection conn, Scanner s) throws SQLException {
+		ResultSet rs = search(conn, s);
+		if (rs != null && rs.next()) {
+			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "ARTIST");
+			Utils.fillRowData(rs, rowData);
+			return new Artist(rowData);
+		} else {
+			return null;
+		}
+	}
+
+	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
+		return Utils.executeSearch(conn, s, "ARTIST");
 	}
 
 	public static int getNextArtistID(Connection conn) throws SQLException {
