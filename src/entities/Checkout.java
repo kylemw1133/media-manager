@@ -5,9 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -17,7 +15,7 @@ import util.Utils;
 public class Checkout implements Entity {
 
 	private final static String insertCheckoutSQL = "INSERT INTO CHECKOUT VALUES (?, ?, ?, ?, ?, ?, ?);";
-	private final static String editCheckoutSQL = "UPDATE CHECKOUT SET Card_ID=?, Inventory_ID=?, Return_Date=?, Checkout_Status=?, Start_Date=?, Due_Date=? WHERE Checkout_ID=?";	
+	private final static String editCheckoutSQL = "UPDATE CHECKOUT SET Card_ID=?, Inventory_ID=?, Return_Date=?, Checkout_Status=?, Start_Date=?, Due_Date=? WHERE Checkout_ID=?";
 	private final static String returnCheckoutSQL = "UPDATE CHECKOUT SET Checkout_Status='Returned', Return_Date=? WHERE Checkout_ID=?";
 	private static final String maxCheckoutIDSQL = "SELECT MAX(Checkout_ID) AS Max_ID FROM CHECKOUT;";
 
@@ -48,7 +46,7 @@ public class Checkout implements Entity {
 		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "CHECKOUT");
 		PreparedStatement insertAlbumStmt = conn.prepareStatement(insertCheckoutSQL);
-		
+
 		for (TypedAttribute a : colSet) {
 			if (a.name.equals("Checkout_ID")) {
 				a.value = id;
@@ -76,7 +74,7 @@ public class Checkout implements Entity {
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editCheckoutSQL, "Order_ID");
 	}
-	
+
 	@Override
 	public String toString() {
 		return Utils.rowDataToString(this.data);
@@ -86,7 +84,7 @@ public class Checkout implements Entity {
 		System.out.println("Returning this checkout.");
 		System.out.println(this.toString());
 		System.out.println("Returning checked-out item...");
-		
+
 		// Updating checkout record;
 		PreparedStatement returnCheckoutStmt = conn.prepareStatement(returnCheckoutSQL);
 		LocalDate now = LocalDate.now();
@@ -94,7 +92,7 @@ public class Checkout implements Entity {
 		returnCheckoutStmt.setString(1, date.toString());
 		returnCheckoutStmt.setInt(2, this.checkoutID);
 		returnCheckoutStmt.execute();
-		
+
 		// Updating inventory_item record;
 		InventoryItem.changeQuantity(conn, this.inventoryItemID, 1);
 	}
@@ -110,7 +108,7 @@ public class Checkout implements Entity {
 		}
 	}
 
-	public static ResultSet search(Connection conn, Scanner s) throws SQLException {	
+	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		return Utils.executeSearch(conn, s, "CHECKOUT");
 	}
 

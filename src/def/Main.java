@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import commands.AddCommand;
+import commands.CheckoutCommand;
 import commands.DeleteCommand;
 import commands.EditCommand;
 import commands.OrderCommand;
-import commands.CheckoutCommand;
 import commands.ReportCommand;
 import commands.SearchCommand;
 

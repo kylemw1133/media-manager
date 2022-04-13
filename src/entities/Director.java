@@ -34,7 +34,7 @@ public class Director implements Entity {
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editDirectorSQL, "Director_ID");
 	}
-	
+
 	public static Director searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs.first()) {

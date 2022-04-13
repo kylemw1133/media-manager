@@ -19,11 +19,7 @@ public class Utils {
 		return maxID + 1;
 	}
 
-	public static int executeInsertion(Connection conn,
-			Scanner s,
-			int id,
-			String insertSQL,
-			String tableName,
+	public static int executeInsertion(Connection conn, Scanner s, int id, String insertSQL, String tableName,
 			String idCol) throws SQLException {
 		int i = 1;
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, tableName);
@@ -46,10 +42,7 @@ public class Utils {
 		return id;
 	}
 
-	public static void executeEdit(Connection conn,
-			Scanner s,
-			LinkedList<TypedAttribute> rowData,
-			String editSQL,
+	public static void executeEdit(Connection conn, Scanner s, LinkedList<TypedAttribute> rowData, String editSQL,
 			String idCol) throws SQLException {
 		PreparedStatement editStmt = conn.prepareStatement(editSQL);
 		int i = 1;
@@ -68,26 +61,24 @@ public class Utils {
 		editStmt.execute();
 		editStmt.close();
 	}
-	
-	public static ResultSet executeSearch(Connection conn,
-			Scanner s,
-			String tableName) throws SQLException {
+
+	public static ResultSet executeSearch(Connection conn, Scanner s, String tableName) throws SQLException {
 		LinkedList<TypedAttribute> colSet = getColumns(conn, tableName);
 		StringBuilder sb = new StringBuilder();
 		int i;
 		for (i = 0; i < colSet.size(); i++) {
-			sb.append("| " + (i+1) + ": " + colSet.get(i).name + " ");
+			sb.append("| " + (i + 1) + ": " + colSet.get(i).name + " ");
 		}
-		sb.append("| " + (i+1) + ": EXIT |");
+		sb.append("| " + (i + 1) + ": EXIT |");
 
 		System.out.println(sb.toString());
 		System.out.print("Provide the field number you want to search by: ");
 		int input = Integer.parseInt(s.nextLine());
-		
+
 		if (input < 1 || input > colSet.size()) {
 			return null;
 		}
-		
+
 		TypedAttribute chosenAttribute = colSet.get(input - 1);
 		String selectCheckoutSQL = "SELECT * FROM " + tableName + " WHERE " + chosenAttribute.name + "=?;";
 		PreparedStatement selectCheckoutStmt = conn.prepareStatement(selectCheckoutSQL);

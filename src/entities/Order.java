@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -30,7 +29,7 @@ public class Order implements Entity {
 
 	public Order(LinkedList<TypedAttribute> data) {
 		this.data = data;
-		
+
 		for (TypedAttribute ta : this.data) {
 			if (ta.name.equals("Inventory_ID")) {
 				this.inventoryItemID = (int) ta.value;

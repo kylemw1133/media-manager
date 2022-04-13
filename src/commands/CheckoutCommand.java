@@ -4,14 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import entities.Album;
-import entities.Audiobook;
 import entities.Checkout;
-import entities.Entity;
-import entities.InventoryItem;
-import entities.Movie;
-import entities.Order;
-import entities.TVShow;
 
 public class CheckoutCommand {
 

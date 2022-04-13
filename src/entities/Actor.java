@@ -55,7 +55,7 @@ public class Actor implements Entity {
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		return Utils.executeSearch(conn, s, "ACTOR");
 	}
-	
+
 	public static int getNextActorID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxActorSQL, "Max_ID");
 	}
