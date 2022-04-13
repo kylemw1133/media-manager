@@ -4,7 +4,19 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import entities.*;
+import entities.Actor;
+import entities.Album;
+import entities.Artist;
+import entities.Audiobook;
+import entities.Author;
+import entities.Director;
+import entities.Entity;
+import entities.Movie;
+import entities.Patron;
+import entities.Person;
+import entities.Staff;
+import entities.TVShow;
+import entities.Track;
 
 public class AddCommand {
 
@@ -25,7 +37,7 @@ public class AddCommand {
 			case "track":
 				e = new Track();
 				break;
-				
+
 			// Bullet 2:
 			case "movie":
 				e = new Movie();
@@ -36,7 +48,7 @@ public class AddCommand {
 			case "director":
 				e = new Director();
 
-			// Bullet 3:
+				// Bullet 3:
 			case "author":
 				e = new Author();
 				break;
@@ -44,12 +56,12 @@ public class AddCommand {
 				e = new Audiobook();
 				break;
 			// No chapter because its a weak entity.
-				
+
 			// Extra:
 			case "tvshow":
 				e = new TVShow();
 				break;
-				
+
 			// People
 			case "person":
 				e = new Person();
@@ -60,7 +72,7 @@ public class AddCommand {
 			case "staff":
 				e = new Staff();
 				break;
-			
+
 			default:
 				System.out.println("Invalid item type");
 			}

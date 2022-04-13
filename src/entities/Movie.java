@@ -1,7 +1,6 @@
 package entities;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -16,7 +15,7 @@ public class Movie implements Entity {
 	private final static String editMovieSQL = " UPDATE MOVIE SET Name=?, Length=?, Year=?, Content_Rating=? WHERE Inventory_ID=?;";
 	private final static String insertStarsInSQL = "INSERT INTO STARS VALUES(?, ?, ?);";
 	private final static String insertDirectsSQL = "INSERT INTO DIRECTS VALUES(?, ?);";
-	
+
 	public int id;
 	public LinkedList<TypedAttribute> data;
 
@@ -39,10 +38,10 @@ public class Movie implements Entity {
 		InventoryItem parentItem = new InventoryItem();
 		int id = (int) parentItem.insert(conn, s);
 		Utils.executeInsertion(conn, s, id, insertMovieSQL, "MOVIE", "Inventory_ID");
-		
+
 		Actor.insertMultiple(conn, s, id);
 		Director.insertMultiple(conn, s, id);
-		
+
 		return id;
 	}
 

@@ -14,7 +14,7 @@ public class Patron implements Entity {
 
 	private final static String insertPatronSQL = "INSERT INTO PATRON VALUES (?, ?);";
 	private final static String editPatronSQL = " UPDATE PATRON SET P_Email=?, Card_ID=? WHERE P_Email=?";
-	
+
 	public String pEmail;
 	public LinkedList<TypedAttribute> data;
 
@@ -39,14 +39,14 @@ public class Patron implements Entity {
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "PATRON");
 		PreparedStatement insertStmt = conn.prepareStatement(insertPatronSQL);
 
-		for (TypedAttribute a : colSet) {		
+		for (TypedAttribute a : colSet) {
 			if (a.name.equals("P_Email")) {
 				pEmail = Person.insertSingle(conn, s);
 				a.value = pEmail;
 			} else {
 				a.promptForValue(s);
 			}
-			
+
 			a.fillInStmt(insertStmt, i++);
 		}
 
@@ -78,7 +78,7 @@ public class Patron implements Entity {
 	public String toString() {
 		return Utils.rowDataToString(this.data);
 	}
-	
+
 	public static Patron searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {

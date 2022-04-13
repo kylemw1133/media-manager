@@ -89,7 +89,7 @@ public class InventoryItem implements Entity {
 		rs.next();
 		int prevQuantity = rs.getInt("Quantity");
 		int newQuantity = prevQuantity + delta;
-		
+
 		if (newQuantity < 0) {
 			newQuantity = 0;
 		}

@@ -62,10 +62,10 @@ public class Checkout implements Entity {
 
 			a.fillInStmt(insertAlbumStmt, i++);
 		}
-		
+
 		insertAlbumStmt.execute();
 		insertAlbumStmt.close();
-		
+
 		// Updating inventory_item record;
 		InventoryItem.changeQuantity(conn, this.inventoryItemID, -1);
 

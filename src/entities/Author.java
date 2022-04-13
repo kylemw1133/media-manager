@@ -1,7 +1,6 @@
 package entities;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -15,7 +14,7 @@ public class Author implements Entity {
 	private final static String insertAuthorSQL = "INSERT INTO AUTHOR VALUES (?, ?);";
 	private final static String editAuthorSQL = " UPDATE AUTHOR SET Name=? WHERE Author_ID=?";
 	private static final String maxAuthorSQL = "SELECT MAX(Author_ID) AS Max_ID FROM AUTHOR;";
-	
+
 	public int id;
 	public LinkedList<TypedAttribute> data;
 
@@ -61,7 +60,7 @@ public class Author implements Entity {
 	public String toString() {
 		return Utils.rowDataToString(this.data);
 	}
-	
+
 	public static Author searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {

@@ -36,9 +36,9 @@ public class TVShow implements Entity {
 		InventoryItem parentItem = new InventoryItem();
 		int id = (int) parentItem.insert(conn, s);
 		Utils.executeInsertion(conn, s, id, insertTVShowSQL, "TV_SHOW", "Inventory_ID");
-		
+
 		Season.insertMultiple(conn, s, id);
-		
+
 		return id;
 	}
 

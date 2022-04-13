@@ -5,7 +5,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import entities.*;
+import entities.Actor;
+import entities.Album;
+import entities.Artist;
+import entities.Audiobook;
+import entities.Author;
+import entities.Chapter;
+import entities.Director;
+import entities.Entity;
+import entities.Episode;
+import entities.Movie;
+import entities.Season;
+import entities.TVShow;
+import entities.Track;
 
 public class EditCommand {
 

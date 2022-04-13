@@ -50,7 +50,7 @@ public class Genre implements Entity {
 
 			a.fillInStmt(insertGenreStmt, i++);
 		}
-		
+
 		insertGenreStmt.execute();
 		insertGenreStmt.close();
 
@@ -88,7 +88,7 @@ public class Genre implements Entity {
 	public String toString() {
 		return Utils.rowDataToString(this.data);
 	}
-	
+
 	public static void insertMultiple(Connection conn, Scanner s, int inventoryID) throws SQLException {
 		int input;
 		do {
@@ -101,13 +101,13 @@ public class Genre implements Entity {
 
 			Genre g = new Genre();
 			String genreName = (String) g.insertOrSearch(conn, s, input == 1);
-			
+
 			PreparedStatement insertJoinTupleStmt = conn.prepareStatement(insertMediaGenreSQL);
 			insertJoinTupleStmt.setObject(1, inventoryID);
 			insertJoinTupleStmt.setObject(2, genreName);
 			insertJoinTupleStmt.execute();
 		} while (input != 3);
-		
+
 		System.out.println("Finished with Genres.");
 	}
 

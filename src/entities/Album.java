@@ -36,10 +36,10 @@ public class Album implements Entity {
 		InventoryItem parentItem = new InventoryItem();
 		int id = (int) parentItem.insert(conn, s);
 		Utils.executeInsertion(conn, s, id, insertAlbumSQL, "ALBUM", "Inventory_ID");
-		
+
 		Artist.insertMultiple(conn, s, id);
 		Track.insertMultiple(conn, s, id);
-		
+
 		return id;
 	}
 

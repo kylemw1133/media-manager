@@ -1,7 +1,6 @@
 package entities;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -14,7 +13,7 @@ public class Chapter implements Entity {
 
 	private final static String insertChapterSQL = "INSERT INTO CHAPTER VALUES (?, ?, ?)";
 	private final static String editChapterSQL = " UPDATE CHAPTER SET Name=?, Length=? WHERE Inventory_ID=?, Name=?";
-	
+
 	public int inventoryID;
 	public String name;
 	public LinkedList<TypedAttribute> data;
@@ -22,7 +21,7 @@ public class Chapter implements Entity {
 	public Chapter() {
 		this.data = null;
 	}
-	
+
 	public Chapter(int id) {
 		this.inventoryID = id;
 		this.data = null;
@@ -81,10 +80,10 @@ public class Chapter implements Entity {
 			Chapter c = new Chapter(inventoryID);
 			int cID = (int) c.insert(conn, s);
 		} while (input != 2);
-		
+
 		System.out.println("Finished with Chapters.");
 	}
-	
+
 	public static Chapter searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {

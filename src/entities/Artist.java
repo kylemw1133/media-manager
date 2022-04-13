@@ -17,7 +17,7 @@ public class Artist implements Entity {
 	private static final String maxArtistIDSQL = "SELECT MAX(Artist_ID) AS Max_ID FROM ARTIST;";
 
 	private final static String insertAlbumArtistSQL = "INSERT INTO ALBUM_ARTIST VALUES (?, ?);";
-	
+
 	public int id;
 	public LinkedList<TypedAttribute> data;
 
@@ -63,7 +63,7 @@ public class Artist implements Entity {
 	public String toString() {
 		return Utils.rowDataToString(this.data);
 	}
-	
+
 	public static void insertMultiple(Connection conn, Scanner s, int inventoryID) throws SQLException {
 		int input;
 		do {
@@ -76,13 +76,13 @@ public class Artist implements Entity {
 
 			Artist a = new Artist();
 			int aID = (int) a.insertOrSearch(conn, s, input == 1);
-						
+
 			PreparedStatement insertJoinTupleStmt = conn.prepareStatement(insertAlbumArtistSQL);
 			insertJoinTupleStmt.setInt(1, inventoryID);
 			insertJoinTupleStmt.setInt(2, aID);
 			insertJoinTupleStmt.execute();
 		} while (input != 3);
-		
+
 		System.out.println("Finished with Artists.");
 	}
 

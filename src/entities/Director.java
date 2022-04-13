@@ -16,7 +16,7 @@ public class Director implements Entity {
 	private static final String maxDirectorIDSQL = "SELECT MAX(Director_ID) AS Max_ID FROM DIRECTOR;";
 
 	private final static String insertDirectsSQL = "INSERT INTO DIRECTS VALUES (?, ?);";
-	
+
 	public int id;
 	public LinkedList<TypedAttribute> data;
 
@@ -57,7 +57,7 @@ public class Director implements Entity {
 
 		return key;
 	}
-	
+
 	public static void insertMultiple(Connection conn, Scanner s, int inventoryID) throws SQLException {
 		int input;
 		do {
@@ -70,13 +70,13 @@ public class Director implements Entity {
 
 			Director d = new Director();
 			int dID = (int) d.insertOrSearch(conn, s, input == 1);
-						
+
 			PreparedStatement insertJoinTupleStmt = conn.prepareStatement(insertDirectsSQL);
 			insertJoinTupleStmt.setInt(1, inventoryID);
 			insertJoinTupleStmt.setInt(2, dID);
 			insertJoinTupleStmt.execute();
 		} while (input != 3);
-		
+
 		System.out.println("Finished with Directors.");
 	}
 

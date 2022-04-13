@@ -1,7 +1,6 @@
 package entities;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -14,14 +13,14 @@ public class Track implements Entity {
 
 	private final static String insertTrackSQL = "INSERT INTO TRACK VALUES (?, ?, ?, ?, ?);";
 	private final static String editTrackSQL = " UPDATE TRACK SET Artist_ID=?, Name=?, Year=?, Length=? WHERE Inventory_ID=?, Name=?";
-	
+
 	public int inventoryID;
 	public LinkedList<TypedAttribute> data;
 
 	public Track() {
 		this.data = null;
 	}
-	
+
 	public Track(int id) {
 		this.inventoryID = id;
 		this.data = null;
@@ -78,10 +77,10 @@ public class Track implements Entity {
 			Track t = new Track(inventoryID);
 			int tID = (int) t.insert(conn, s);
 		} while (input != 2);
-		
+
 		System.out.println("Finished with Tracks.");
 	}
-	
+
 	public static Track searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {

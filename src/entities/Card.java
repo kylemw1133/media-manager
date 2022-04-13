@@ -17,7 +17,7 @@ public class Card implements Entity {
 	private static final String maxCardSQL = "SELECT MAX(Card_ID) AS Max_ID FROM CARD;";
 
 	private final static String insertStarsSQL = "INSERT INTO STARS VALUES (?, ?, ?);";
-	
+
 	public int id;
 	public LinkedList<TypedAttribute> data;
 
@@ -76,20 +76,20 @@ public class Card implements Entity {
 
 			Card a = new Card();
 			int aID = (int) a.insertOrSearch(conn, s, input == 1);
-			
+
 			System.out.println("Provide the Role: ");
 			String role = s.nextLine();
-			
+
 			PreparedStatement insertJoinTupleStmt = conn.prepareStatement(insertStarsSQL);
 			insertJoinTupleStmt.setInt(1, inventoryID);
 			insertJoinTupleStmt.setInt(2, aID);
 			insertJoinTupleStmt.setString(3, role);
 			insertJoinTupleStmt.execute();
 		} while (input != 3);
-		
+
 		System.out.println("Finished with Actors.");
 	}
-	
+
 	public static Card searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {

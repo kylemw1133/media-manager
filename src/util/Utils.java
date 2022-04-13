@@ -86,7 +86,7 @@ public class Utils {
 		ResultSet rs = selectCheckoutStmt.executeQuery();
 		return rs;
 	}
-	
+
 	public static ResultSet executeList(Connection conn, String tableName) throws SQLException {
 		Statement listStmt = conn.createStatement();
 		String listSQL = "SELECT * FROM [" + tableName + "];";

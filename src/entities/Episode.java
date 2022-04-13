@@ -14,7 +14,7 @@ public class Episode implements Entity {
 
 	private final static String insertEpisodeSQL = "INSERT INTO EPISODE VALUES (?, ?, ?, ?, ?);";
 	private final static String editEpisodeSQL = " UPDATE EPISODE SET Director_ID=?, Episode_Name=?, Episode_Length=? WHERE Inventory_ID=? AND Season_Number=?";
-	
+
 	public int inventoryID;
 	public int seasonNo;
 	public String name;
@@ -23,7 +23,7 @@ public class Episode implements Entity {
 	public Episode() {
 		this.data = null;
 	}
-	
+
 	public Episode(int inventoryID, int seasonNo) {
 		this.inventoryID = inventoryID;
 		this.seasonNo = seasonNo;
@@ -58,13 +58,13 @@ public class Episode implements Entity {
 			if (a.name.equals("Episode_Name")) {
 				this.name = (String) a.value;
 			}
-			
+
 			a.fillInStmt(insertStmt, i++);
 		}
 
 		insertStmt.execute();
 		insertStmt.close();
-		
+
 		Actor.insertMultiple(conn, s, this.inventoryID);
 
 		return this.name;
@@ -106,10 +106,10 @@ public class Episode implements Entity {
 			Episode e = new Episode(inventoryID, seasonNo);
 			e.insert(conn, s);
 		} while (input != 2);
-		
+
 		System.out.println("Finished with Episodes.");
 	}
-	
+
 	public static Episode searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {

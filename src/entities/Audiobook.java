@@ -36,9 +36,9 @@ public class Audiobook implements Entity {
 		InventoryItem parentItem = new InventoryItem();
 		int id = (int) parentItem.insert(conn, s);
 		Utils.executeInsertion(conn, s, id, insertAudiobookSQL, "AUDIOBOOK", "Inventory_ID");
-		
+
 		Chapter.insertMultiple(conn, s, id);
-		
+
 		return id;
 	}
 

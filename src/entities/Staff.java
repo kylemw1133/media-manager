@@ -14,7 +14,7 @@ public class Staff implements Entity {
 
 	private final static String insertStaffSQL = "INSERT INTO STAFF VALUES (?, ?, ?);";
 	private final static String editStaffSQL = " UPDATE STAFF SET Staff_Salted_Password=?, Staff_Username=? WHERE P_Email=?";
-	
+
 	public String pEmail;
 	public LinkedList<TypedAttribute> data;
 
@@ -39,14 +39,14 @@ public class Staff implements Entity {
 		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "STAFF");
 		PreparedStatement insertStmt = conn.prepareStatement(insertStaffSQL);
 
-		for (TypedAttribute a : colSet) {		
+		for (TypedAttribute a : colSet) {
 			if (a.name.equals("P_Email")) {
 				pEmail = Person.insertSingle(conn, s);
 				a.value = pEmail;
 			} else {
 				a.promptForValue(s);
 			}
-			
+
 			a.fillInStmt(insertStmt, i++);
 		}
 
@@ -78,7 +78,7 @@ public class Staff implements Entity {
 	public String toString() {
 		return Utils.rowDataToString(this.data);
 	}
-	
+
 	public static Staff searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {

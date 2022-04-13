@@ -1,11 +1,9 @@
 package entities;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -54,7 +52,7 @@ public class Order implements Entity {
 	public void edit(Connection conn, Scanner s) throws SQLException {
 //		Utils.executeEdit(conn, s, this.data, editOrderSQL, "Order_ID");
 	}
-	
+
 	@Override
 	public String toString() {
 		return Utils.rowDataToString(this.data);
@@ -92,7 +90,7 @@ public class Order implements Entity {
 	public static ResultSet list(Connection conn) throws SQLException {
 		return Utils.executeList(conn, "ORDER");
 	}
-	
+
 	public static Order searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {
