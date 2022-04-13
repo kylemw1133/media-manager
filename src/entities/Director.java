@@ -1,7 +1,6 @@
 package entities;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -34,7 +33,7 @@ public class Director implements Entity {
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editDirectorSQL, "Director_ID");
 	}
-	
+
 	public static int getNextDirectorID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxDirectorIDSQL, "Max_ID");
 	}

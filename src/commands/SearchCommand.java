@@ -5,7 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import entities.*;
+import entities.Album;
+import entities.Audiobook;
+import entities.Movie;
+import entities.TVShow;
 import util.Utils;
 
 public class SearchCommand {

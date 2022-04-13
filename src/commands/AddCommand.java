@@ -4,7 +4,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import entities.*;
+import entities.Album;
+import entities.Audiobook;
+import entities.Entity;
+import entities.InventoryItem;
+import entities.Movie;
+import entities.TVShow;
 
 public class AddCommand {
 
@@ -31,7 +36,7 @@ public class AddCommand {
 				e = new InventoryItem();
 				System.out.println("Invalid item type");
 			}
-			
+
 			e.insert(conn, s);
 		} catch (SQLException ex) {
 			ex.printStackTrace();

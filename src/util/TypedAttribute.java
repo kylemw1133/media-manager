@@ -1,11 +1,10 @@
 package util;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.sql.Date;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.Scanner;
 
 public class TypedAttribute {

@@ -9,8 +9,6 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-import entities.InventoryItem;
-
 public class Utils {
 
 	public static int getNextOrdinal(Connection conn, String sql, String name) throws SQLException {
@@ -20,7 +18,7 @@ public class Utils {
 		stmt.close();
 		return maxID + 1;
 	}
-	
+
 	public static int executeInsertion(Connection conn,
 			Scanner s,
 			int id,
@@ -65,30 +63,30 @@ public class Utils {
 				a.fillInStmt(editStmt, i++);
 			}
 		}
-		
+
 		editStmt.setInt(i, id);
 		editStmt.execute();
 		editStmt.close();
 	}
-	
+
 	public static void fillRowData(ResultSet rs, LinkedList<TypedAttribute> rowData) throws SQLException {
 		for (TypedAttribute ta : rowData) {
 			ta.value = rs.getObject(ta.name);
 		}
 	}
-	
+
 	public static String rowDataToString(LinkedList<TypedAttribute> rowData) {
 		StringBuffer s = new StringBuffer("|");
-		
+
 		for (TypedAttribute ta : rowData) {
 			s.append(" ");
 			s.append(ta.value.toString());
 			s.append(" |");
 		}
-		
+
 		return s.toString();
 	}
-	
+
 	/**
 	 * Gets the columns of a table in the database.
 	 *
@@ -118,7 +116,7 @@ public class Utils {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param rs the result set containing records to print to console
 	 */
 	public static void printRecords(ResultSet rs) throws SQLException {

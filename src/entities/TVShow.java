@@ -1,13 +1,9 @@
 package entities;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -20,15 +16,16 @@ public class TVShow implements Entity {
 	private final static String editTVShowSQL = " UPDATE TV_SHOW SET Name=?, Year=?, Rating=? WHERE Inventory_ID=?;";
 
 	private LinkedList<TypedAttribute> data;
-	
+
 	public TVShow() {
 		this.data = null;
 	}
-	
+
 	public TVShow(LinkedList<TypedAttribute> data) {
 		this.data = data;
 	}
-	
+
+	@Override
 	public int insert(Connection conn, Scanner s) throws SQLException {
 		InventoryItem parentItem = new InventoryItem();
 		int id = parentItem.insert(conn, s);
@@ -53,6 +50,7 @@ public class TVShow implements Entity {
 		return id;
 	}
 
+	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editTVShowSQL, "Inventory_ID");
 	}
@@ -61,7 +59,7 @@ public class TVShow implements Entity {
 	public String toString() {
 		return Utils.rowDataToString(this.data);
 	}
-	
+
 	public static TVShow searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = Album.search(conn, s);
 		if (rs.next()) {
@@ -72,7 +70,7 @@ public class TVShow implements Entity {
 			return null;
 		}
 	}
-	
+
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		System.out.println("Which field do you want to search by?");
 		System.out.println("1: Name | 2: Year | 3: Rating | 4: EXIT: ");

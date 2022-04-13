@@ -3,7 +3,6 @@ package entities;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
@@ -22,15 +21,16 @@ public class Order implements Entity {
 	private static final String maxOrderIDSQL = "SELECT MAX(Order_ID) AS Max_ID FROM [ORDER];";
 
 	private LinkedList<TypedAttribute> data;
-	
+
 	public Order() {
 		this.data = null;
 	}
-	
+
 	public Order(LinkedList<TypedAttribute> data) {
 		this.data = data;
 	}
-	
+
+	@Override
 	public int insert(Connection conn, Scanner s) throws SQLException {
 		int id = 0;
 		int i = 1;
@@ -53,7 +53,7 @@ public class Order implements Entity {
 
 		return id;
 	}
-	
+
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editOrderSQL, "Order_ID");
@@ -105,7 +105,7 @@ public class Order implements Entity {
 		}
 		selectOrderStatement.close();
 	}
-	
+
 	public static Order searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = Album.search(conn, s);
 		if (rs.next()) {
@@ -116,7 +116,7 @@ public class Order implements Entity {
 			return null;
 		}
 	}
-	
+
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		System.out.println("Which field do you want to search by?");
 		System.out.println("1: Name | 2: Length | 3: Year | 4: EXIT: ");
@@ -151,7 +151,7 @@ public class Order implements Entity {
 			System.out.println("Invalid input");
 			break;
 		}
-		
+
 		if (searchAlbumSQLstmt != null) {
 			ResultSet rs = searchAlbumSQLstmt.executeQuery();
 			return rs;

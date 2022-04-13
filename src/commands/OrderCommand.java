@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import entities.*;
+import entities.Order;
 
 public class OrderCommand {
 

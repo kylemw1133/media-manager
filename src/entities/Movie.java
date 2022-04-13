@@ -3,9 +3,7 @@ package entities;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -18,17 +16,18 @@ public class Movie implements Entity {
 	private final static String editMovieSQL = " UPDATE MOVIE SET Name=?, Length=?, Year=?, Content_Rating=? WHERE Inventory_ID=?;";
 	private final static String insertStarsInSQL = "INSERT INTO STARS VALUES(?, ?, ?);";
 	private final static String insertDirectsSQL = "INSERT INTO DIRECTS VALUES(?, ?);";
-	
+
 	private LinkedList<TypedAttribute> data;
-	
+
 	public Movie() {
 		this.data = null;
 	}
-	
+
 	public Movie(LinkedList<TypedAttribute> data) {
 		this.data = data;
 	}
-	
+
+	@Override
 	public int insert(Connection conn, Scanner s) throws SQLException {
 		InventoryItem parentItem = new InventoryItem();
 		int id = parentItem.insert(conn, s);
@@ -39,11 +38,11 @@ public class Movie implements Entity {
 		for (TypedAttribute a : colSet) {
 			if (a.name.equals("Inventory_ID")) {
 				a.value = id;
-			} 
+			}
 			else {
 				a.promptForValue(s);
 			}
-			
+
 			a.fillInStmt(insertMovieStmt, i);
 			i++;
 		}
@@ -76,7 +75,7 @@ public class Movie implements Entity {
 					PreparedStatement insertActorMovieRelationStmt = conn.prepareStatement(insertDirectsSQL);
 					insertActorMovieRelationStmt.setInt(1, id);
 					insertActorMovieRelationStmt.setInt(2, director_id);
-				
+
 					insertActorMovieRelationStmt.executeUpdate();
 				} else {
 					addDirector = false;
@@ -89,10 +88,11 @@ public class Movie implements Entity {
 		return id;
 	}
 
+	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editMovieSQL, "Inventory_ID");
 	}
-	
+
 	@Override
 	public String toString() {
 		return Utils.rowDataToString(this.data);
@@ -108,7 +108,7 @@ public class Movie implements Entity {
 			return null;
 		}
 	}
-	
+
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		System.out.println("Which field do you want to search by?");
 		System.out.println("1: Name | 2: Length | 3: Year | 4: Content_Rating | 5: EXIT");

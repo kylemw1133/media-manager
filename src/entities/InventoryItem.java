@@ -3,9 +3,7 @@ package entities;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -20,20 +18,22 @@ public class InventoryItem implements Entity {
 	private static final String maxInventoryIDSQL = "SELECT MAX(Inventory_ID) AS Max_ID FROM INVENTORY_ITEM;";
 
 	private LinkedList<TypedAttribute> data;
-	
+
 	public InventoryItem() {
 		this.data = null;
 	}
-	
+
 	public InventoryItem(LinkedList<TypedAttribute> data) {
 		this.data = data;
 	}
-	
+
+	@Override
 	public int insert(Connection conn, Scanner s) throws SQLException {
 		int id = getNextInventoryID(conn);
 		return Utils.executeInsertion(conn, s, id, insertInventoryItemSQL, "INVENTORY_ITEM", "Inventory_ID");
 	}
 
+	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editInventoryItemSQL, "Inventory_ID");
 	}
@@ -52,7 +52,7 @@ public class InventoryItem implements Entity {
 		deleteInventoryItemStmt.executeQuery();
 		deleteInventoryItemStmt.close();
 	}
-	
+
 	public static InventoryItem searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = InventoryItem.search(conn, s);
 		if (rs.first()) {
@@ -63,7 +63,7 @@ public class InventoryItem implements Entity {
 			return null;
 		}
 	}
-	
+
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		System.out.println("Which field do you want to search by?");
 		System.out.println("1: Quantity | 2: Format | 3: Location | 4: EXIT: ");
@@ -98,7 +98,7 @@ public class InventoryItem implements Entity {
 			System.out.println("Invalid input");
 			break;
 		}
-		
+
 		if (searchInventoryItemSQLStmt != null) {
 			ResultSet rs = searchInventoryItemSQLStmt.executeQuery();
 			return rs;
@@ -107,7 +107,7 @@ public class InventoryItem implements Entity {
 			return null;
 		}
 	}
-	
+
 	public static int getNextInventoryID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxInventoryIDSQL, "Max_ID");
 	}

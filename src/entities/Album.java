@@ -3,9 +3,7 @@ package entities;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -18,15 +16,15 @@ public class Album implements Entity {
 	private final static String editAlbumSQL = " UPDATE ALBUM SET Name=?, Length=?, Year=? WHERE Inventory_ID=?";
 
 	private LinkedList<TypedAttribute> data;
-	
+
 	public Album() {
 		this.data = null;
 	}
-	
+
 	public Album(LinkedList<TypedAttribute> data) {
 		this.data = data;
 	}
-	
+
 	@Override
 	public int insert(Connection conn, Scanner s) throws SQLException {
 		InventoryItem parentItem = new InventoryItem();
@@ -38,7 +36,7 @@ public class Album implements Entity {
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editAlbumSQL, "Inventory_ID");
 	}
-	
+
 	@Override
 	public String toString() {
 		return Utils.rowDataToString(this.data);
@@ -54,7 +52,7 @@ public class Album implements Entity {
 			return null;
 		}
 	}
-	
+
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		System.out.println("Which field do you want to search by?");
 		System.out.println("1: Name | 2: Length | 3: Year | 4: EXIT: ");
@@ -62,7 +60,7 @@ public class Album implements Entity {
 		String searchInputString = "";
 		int searchInputInt;
 		PreparedStatement searchAlbumSQLstmt = null;
-		
+
 		switch (input) {
 		case "1":
 			System.out.println("Enter search name");
@@ -89,7 +87,7 @@ public class Album implements Entity {
 			System.out.println("Invalid input");
 			break;
 		}
-		
+
 		if (searchAlbumSQLstmt != null) {
 			ResultSet rs = searchAlbumSQLstmt.executeQuery();
 			return rs;

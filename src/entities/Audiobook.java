@@ -2,12 +2,10 @@ package entities;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.Scanner;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 
 import util.TypedAttribute;
 import util.Utils;
@@ -21,21 +19,23 @@ public class Audiobook implements Entity {
 	// Inventory_ID = ?;";
 
 	private LinkedList<TypedAttribute> data;
-	
+
 	public Audiobook() {
 		this.data = null;
 	}
-	
+
 	public Audiobook(LinkedList<TypedAttribute> data) {
 		this.data = data;
 	}
-	
+
+	@Override
 	public int insert(Connection conn, Scanner s) throws SQLException {
 		InventoryItem parentItem = new InventoryItem();
 		int id = parentItem.insert(conn, s);
 		return Utils.executeInsertion(conn, s, id, insertAudiobookSQL, "AUDIOBOOK", "Inventory_ID");
 	}
 
+	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
 		Utils.executeEdit(conn, s, this.data, editAudiobookSQL, "Inventory_ID");
 	}
@@ -44,7 +44,7 @@ public class Audiobook implements Entity {
 	public String toString() {
 		return Utils.rowDataToString(this.data);
 	}
-	
+
 	public static Audiobook searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = Album.search(conn, s);
 		if (rs.next()) {
@@ -55,7 +55,7 @@ public class Audiobook implements Entity {
 			return null;
 		}
 	}
-	
+
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		System.out.println("Which field do you want to search by?");
 		System.out.println("1: Author_ID | 2: Length | 3: Year | 4: Name | 5: Reader | 6: EXIT: ");
@@ -102,7 +102,7 @@ public class Audiobook implements Entity {
 			System.out.println("Invalid input");
 			break;
 		}
-		
+
 		if (searchAudiobookSQLstmt != null) {
 			ResultSet rs = searchAudiobookSQLstmt.executeQuery();
 			return rs;
