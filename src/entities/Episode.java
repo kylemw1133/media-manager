@@ -113,7 +113,7 @@ public class Episode implements Entity {
 	public static Episode searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {
-			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "ACTOR");
+			LinkedList<TypedAttribute> rowData = Utils.getColumns(conn, "EPISODE");
 			Utils.fillRowData(rs, rowData);
 			return new Episode(rowData);
 		} else {
@@ -122,6 +122,6 @@ public class Episode implements Entity {
 	}
 
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
-		return Utils.executeSearch(conn, s, "ACTOR");
+		return Utils.executeSearch(conn, s, "EPISODE");
 	}
 }
