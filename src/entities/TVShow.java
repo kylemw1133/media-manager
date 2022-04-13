@@ -35,7 +35,11 @@ public class TVShow implements Entity {
 	public Object insert(Connection conn, Scanner s) throws SQLException {
 		InventoryItem parentItem = new InventoryItem();
 		int id = (int) parentItem.insert(conn, s);
-		return Utils.executeInsertion(conn, s, id, insertTVShowSQL, "TV_SHOW", "Inventory_ID");
+		Utils.executeInsertion(conn, s, id, insertTVShowSQL, "TV_SHOW", "Inventory_ID");
+		
+		Season.insertMultiple(conn, s, id);
+		
+		return id;
 	}
 
 	@Override
@@ -46,13 +50,11 @@ public class TVShow implements Entity {
 	@Override
 	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException {
 		int key = 0;
-		TVShow a = new TVShow();
 
 		if (insert) {
-			key = (int) a.insert(conn, s);
+			key = (int) this.insert(conn, s);
 		} else {
-			a = TVShow.searchForOne(conn, s);
-			key = a.id;
+			key = TVShow.searchForOne(conn, s).id;
 		}
 
 		return key;
