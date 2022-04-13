@@ -16,7 +16,7 @@ public class Movie implements Entity {
 	private final static String editMovieSQL = " UPDATE MOVIE SET Name=?, Length=?, Year=?, Content_Rating=? WHERE Inventory_ID=?;";
 	private final static String insertStarsInSQL = "INSERT INTO STARS VALUES(?, ?, ?);";
 	private final static String insertDirectsSQL = "INSERT INTO DIRECTS VALUES(?, ?);";
-
+	
 	public int id;
 	public LinkedList<TypedAttribute> data;
 
@@ -39,42 +39,10 @@ public class Movie implements Entity {
 		InventoryItem parentItem = new InventoryItem();
 		int id = (int) parentItem.insert(conn, s);
 		Utils.executeInsertion(conn, s, id, insertMovieSQL, "MOVIE", "Inventory_ID");
-
-		// adding Actor STARS in Movie relation (cheap solution)
-		boolean addActor = true;
-		while (addActor) {
-			System.out.println("1: Add actor | 2: exit");
-			if (Integer.parseInt(s.nextLine()) == 1) {
-				Entity e = new Actor();
-				int actor_id = (int) e.insert(conn, s);
-				System.out.println("What is the role of the actor? ");
-				String role = s.nextLine();
-				PreparedStatement insertActorMovieRelationStmt = conn.prepareStatement(insertStarsInSQL);
-				insertActorMovieRelationStmt.setInt(1, id);
-				insertActorMovieRelationStmt.setInt(2, actor_id);
-				insertActorMovieRelationStmt.setString(2, role);
-				insertActorMovieRelationStmt.executeUpdate();
-			} else {
-				addActor = false;
-			}
-		}
-		// adding Director DIRECTS Movie relation (cheap solution)
-		boolean addDirector = true;
-		while (addDirector) {
-			System.out.println("1: Add Director | 2: exit");
-			if (Integer.parseInt(s.nextLine()) == 1) {
-				Entity e = new Director();
-				int director_id = (int) e.insert(conn, s);
-				PreparedStatement insertActorMovieRelationStmt = conn.prepareStatement(insertDirectsSQL);
-				insertActorMovieRelationStmt.setInt(1, id);
-				insertActorMovieRelationStmt.setInt(2, director_id);
-
-				insertActorMovieRelationStmt.executeUpdate();
-			} else {
-				addDirector = false;
-			}
-		}
-
+		
+		Actor.insertMultiple(conn, s, id);
+		Director.insertMultiple(conn, s, id);
+		
 		return id;
 	}
 

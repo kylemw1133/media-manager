@@ -1,6 +1,7 @@
 package entities;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -15,6 +16,8 @@ public class Actor implements Entity {
 	private final static String editActorSQL = " UPDATE ACTOR SET Name=? WHERE Actor_ID=?";
 	private static final String maxActorSQL = "SELECT MAX(Actor_ID) AS Max_ID FROM Actor;";
 
+	private final static String insertStarsSQL = "INSERT INTO STARS VALUES (?, ?, ?);";
+	
 	public int id;
 	public LinkedList<TypedAttribute> data;
 
@@ -46,13 +49,11 @@ public class Actor implements Entity {
 	@Override
 	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException {
 		int key = 0;
-		Actor a = new Actor();
 
 		if (insert) {
-			key = (int) a.insert(conn, s);
+			key = (int) this.insert(conn, s);
 		} else {
-			a = Actor.searchForOne(conn, s);
-			key = a.id;
+			key = Actor.searchForOne(conn, s).id;
 		}
 
 		return key;
@@ -63,6 +64,32 @@ public class Actor implements Entity {
 		return Utils.rowDataToString(this.data);
 	}
 
+	public static void insertMultiple(Connection conn, Scanner s, int inventoryID) throws SQLException {
+		int input;
+		do {
+			System.out.println("| 1: Create Actor | 2: Choose Actor | 3: Finish with Actors |");
+			input = Integer.parseInt(s.nextLine());
+
+			if (input == 3) {
+				break;
+			}
+
+			Actor a = new Actor();
+			int aID = (int) a.insertOrSearch(conn, s, input == 1);
+			
+			System.out.println("Provide the Role: ");
+			String role = s.nextLine();
+			
+			PreparedStatement insertJoinTupleStmt = conn.prepareStatement(insertStarsSQL);
+			insertJoinTupleStmt.setInt(1, inventoryID);
+			insertJoinTupleStmt.setInt(2, aID);
+			insertJoinTupleStmt.setString(3, role);
+			insertJoinTupleStmt.execute();
+		} while (input != 3);
+		
+		System.out.println("Finished with Actors.");
+	}
+	
 	public static Actor searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs != null && rs.next()) {

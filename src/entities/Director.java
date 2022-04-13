@@ -1,6 +1,7 @@
 package entities;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -14,6 +15,8 @@ public class Director implements Entity {
 	private final static String editDirectorSQL = " UPDATE DIRECTOR SET Name=? WHERE Director_ID=?";
 	private static final String maxDirectorIDSQL = "SELECT MAX(Director_ID) AS Max_ID FROM DIRECTOR;";
 
+	private final static String insertDirectsSQL = "INSERT INTO DIRECTS VALUES (?, ?);";
+	
 	public int id;
 	public LinkedList<TypedAttribute> data;
 
@@ -45,16 +48,36 @@ public class Director implements Entity {
 	@Override
 	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException {
 		int key = 0;
-		Director a = new Director();
 
 		if (insert) {
-			key = (int) a.insert(conn, s);
+			key = (int) this.insert(conn, s);
 		} else {
-			a = Director.searchForOne(conn, s);
-			key = a.id;
+			key = Director.searchForOne(conn, s).id;
 		}
 
 		return key;
+	}
+	
+	public static void insertMultiple(Connection conn, Scanner s, int inventoryID) throws SQLException {
+		int input;
+		do {
+			System.out.println("| 1: Create Director | 2: Choose Director | 3: Finish with Directors |");
+			input = Integer.parseInt(s.nextLine());
+
+			if (input == 3) {
+				break;
+			}
+
+			Director d = new Director();
+			int dID = (int) d.insertOrSearch(conn, s, input == 1);
+						
+			PreparedStatement insertJoinTupleStmt = conn.prepareStatement(insertDirectsSQL);
+			insertJoinTupleStmt.setInt(1, inventoryID);
+			insertJoinTupleStmt.setInt(2, dID);
+			insertJoinTupleStmt.execute();
+		} while (input != 3);
+		
+		System.out.println("Finished with Directors.");
 	}
 
 	public static Director searchForOne(Connection conn, Scanner s) throws SQLException {
