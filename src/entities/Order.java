@@ -15,6 +15,7 @@ import util.Utils;
 public class Order implements Entity {
 
 	private final static String insertOrderSQL = "INSERT INTO [ORDER] VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+	private final static String editOrderSQL = "INSERT INTO [ORDER] VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	private final static String selectOrderSQL = "SELECT * FROM [ORDER] WHERE Order_ID=?;";
 	private final static String updateInventorySQL = "UPDATE INVENTORY_ITEM SET Quantity=? WHERE INVENTORY_ITEM.Inventory_ID=?";
 	private final static String updateOrderSQL = "UPDATE [ORDER] SET Status='FULFILLED' WHERE Order_ID=?";
@@ -30,11 +31,6 @@ public class Order implements Entity {
 		this.data = data;
 	}
 	
-	
-	public static int getNextOrderID(Connection conn) throws SQLException {
-		return Utils.getNextOrdinal(conn, maxOrderIDSQL, "Max_ID");
-	}
-
 	public int insert(Connection conn, Scanner s) throws SQLException {
 		int id = 0;
 		int i = 1;
@@ -56,6 +52,11 @@ public class Order implements Entity {
 		insertOrderStmt.close();
 
 		return id;
+	}
+	
+	@Override
+	public void edit(Connection conn, Scanner s) throws SQLException {
+		Utils.executeEdit(conn, s, this.data, editOrderSQL, "Order_ID");
 	}
 
 	public void activate(Connection conn, Scanner s) throws SQLException {
@@ -160,9 +161,7 @@ public class Order implements Entity {
 		}
 	}
 
-	@Override
-	public void edit(Connection conn, Scanner s) throws SQLException {
-		// TODO Auto-generated method stub
-
+	public static int getNextOrderID(Connection conn) throws SQLException {
+		return Utils.getNextOrdinal(conn, maxOrderIDSQL, "Max_ID");
 	}
 }

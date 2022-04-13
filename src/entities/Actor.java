@@ -15,39 +15,31 @@ import util.Utils;
 public class Actor implements Entity {
 
 	private final static String insertActorSQL = "INSERT INTO Actor VALUES (?, ?);";
+	private final static String editActorSQL = " UPDATE ACTOR SET Name=? WHERE Actor_ID=?";
 	private static final String maxActorSQL = "SELECT MAX(Actor_ID) AS Max_ID FROM Actor;";
 
-	public static int getNextActorID(Connection conn) throws SQLException {
-		return Utils.getNextOrdinal(conn, maxActorSQL, "Max_ID");
+	private LinkedList<TypedAttribute> data;
+
+	public Actor() {
+		this.data = null;
+	}
+
+	public Actor(LinkedList<TypedAttribute> data) {
+		this.data = data;
 	}
 
 	@Override
 	public int insert(Connection conn, Scanner s) throws SQLException {
-		int id = 0;
-		int i = 1;
-		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "Actor");
-		PreparedStatement insertActorStmt = conn.prepareStatement(insertActorSQL);
-
-		for (TypedAttribute a : colSet) {
-			if (a.name.equals("Actor_ID")) {
-				id = getNextActorID(conn);
-				a.value = id;
-			} else {
-				a.promptForValue(s);
-			}
-
-			a.fillInStmt(insertActorStmt, i);
-			i++;
-		}
-
-		insertActorStmt.execute();
-
-		return id;
+		int id = getNextActorID(conn);
+		return Utils.executeInsertion(conn, s, id, insertActorSQL, "ACTOR", "Actor_ID");
 	}
 
 	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
-		// TODO Auto-generated method stub
+		Utils.executeEdit(conn, s, this.data, editActorSQL, "Actor_ID");
+	}
 
+	public static int getNextActorID(Connection conn) throws SQLException {
+		return Utils.getNextOrdinal(conn, maxActorSQL, "Max_ID");
 	}
 }

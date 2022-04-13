@@ -27,60 +27,21 @@ public class Album implements Entity {
 		this.data = data;
 	}
 	
+	@Override
 	public int insert(Connection conn, Scanner s) throws SQLException {
 		InventoryItem parentItem = new InventoryItem();
 		int id = parentItem.insert(conn, s);
-		int i = 1;
-		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "ALBUM");
-		PreparedStatement insertAlbumStmt = conn.prepareStatement(insertAlbumSQL);
-
-		for (TypedAttribute a : colSet) {
-			if (a.name.equals("Inventory_ID")) {
-				a.value = id;
-			} else {
-				a.promptForValue(s);
-			}
-
-			a.fillInStmt(insertAlbumStmt, i);
-			i++;
-		}
-
-		insertAlbumStmt.execute();
-		insertAlbumStmt.close();
-
-		return id;
+		return Utils.executeInsertion(conn, s, id, insertAlbumSQL, "ALBUM", "Inventory_ID");
 	}
 
+	@Override
 	public void edit(Connection conn, Scanner s) throws SQLException {
-		PreparedStatement editAlbumStmt = conn.prepareStatement(editAlbumSQL);
-		int i = 1;
-		int id = 0;
-
-		for (TypedAttribute a : this.data) {
-			if (a.name.equals("Inventory_ID")) {
-				id = (int) a.value;
-			} else {
-				a.promptForValue(s);
-				a.fillInStmt(editAlbumStmt, i++);
-			}
-		}
-		
-		editAlbumStmt.setInt(i, id);
-		editAlbumStmt.execute();
-		editAlbumStmt.close();
+		Utils.executeEdit(conn, s, this.data, editAlbumSQL, "Inventory_ID");
 	}
 	
 	@Override
 	public String toString() {
-		StringBuffer s = new StringBuffer("|");
-		
-		for (TypedAttribute ta : this.data) {
-			s.append(" ");
-			s.append(ta.value.toString());
-			s.append(" |");
-		}
-		
-		return s.toString();
+		return Utils.rowDataToString(this.data);
 	}
 
 	public static Album searchForOne(Connection conn, Scanner s) throws SQLException {

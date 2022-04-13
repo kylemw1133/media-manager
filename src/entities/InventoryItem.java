@@ -29,53 +29,13 @@ public class InventoryItem implements Entity {
 		this.data = data;
 	}
 	
-	public static int getNextInventoryID(Connection conn) throws SQLException {
-		return Utils.getNextOrdinal(conn, maxInventoryIDSQL, "Max_ID");
-	}
-
 	public int insert(Connection conn, Scanner s) throws SQLException {
-		int id = 0;
-		int i = 1;
-		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "INVENTORY_ITEM");
-		PreparedStatement insertInventoryItemStmt = conn.prepareStatement(insertInventoryItemSQL);
-
-		for (TypedAttribute a : colSet) {
-			if (a.name.equals("Inventory_ID")) {
-				id = getNextInventoryID(conn);
-				a.value = id;
-			} else {
-				a.promptForValue(s);
-			}
-
-			a.fillInStmt(insertInventoryItemStmt, i);
-			i++;
-		}
-
-		insertInventoryItemStmt.execute();
-		insertInventoryItemStmt.close();
-
-		return id;
+		int id = getNextInventoryID(conn);
+		return Utils.executeInsertion(conn, s, id, insertInventoryItemSQL, "INVENTORY_ITEM", "Inventory_ID");
 	}
 
 	public void edit(Connection conn, Scanner s) throws SQLException {
-		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, "MOVIE");
-		PreparedStatement editInventoryItemStmt = conn.prepareStatement(editInventoryItemSQL);
-		int i = 1;
-		int id = 0;
-
-		for (TypedAttribute a : colSet) {
-			if (a.name.equals("Inventory_ID")) {
-				System.out.print("Provide the ID of the item you want to edit: ");
-				id = Integer.parseInt(s.nextLine());
-			} else {
-				a.promptForValue(s);
-				a.fillInStmt(editInventoryItemStmt, i++);
-			}
-		}
-
-		editInventoryItemStmt.setInt(i, id);
-
-		editInventoryItemStmt.executeUpdate();
+		Utils.executeEdit(conn, s, this.data, editInventoryItemSQL, "Inventory_ID");
 	}
 
 	public static void delete(Connection conn, Scanner s) throws SQLException {
@@ -146,5 +106,9 @@ public class InventoryItem implements Entity {
 			System.out.println("No search performed");
 			return null;
 		}
+	}
+	
+	public static int getNextInventoryID(Connection conn) throws SQLException {
+		return Utils.getNextOrdinal(conn, maxInventoryIDSQL, "Max_ID");
 	}
 }

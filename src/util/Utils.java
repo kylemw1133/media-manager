@@ -1,11 +1,15 @@
 package util;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
+import java.util.Scanner;
+
+import entities.InventoryItem;
 
 public class Utils {
 
@@ -16,26 +20,74 @@ public class Utils {
 		stmt.close();
 		return maxID + 1;
 	}
+	
+	public static int executeInsertion(Connection conn,
+			Scanner s,
+			int id,
+			String insertSQL,
+			String tableName,
+			String idCol) throws SQLException {
+		int i = 1;
+		LinkedList<TypedAttribute> colSet = Utils.getColumns(conn, tableName);
+		PreparedStatement insertAlbumStmt = conn.prepareStatement(insertSQL);
 
-	/**
-	 * Gets all attributes of an inventory item type. If the type is not found, only
-	 * the basic inventory item attributes are returned.
-	 *
-	 * @param conn a connection object
-	 * @param name the table name
-	 */
-	public static LinkedList<TypedAttribute> getInventoryItemAttributes(Connection conn, String name) {
-		LinkedList<TypedAttribute> colNameSet = getColumns(conn, "INVENTORY_ITEM");
-		colNameSet.addAll(getColumns(conn, name));
-		return colNameSet;
+		for (TypedAttribute a : colSet) {
+			if (a.name.equals(idCol)) {
+				a.value = id;
+			} else {
+				a.promptForValue(s);
+			}
+
+			a.fillInStmt(insertAlbumStmt, i);
+			i++;
+		}
+
+		insertAlbumStmt.execute();
+		insertAlbumStmt.close();
+
+		return id;
 	}
 
+	public static void executeEdit(Connection conn,
+			Scanner s,
+			LinkedList<TypedAttribute> rowData,
+			String editSQL,
+			String idCol) throws SQLException {
+		PreparedStatement editStmt = conn.prepareStatement(editSQL);
+		int i = 1;
+		int id = 0;
+
+		for (TypedAttribute a : rowData) {
+			if (a.name.contains(idCol)) {
+				id = (int) a.value;
+			} else {
+				a.promptForValue(s);
+				a.fillInStmt(editStmt, i++);
+			}
+		}
+		
+		editStmt.setInt(i, id);
+		editStmt.execute();
+		editStmt.close();
+	}
+	
 	public static void fillRowData(ResultSet rs, LinkedList<TypedAttribute> rowData) throws SQLException {
 		for (TypedAttribute ta : rowData) {
 			ta.value = rs.getObject(ta.name);
 		}
 	}
-
+	
+	public static String rowDataToString(LinkedList<TypedAttribute> rowData) {
+		StringBuffer s = new StringBuffer("|");
+		
+		for (TypedAttribute ta : rowData) {
+			s.append(" ");
+			s.append(ta.value.toString());
+			s.append(" |");
+		}
+		
+		return s.toString();
+	}
 	
 	/**
 	 * Gets the columns of a table in the database.
