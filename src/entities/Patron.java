@@ -90,6 +90,10 @@ public class Patron implements Entity {
 		}
 	}
 
+    public static ResultSet list(Connection conn) throws SQLException {
+        return Utils.executeList(conn, "PATRON");
+    }
+
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		return Utils.executeSearch(conn, s, "PATRON");
 	}

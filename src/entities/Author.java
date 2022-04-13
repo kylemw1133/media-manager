@@ -76,6 +76,10 @@ public class Author implements Entity {
 		return Utils.executeSearch(conn, s, "AUTHOR");
 	}
 
+	public static ResultSet list(Connection conn) throws SQLException {
+		return Utils.executeList(conn, "AUTHOR");
+	}
+
 	public static int getNextAuthorID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxAuthorSQL, "Max_ID");
 	}

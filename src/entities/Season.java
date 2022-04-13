@@ -126,6 +126,10 @@ public class Season implements Entity {
 		return Utils.executeSearch(conn, s, "ALBUM");
 	}
 
+                    public static ResultSet list(Connection conn) throws SQLException {
+        return Utils.executeList(conn, "ALBUM");
+    }
+
 	public int getNextSeasonNumber(Connection conn) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement(maxSeasonNumberSQL);
 		stmt.setInt(1, this.inventoryID);

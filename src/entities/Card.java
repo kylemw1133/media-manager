@@ -105,6 +105,10 @@ public class Card implements Entity {
 		return Utils.executeSearch(conn, s, "CARD");
 	}
 
+                public static ResultSet list(Connection conn) throws SQLException {
+        return Utils.executeList(conn, "CARD");
+    }
+
 	public static int getNextCardID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxCardSQL, "Max_ID");
 	}

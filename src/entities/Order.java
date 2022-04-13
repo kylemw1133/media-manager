@@ -106,6 +106,10 @@ public class Order implements Entity {
 		return Utils.executeSearch(conn, s, "ORDER");
 	}
 
+                public static ResultSet list(Connection conn) throws SQLException {
+        return Utils.executeList(conn, "ORDER");
+    }
+
 	public static int getNextOrderID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxOrderIDSQL, "Max_ID");
 	}

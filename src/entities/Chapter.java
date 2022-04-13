@@ -95,6 +95,10 @@ public class Chapter implements Entity {
 		}
 	}
 
+	public static ResultSet list(Connection conn) throws SQLException {
+		return Utils.executeList(conn, "CHAPTER");
+	}
+
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		return Utils.executeSearch(conn, s, "CHAPTER");
 	}

@@ -124,4 +124,8 @@ public class Episode implements Entity {
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		return Utils.executeSearch(conn, s, "EPISODE");
 	}
+
+                    public static ResultSet list(Connection conn) throws SQLException {
+        return Utils.executeList(conn, "EPISODE");
+    }
 }

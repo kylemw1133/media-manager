@@ -6,13 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import commands.AddCommand;
-import commands.CheckoutCommand;
-import commands.DeleteCommand;
-import commands.EditCommand;
-import commands.OrderCommand;
-import commands.ReportCommand;
-import commands.SearchCommand;
+import commands.*;
 
 public class Main {
 
@@ -53,7 +47,8 @@ public class Main {
 		Scanner s = new Scanner(System.in);
 
 		while (promptUser) {
-			System.out.print("Enter db command (add, edit, delete, search, order, checkout, report, exit): ");
+			System.out.print("Enter db command (add, edit, delete, search, list,"
+					+ " order, checkout, report, exit): ");
 			String command = s.nextLine();
 			switch (command) {
 			case "add":
@@ -67,6 +62,9 @@ public class Main {
 				break;
 			case "search":
 				SearchCommand.exec(conn, s);
+				break;
+			case "list":
+				ListCommand.exec(conn, s);
 				break;
 			case "order":
 				OrderCommand.exec(conn, s);

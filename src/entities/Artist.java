@@ -101,6 +101,10 @@ public class Artist implements Entity {
 		return Utils.executeSearch(conn, s, "ARTIST");
 	}
 
+                    public static ResultSet list(Connection conn) throws SQLException {
+        return Utils.executeList(conn, "ARTIST");
+    }
+
 	public static int getNextArtistID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxArtistIDSQL, "Max_ID");
 	}

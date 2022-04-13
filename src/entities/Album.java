@@ -79,6 +79,10 @@ public class Album implements Entity {
 		}
 	}
 
+	public static ResultSet list(Connection conn) throws SQLException {
+		return Utils.executeList(conn, "ALBUM");
+	}
+
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		return Utils.executeSearch(conn, s, "ALBUM");
 	}

@@ -95,6 +95,10 @@ public class Director implements Entity {
 		return Utils.executeSearch(conn, s, "DIRECTOR");
 	}
 
+                public static ResultSet list(Connection conn) throws SQLException {
+        return Utils.executeList(conn, "DIRECTOR");
+    }
+
 	public static int getNextDirectorID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxDirectorIDSQL, "Max_ID");
 	}

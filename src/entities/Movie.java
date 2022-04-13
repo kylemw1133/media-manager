@@ -81,6 +81,10 @@ public class Movie implements Entity {
 		}
 	}
 
+	public static ResultSet list(Connection conn) throws SQLException {
+		return Utils.executeList(conn, "MOVIE");
+	}
+
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		return Utils.executeSearch(conn, s, "MOVIE");
 	}

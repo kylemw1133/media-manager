@@ -6,7 +6,7 @@
 3. audiobooks
 4. tv shows
 
-* TODO List:
+* The TODO List:
 
 - [X] Entering new artists, albums, tracks, genres, length, year into the database as the music collection is expanded
   - [X] insert artist
@@ -30,17 +30,17 @@
   - [X] list orders
 - [X] Transferring new media items that arrive to the current media inventory (removing them from the inventory of the media items ordered)
   - [X] activate order
-- [ ] Keeping track of inventory: physical copies of albums, videos and audiobooks with their location, as well as electronic copies/licenses for digital copies of albums/videos/audiobooks. There could be several physical copies of albums/videos/audiobooks as well as electronic copies
-  - [ ] list inventory items
-  - [ ] search inventory items
-  - [ ] list albums
-  - [ ] search albums
-  - [ ] list movies
-  - [ ] search movies
-  - [ ] list audiobooks
-  - [ ] search audiobooks
-  - [ ] list tv shows
-  - [ ] search tv shows
+- [X] Keeping track of inventory: physical copies of albums, videos and audiobooks with their location, as well as electronic copies/licenses for digital copies of albums/videos/audiobooks. There could be several physical copies of albums/videos/audiobooks as well as electronic copies
+  - [X] list inventory items
+  - [X] search inventory items
+  - [X] list albums
+  - [X] search albums
+  - [X] list movies
+  - [X] search movies
+  - [X] list audiobooks
+  - [X] search audiobooks
+  - [X] list tv shows
+  - [X] search tv shows
 - [ ] Registering a person for a library card, deactivating old or lost library cards. A patron can have only one card. First name, last name, address of the patrons are needed as well as the email address.
   - [ ] insert patron
   - [ ] insert card

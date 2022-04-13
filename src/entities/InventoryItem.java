@@ -66,6 +66,11 @@ public class InventoryItem implements Entity {
 		return key;
 	}
 
+	@Override
+	public String toString() {
+		return Utils.rowDataToString(this.data);
+	}
+
 	public static void delete(Connection conn, Scanner s) throws SQLException {
 		System.out.println("Enter the inventory ID of the item you wish to delete:");
 		PreparedStatement deleteInventoryItemStmt = conn.prepareStatement(deleteInventoryItemSQL);
@@ -102,11 +107,6 @@ public class InventoryItem implements Entity {
 		stmt.close();
 	}
 
-	@Override
-	public String toString() {
-		return Utils.rowDataToString(this.data);
-	}
-
 	public static InventoryItem searchForOne(Connection conn, Scanner s) throws SQLException {
 		ResultSet rs = search(conn, s);
 		if (rs.next()) {
@@ -120,6 +120,10 @@ public class InventoryItem implements Entity {
 
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		return Utils.executeSearch(conn, s, "INVENTORY_ITEM");
+	}
+
+	public static ResultSet list(Connection conn) throws SQLException {
+		return Utils.executeList(conn, "INVENTORY_ITEM");
 	}
 
 	public static int getNextInventoryID(Connection conn) throws SQLException {

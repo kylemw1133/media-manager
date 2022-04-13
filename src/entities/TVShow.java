@@ -79,4 +79,8 @@ public class TVShow implements Entity {
 	public static ResultSet search(Connection conn, Scanner s) throws SQLException {
 		return Utils.executeSearch(conn, s, "TV_SHOW");
 	}
+
+                public static ResultSet list(Connection conn) throws SQLException {
+        return Utils.executeList(conn, "TV_SHOW");
+    }
 }

@@ -129,6 +129,10 @@ public class Checkout implements Entity {
 		return Utils.executeSearch(conn, s, "CHECKOUT");
 	}
 
+            public static ResultSet list(Connection conn) throws SQLException {
+        return Utils.executeList(conn, "CHECKOUT");
+    }
+
 	public static int getNextCheckoutID(Connection conn) throws SQLException {
 		return Utils.getNextOrdinal(conn, maxCheckoutIDSQL, "Max_ID");
 	}
