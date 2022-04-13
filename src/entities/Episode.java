@@ -64,6 +64,8 @@ public class Episode implements Entity {
 
 		insertStmt.execute();
 		insertStmt.close();
+		
+		Actor.insertMultiple(conn, s, this.inventoryID);
 
 		return this.name;
 	}
@@ -105,7 +107,7 @@ public class Episode implements Entity {
 			e.insert(conn, s);
 		} while (input != 2);
 		
-		System.out.println("Finished with Tracks.");
+		System.out.println("Finished with Episodes.");
 	}
 	
 	public static Episode searchForOne(Connection conn, Scanner s) throws SQLException {

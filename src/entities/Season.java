@@ -107,7 +107,7 @@ public class Season implements Entity {
 			int seID = (int) se.insert(conn, s);
 		} while (input != 2);
 		
-		System.out.println("Finished with Tracks.");
+		System.out.println("Finished with Seasons.");
 	}
 
 	public static Season searchForOne(Connection conn, Scanner s) throws SQLException {
