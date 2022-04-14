@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 import commands.AddCommand;
@@ -35,6 +36,8 @@ public class Main {
 				// Provides some positive assurance the connection and/or creation was
 				// successful.
 				DatabaseMetaData meta = conn.getMetaData();
+				Statement s = conn.createStatement();
+				s.execute("PRAGMA foreign_keys=ON");
 				System.out.println("The connection to the database was successful.");
 			} else {
 				// Provides some feedback in case the connection failed but did not throw an

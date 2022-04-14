@@ -10,4 +10,6 @@ public interface Entity {
 	public void edit(Connection conn, Scanner s) throws SQLException;
 
 	public Object insertOrSearch(Connection conn, Scanner s, boolean insert) throws SQLException;
+
+
 }

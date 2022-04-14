@@ -1,6 +1,7 @@
 package entities;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ public class Movie implements Entity {
 	private final static String editMovieSQL = " UPDATE MOVIE SET Name=?, Length=?, Year=?, Content_Rating=? WHERE Inventory_ID=?;";
 	private final static String insertStarsInSQL = "INSERT INTO STARS VALUES(?, ?, ?);";
 	private final static String insertDirectsSQL = "INSERT INTO DIRECTS VALUES(?, ?);";
+	private final static String deleteInventoryItemSQL = "DELETE FROM INVENTORY_ITEM WHERE Inventory_ID = ?;";
 
 	public int id;
 	public LinkedList<TypedAttribute> data;
@@ -63,6 +65,19 @@ public class Movie implements Entity {
 		}
 
 		return key;
+	}
+	public void searchAndDelete(Connection conn, Scanner s) throws SQLException {
+		//Album a = new Album();
+		PreparedStatement deleteInventoryItemStmt = conn.prepareStatement(deleteInventoryItemSQL);
+		ResultSet rs = Utils.executeSearch(conn, s, "MOVIE");
+		System.out.println("Deleting...");
+		while(rs.next()) {
+			String id = rs.getString("Inventory_ID");
+			System.out.println(id);
+			deleteInventoryItemStmt.setString(1, id);
+			deleteInventoryItemStmt.execute();
+		}
+		deleteInventoryItemStmt.close();
 	}
 
 	@Override

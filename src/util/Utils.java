@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import entities.InventoryItem;
+
 public class Utils {
 
 	public static int getNextOrdinal(Connection conn, String sql, String name) throws SQLException {
@@ -165,4 +167,5 @@ public class Utils {
 			System.out.print("\n");
 		}
 	}
+
 }
